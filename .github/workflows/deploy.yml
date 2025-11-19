@@ -1,35 +1,62 @@
-# .github/workflows/deploy.yml
-name: Deploy to GitHub Pages
+# Name of the workflow
+name: Deploy React/Vite/TS App to Pages
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on push events to the main branch
   push:
     branches:
-      - main # Set this to your main branch name (e.g., 'main' or 'master')
+      - main
+  
+  # Allows you to run this workflow manually
+  workflow_dispatch:
 
-permissions: # <--- ADD THIS BLOCK
-  contents: write # This grants permission to push to the gh-pages branch
+# Sets permissions required for the GITHUB_TOKEN
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allows one deployment at a time
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout 
+      - name: ⬇️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      # 1. Setup and Build Step (Vite Specific)
+      - name: 🛠️ Setup Node.js (Vite Requirement)
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use a stable Node.js version
+          node-version: '20' # You can change this version if needed
 
-      - name: Install dependencies
-        run: npm install
+      - name: 📦 Install Dependencies
+        run: npm install # Or yarn install, pnpm install, etc.
 
-      - name: Build project
-        run: npm run build
+      - name: 🏗️ Build Vite Project
+        # The standard Vite build command produces production assets
+        run: npm run build 
+        
+      # 2. Configure and Deploy Pages
+      - name: ⚙️ Setup Pages
+        uses: actions/configure-pages@v5
 
-      # Deploy the build output to the 'gh-pages' branch
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: ⬆️ Upload Artifact (Vite's output)
+        uses: actions/upload-pages-artifact@v3
+        # **Vite outputs the production files into the 'dist' directory by default.**
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # The directory containing the built files
+          path: './dist' 
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
