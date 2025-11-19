@@ -14,11 +14,11 @@ export const ItemCard = memo(({ item, onViewJson }: { item: BrewItem, onViewJson
 
     return (
         <div className="flex flex-col p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:shadow-lg hover:border-green-500 transition-all h-full group">
-            <div className="flex gap-4 items-start mb-3">
+            <div className="flex gap-4 items-start mb-3 ">
                 <img
                     src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`}
                     onError={(e) => (e.currentTarget.src = "/vite.svg")}
-                    className="w-10 h-10 rounded bg-white p-1 border"
+                    className="w-11 h-11  rounded  bg-gray-200 dark:bg-gray-700 p-1 border border-gray-300 dark:border-gray-600"
                     alt=""
                 />
                 <div className="min-w-0">
