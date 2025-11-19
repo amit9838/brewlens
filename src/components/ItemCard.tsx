@@ -30,7 +30,7 @@ export const ItemCard = memo(({ item, onViewJson }: { item: BrewItem, onViewJson
             <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4 flex-1">{item.desc}</p>
 
             <div className="mt-auto space-y-3">
-                <div className="flex items-center gap-1.5 text-xs text-gray-400">
+                <div className="flex items-center gap-1.5 text-xs text-gray-500">
                     <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded max-w-[8rem] overflow-hidden text-ellipsis text-nowrap" title={item.version}>v{item.version}</span>
                     <span className="cursor-default">|</span>
                     <button onClick={() => onViewJson(item.raw)} className="hover:text-green-500 hover:underline">JSON</button>
