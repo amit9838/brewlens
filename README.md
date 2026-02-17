@@ -1,61 +1,36 @@
-# **Brew**Lens
-> A modern, web-based explorer for Homebrew Casks and Formulae.
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## What is BrewLens?
+## Getting Started
 
-BrewLens is a modern browser-based tool that fetches and parses **Homebrew Cask and Formula** metadata directly from official Homebrew sources. It helps developers and power users inspect application and command-line tool details with clarity and speed — all without using a single terminal command.
+First, run the development server:
 
-You can browse both **Casks (macOS Apps)** and **Formulae (CLI Tools)**, including:
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-  * Version details (stable, etc.)
-  * Installation commands
-  * Homepages and download URLs
-  * SHA256 checksums
-  * Dependencies and build dependencies
-  * Artifacts (for casks)
-  * Full JSON representation
-  * Deprecation and disable status
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
------
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## ⭐ Features
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### 📦 **Cask & Formula Switcher**
+## Learn More
 
-Instantly toggle between browsing the entire **Cask** (macOS apps) or **Formula** (CLI tools) database.
+To learn more about Next.js, take a look at the following resources:
 
-### 🔍 **Powerful Search**
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Instantly search across thousands of Homebrew packages with pagination and fast filtering. Filter by name, token, description keywords, and more.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-### 🌗 **Dynamic Light/Dark Theme**
+## Deploy on Vercel
 
-The entire UI (body, cards, header, modals) updates instantly when switching themes and remembers your preference.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-
-## 🧰 Use Cases
-
-### **Developers**
-
-Inspect metadata, versions, URLs, and dependencies while building or debugging casks **and formulae**.
-
-### **Security / Compliance Teams**
-
-Verify download URLs, SHA256 checksums, and source authenticity for any package.
-
-### **SysAdmins**
-
-Audit applications **and tools** before deploying to managed macOS or Linux environments.
-
-### **Homebrew Contributors**
-
-Quickly investigate **cask or formula** structure before making pull requests.
-
-### **General Users**
-
-Discover new macOS apps **and command-line tools** available via Homebrew — without using Terminal.
-
-## 🤝 Contributing
-
-Contributions, feature suggestions, and pull requests are always welcome.
-Open an issue to request fixes, enhancements, or new features.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

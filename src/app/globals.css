@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+/* 1. FORCE DARK MODE VARIANT 
+   This tells Tailwind: "Activate 'dark:...' utilities when the .dark class is present" */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #09090b; /* Zinc 950 */
+}
+
+/* 2. ADD A BORDER VARIABLE (Recommended)
+   Instead of hardcoding border-gray-200 everywhere, define a theme border color. */
+:root {
+  --border-color: #e5e7eb; /* Gray 200 */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a; /* Zinc 950 */
+    --foreground: #fafafa; /* Zinc 50 */
+    --border-color: #27272a; /* Zinc 800 (Darker, subtler border) */
+  }
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --border-color: #27272a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border-color); /* Map the variable here */
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
