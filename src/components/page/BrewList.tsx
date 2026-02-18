@@ -28,7 +28,12 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         return data.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
     }, [data, deferredSearch]);
 
-    const { currentData, currentPage, setCurrentPage, totalPages } = usePagination(filtered, itemsPerPage);
+    const { currentData, currentPage, setCurrentPage, totalPages } = usePagination(filtered, itemsPerPage, "currentPage");
+
+    const changeType = (type: BrewType) => {
+        setType(type);
+        setCurrentPage(1);
+    }
 
     {/* CONTROLS */ }
     return <div className="contasiner max-w-[1400px] mx-auto">
@@ -48,7 +53,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     {(['cask', 'formula'] as const).map(t => (
                         <button
                             key={t}
-                            onClick={() => { setType(t); setSearch(''); }}
+                            onClick={() => { changeType(t); setSearch(''); }}
                             className={cn("px-4 py-1.5 rounded-md text-sm font-medium capitalize transition-all",
                                 type === t ? "bg-white dark:bg-zinc-600 shadow text-green-600 dark:text-green-400" : "text-gray-500"
                             )}
