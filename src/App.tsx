@@ -24,10 +24,10 @@ function HomebrewExplorer() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#111] text-gray-900 dark:text-gray-100 p-4 sm:p-8 transition-colors">
       <div className="max-w-7xl mx-auto space-y-8">
-        <NavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} onShowInstallGuide={() => setIsOpen(true)} />
+        <NavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
         {/* HEADER */}
-        <Header type={type} search={search} setSearch={setSearch} setIsOpen={setIsOpen} />
+        <Header setIsOpen={setIsOpen} />
         <Routes>
           <Route path="/install" element={<div>Install Guide</div>} />
           {/* <BrewList search={search} setSearch={setSearch} type={type} setType={setType} /> */}

@@ -7,8 +7,7 @@ import { NavLink } from "react-router-dom";
 interface NavDrawerProps {
     isOpen: boolean;
     onClose: () => void;
-    // Callback to tell the parent (Header) to open the Modal
-    onShowInstallGuide: () => void;
+
 }
 
 // Internal component for clean link rendering
@@ -25,7 +24,7 @@ const DrawerLink = ({ href, icon: Icon, name, onClose }: { href: string; icon: a
     </a>
 );
 
-export const NavDrawer = ({ isOpen, onClose, onShowInstallGuide }: NavDrawerProps) => {
+export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
 
     // Link Definitions
     const externalLinks = [
@@ -42,7 +41,7 @@ export const NavDrawer = ({ isOpen, onClose, onShowInstallGuide }: NavDrawerProp
         >
             {/* Backdrop: Closes the drawer when clicking outside */}
             <div
-                className="absolute inset-0 h-[100vh] bg-black/80"
+                className="absolute inset-0 h-screen bg-black/80"
                 onClick={onClose}
             />
 
@@ -71,11 +70,11 @@ export const NavDrawer = ({ isOpen, onClose, onShowInstallGuide }: NavDrawerProp
                     {/* Action Button: Installation Details */}
                     <NavLink
                         to={`/installation`}
+                        onClick={onClose}
                     >
                         <Button
                             className="flex w-full justify-start font-bold py-3 text-base"
                             variant="primary"
-                            onClick={onShowInstallGuide} // Triggers the modal open logic in the parent
                         >
                             <Terminal className="w-5 h-5 mr-3" />
                             <span>
