@@ -48,9 +48,8 @@ export const FormulaeDetail = () => {
 
 
     return (
-        <div className="min-h-screen text-zinc-800 dark:text-zinc-100 p-4 md:p-8 font-sans">
-            <div className="max-w-6xl mx-auto space-y-6">
-
+        <div className="min-h-screen text-zinc-800 dark:text-zinc-100 p-2 font-sans">
+            <div className="max-[1400px] mx-auto space-y-6">
                 {/* Top Navigation Bar */}
                 <div className="flex items-center justify-between mb-4">
                     <NavLink

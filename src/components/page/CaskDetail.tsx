@@ -62,9 +62,9 @@ export function CaskDetail() {
   const sha256 = raw.sha256 || "Not available";
 
   return (
-    <div className="min-h-screen p-8 text-gray-800 dark:text-gray-200 font-sans">
+    <div className="min-h-screen p-2  text-gray-800 dark:text-gray-200 font-sans max-[1400px] mx-auto">
       {/* Top Navigation Bar */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between  mb-4">
         <NavLink
           to={`/brewlens`}
         >
