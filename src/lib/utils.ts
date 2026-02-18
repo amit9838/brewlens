@@ -21,12 +21,14 @@ export const normalizeItem = (item: any, type: BrewType): BrewItem => {
 
     return {
         id,
+        type: type,
         name: name || id,
         token: isCask ? item.full_token : item.full_name,
         desc: item.desc || "No description available.",
         version: isCask ? item.version : item.versions?.stable || 'N/A',
         homepage: item.homepage,
         deprecated: item.deprecated,
+        disabled: item.disabled,
         installCmd: `${API_CONFIG[type].installPrefix} ${id}`,
         raw: item,
         _searchString: `${id} ${name} ${item.desc || ''}`.toLowerCase()

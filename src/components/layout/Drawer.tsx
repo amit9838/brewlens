@@ -1,6 +1,8 @@
 import { X, Github, BookOpen, Terminal } from 'lucide-react';
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
+import { NavLink } from "react-router-dom";
+
 
 interface NavDrawerProps {
     isOpen: boolean;
@@ -67,14 +69,20 @@ export const NavDrawer = ({ isOpen, onClose, onShowInstallGuide }: NavDrawerProp
                 <nav className="space-y-4">
 
                     {/* Action Button: Installation Details */}
-                    <Button
-                        className="w-full justify-start font-bold py-3 text-base"
-                        variant="primary"
-                        onClick={onShowInstallGuide} // Triggers the modal open logic in the parent
+                    <NavLink
+                        to={`/installation`}
                     >
-                        <Terminal className="w-5 h-5 mr-3" />
-                        Show Installation Guide
-                    </Button>
+                        <Button
+                            className="flex w-full justify-start font-bold py-3 text-base"
+                            variant="primary"
+                            onClick={onShowInstallGuide} // Triggers the modal open logic in the parent
+                        >
+                            <Terminal className="w-5 h-5 mr-3" />
+                            <span>
+                                Show Installation Guide
+                            </span>
+                        </Button>
+                    </NavLink>
 
                     <div className="pt-4 space-y-2 border-t border-gray-100 dark:border-gray-800 mt-4">
                         <p className="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 tracking-wider pt-2">
