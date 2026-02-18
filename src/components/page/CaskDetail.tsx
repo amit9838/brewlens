@@ -107,7 +107,7 @@ export function CaskDetail() {
               {displayName}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-2">
               <div className="flex items-center gap-3 rounded-full border border-white/10 bg-zinc-200/40 dark:bg-black/40 px-5 py-2.5 backdrop-blur-sm">
                 <span className="text-sm font-medium text-gray-800 dark:text-gray-400">
                   Install &gt;
@@ -117,12 +117,20 @@ export function CaskDetail() {
                 </code>
               </div>
 
-              <div className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-full text-xs font-medium border border-white/10">
+              <div className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-1 py-2 rounded-full text-xs font-medium border border-white/10">
                 <button onClick={copyCmd.bind(null, item)} className="px-3">
                   {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                 </button>
               </div>
               {"|"}
+              <a
+                href={`https://formulae.brew.sh/api/cask/${item.token}.json`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-full text-xs font-medium border border-white/10"
+              >
+                JSON <ExternalLink size={14} />
+              </a>
               {homepage && (
                 <a
                   href={homepage}
@@ -161,7 +169,7 @@ export function CaskDetail() {
 
           {/* Included Artifacts Section */}
           <section className="bg-zinc-100 dark:bg-zinc-900 p-6 rounded-3xl border-black/5 dark:border-white/5 ">
-            <div className="flex items-center gap-2 mb-4 px-2">
+            <div className="flex items-center gap-2 mb-4 pr-2">
               <Box size={18} className="text-emerald-500" />
               <h2 className="text-xl font-semibold ">Included Artifacts</h2>
             </div>

@@ -35,8 +35,9 @@ export const normalizeItem = (item: any, type: BrewType): BrewItem => {
     };
 };
 
-export const fetchBrewData = async (type: BrewType): Promise<BrewItem[]> => {
-    const res = await fetch(API_CONFIG[type].url);
+export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewItem[]> => {
+    let full_url = url || API_CONFIG[type].url;
+    const res = await fetch(full_url);
     if (!res.ok) throw new Error(`Failed to fetch ${type}s`);
     const json = await res.json();
     return json.map((item: any) => normalizeItem(item, type));

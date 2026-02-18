@@ -1,415 +1,308 @@
-import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import { ChevronLeft, Check, Copy, Terminal, Moon, Sun } from "lucide-react";
-/**
- * Icons (Inline SVGs to avoid external dependencies)
- */
-const Icons = {
+import React from "react";
+import { 
+  Terminal, 
+  Apple, 
+  Monitor, 
+  Command, 
+  CheckCircle2, 
+  BookOpen, 
+  ExternalLink, 
+  Cpu,
+  Server
+} from "lucide-react";
+import { cn } from "../../lib/utils";
 
-    Terminal: () => (
-        <svg
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 17v1a3 3 0 003 3h10a3 3 0 003-3v-1m-2-2l-2-2m2 2l-2 2m2-2H4"
-            />
-        </svg>
-    ),
-    Moon: () => (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-        </svg>
-    ),
-    Sun: () => (
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
-        </svg>
-    ),
-};
+// --- Types ---
+interface CardProps {
+  title: string;
+  icon?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+  headerClassName?: string;
+}
 
-/**
- * CodeBlock Component - Handles syntax highlighting aesthetics and copy functionality
- */
-const CodeBlock: React.FC<{ code: string; label?: string }> = ({
-    code,
-    label,
-}) => {
-    const [copied, setCopied] = useState(false);
+interface CodeBlockProps {
+  command: string;
+  label?: string;
+}
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(code);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
+// --- Helper Components ---
 
-    return (
-        <div className="relative group overflow-hidden rounded-xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-highest)] my-2">
-            {label && (
-                <div className="px-4 py-1 text-xs font-medium text-[var(--md-sys-color-on-surface-variant)] border-b border-[var(--md-sys-color-outline-variant)]/50 bg-[var(--md-sys-color-surface-container-high)]">
-                    {label}
-                </div>
-            )}
-            <div className="flex items-start justify-between p-4">
-                <code className="font-mono text-sm break-all text-[var(--md-sys-color-on-surface-variant)]">
-                    {code}
-                </code>
-                <button
-                    onClick={handleCopy}
-                    className="ml-4 p-2 rounded-full hover:bg-[var(--md-sys-color-on-surface)]/10 transition-colors text-[var(--md-sys-color-primary)] shrink-0"
-                    aria-label="Copy code"
-                >
-                    {copied ? <Check /> : <Copy />}
-                </button>
-            </div>
+const CodeBlock: React.FC<CodeBlockProps> = ({ command, label }) => {
+  return (
+    <div className="my-3 overflow-hidden rounded-lg border border-slate-200 bg-slate-900 text-slate-100 shadow-sm dark:border-slate-700">
+      {label && (
+        <div className="flex items-center border-b border-slate-700 bg-slate-800/50 px-3 py-1.5 text-xs font-medium text-slate-400">
+          <Terminal className="mr-2 h-3 w-3" />
+          {label}
         </div>
-    );
+      )}
+      <div className="group relative">
+        <pre className="overflow-x-auto p-4 text-sm font-mono leading-relaxed">
+          <code>{command}</code>
+        </pre>
+      </div>
+    </div>
+  );
 };
 
-const Installation: React.FC = () => {
-    // Theme toggle state
-    const [isDark, setIsDark] = useState(false);
+const BentoCard: React.FC<CardProps> = ({ title, icon, children, className, headerClassName }) => {
+  return (
+    <div className={cn(
+      "flex flex-col overflow-hidden rounded-3xl border transition-all duration-200",
+      "bg-white dark:bg-slate-900 dark:border-slate-800",
+      "shadow-sm hover:shadow-md",
+      className
+    )}>
+      <div className={cn("flex items-center gap-3 px-6 pt-6 pb-2", headerClassName)}>
+        {icon && <div className="text-slate-700 dark:text-slate-200">{icon}</div>}
+        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{title}</h3>
+      </div>
+      <div className="flex-1 px-6 pb-6 text-slate-600 dark:text-slate-300">
+        {children}
+      </div>
+    </div>
+  );
+};
 
-    // Initial Theme Check
-    useEffect(() => {
-        if (
-            window.matchMedia &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches
-        ) {
-            setIsDark(true);
-        }
-    }, []);
+const Pill = ({ children, color = "slate" }: { children: React.ReactNode, color?: string }) => (
+  <span className={cn(
+    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+    color === "blue" && "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+    color === "green" && "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
+    color === "orange" && "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
+    color === "slate" && "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300",
+  )}>
+    {children}
+  </span>
+);
 
-    const toggleTheme = () => setIsDark(!isDark);
+// --- Main Component ---
 
-    const platforms = [
-        {
-            name: "macOS",
-            icon: "🍏",
-            prerequisites: [
-                "macOS Monterey (12) or later",
-                "Xcode Command Line Tools",
-                "64-bit Intel or Apple Silicon",
-                "curl and git",
-            ],
-            steps: [
-                {
-                    type: "text",
-                    content: "Open Terminal (/Applications/Utilities/Terminal)",
-                },
-                {
-                    type: "code",
-                    content:
-                        '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
-                    label: "Install Script",
-                },
-                { type: "text", content: "Follow the prompts and enter password." },
-            ],
-            postInstall: [
-                "echo 'eval \"$(/opt/homebrew/bin/brew shellenv)\"' >> ~/.zprofile",
-                'eval "$(/opt/homebrew/bin/brew shellenv)"',
-            ],
-        },
-        {
-            name: "Linux",
-            icon: "🐧",
-            prerequisites: [
-                "GCC / Clang",
-                "curl, git, procps",
-                "Ruby",
-                "64-bit system",
-            ],
-            steps: [
-                { type: "text", content: "Install build tools (Debian/Ubuntu):" },
-                {
-                    type: "code",
-                    content:
-                        "sudo apt update && sudo apt install build-essential procps curl file git",
-                    label: "Dependencies",
-                },
-                { type: "text", content: "Run the install script:" },
-                {
-                    type: "code",
-                    content:
-                        '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"',
-                    label: "Install Script",
-                },
-            ],
-            postInstall: [
-                "echo 'eval \"$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)\"' >> ~/.bashrc",
-                'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"',
-            ],
-        },
-        {
-            name: "Windows (WSL)",
-            icon: "🪟",
-            prerequisites: ["Windows 10/11 with WSL2", "Ubuntu (or similar) on WSL"],
-            steps: [
-                { type: "text", content: "Open your WSL terminal." },
-                {
-                    type: "text",
-                    content: "Follow the Linux installation steps exactly.",
-                },
-                {
-                    type: "text",
-                    content: "Brew will be available inside the Linux subsystem.",
-                },
-            ],
-            postInstall: [],
-        },
-    ];
-
-    const commands = [
-        { command: "brew --version", description: "Show Homebrew version." },
-        { command: "brew update", description: "Update Homebrew & formulae." },
-        { command: "brew upgrade", description: "Upgrade installed packages." },
-        { command: "brew install <pkg>", description: "Install a package." },
-        { command: "brew list", description: "List installed packages." },
-        { command: "brew search <text>", description: "Search packages." },
-        { command: "brew info <pkg>", description: "View package details." },
-        { command: "brew doctor", description: "Check system health." },
-    ];
-
-    return (
-        <div
-            className={`transition-colors duration-500 ease-in-out ${isDark ? "dark" : ""}`}
-            style={
-                {
-                    // CSS Variables mapping for M3 Tokens
-                    "--md-sys-color-primary": isDark ? "#D0BCFF" : "#6750A4",
-                    "--md-sys-color-on-primary": isDark ? "#381E72" : "#FFFFFF",
-                    "--md-sys-color-primary-container": isDark ? "#4F378B" : "#EADDFF",
-                    "--md-sys-color-on-primary-container": isDark ? "#EADDFF" : "#21005D",
-
-                    "--md-sys-color-surface": isDark ? "#141218" : "#FDF8F6",
-                    "--md-sys-color-on-surface": isDark ? "#E6E1E5" : "#1C1B1F",
-                    "--md-sys-color-on-surface-variant": isDark ? "#CAC4D0" : "#49454F",
-                    "--md-sys-color-outline": isDark ? "#938F99" : "#79747E",
-                    "--md-sys-color-outline-variant": isDark ? "#49454F" : "#CAC4D0",
-
-                    "--md-sys-color-surface-container-low": isDark
-                        ? "#1D1B20"
-                        : "#F7F2FA",
-                    "--md-sys-color-surface-container": isDark ? "#211F26" : "#F3EDF7",
-                    "--md-sys-color-surface-container-high": isDark
-                        ? "#2B2930"
-                        : "#ECE6F0",
-                    "--md-sys-color-surface-container-highest": isDark
-                        ? "#36343B"
-                        : "#E6E0E9",
-                } as React.CSSProperties
-            }
-        >
-            <div className="min-h-screen font-sans  duration-300 p-4 md:p-4">
-                {/* Top Navigation Bar */}
-                <div className="flex items-center justify-between mb-4"></div>
-                <div className="max-w-7xl mx-auto space-y-12">
-                    {/* Header */}
-                    <header className="relative overflow-hidden rounded-full  p-8 md:p-2 text-center shadow-sm">
-                        <nav className="flex justify-between items-center p-1 w-full">
-                            <h1 className="text-2xl md:text-2xl font-normal tracking-tight text-[var(--md-sys-color-on-surface)]">
-                                Homebew Guide
-                            </h1>
-                            {/* Theme Toggle */}
-                            <button
-                                onClick={toggleTheme}
-                                className="  p-3 rounded-full bg-[var(--md-sys-color-surface-container-highest)] hover:bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-surface)] hover:text-[var(--md-sys-color-on-primary-container)] transition-all"
-                                aria-label="Toggle theme"
-                            >
-                                {isDark ? <Sun /> : <Moon />}
-                            </button>
-                        </nav>
-                    </header>
-
-                    {/* Platform Grid */}
-                    <section>
-                        <h2 className="text-2xl md:text-3xl font-normal mb-8 pl-2 border-l-4 border-[var(--md-sys-color-primary)]">
-                            Installation
-                        </h2>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {platforms.map((platform) => (
-                                <article
-                                    key={platform.name}
-                                    className="flex flex-col bg-[var(--md-sys-color-surface-container-low)] rounded-[2rem] p-6 md:p-8 hover:bg-[var(--md-sys-color-surface-container)] transition-all duration-300 hover:-translate-y-1 shadow-sm hover:shadow-md"
-                                >
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <div className="w-16 h-16 rounded-2xl bg-[var(--md-sys-color-primary-container)] flex items-center justify-center text-3xl">
-                                            {platform.icon}
-                                        </div>
-                                        <h3 className="text-2xl font-normal text-[var(--md-sys-color-on-surface)]">
-                                            {platform.name}
-                                        </h3>
-                                    </div>
-
-                                    <div className="space-y-8 flex-grow">
-                                        {/* Prerequisites */}
-                                        <div>
-                                            <h4 className="text-sm font-bold tracking-wider uppercase text-[var(--md-sys-color-primary)] mb-3">
-                                                Prerequisites
-                                            </h4>
-                                            <ul className="space-y-2">
-                                                {platform.prerequisites.map((req, i) => (
-                                                    <li
-                                                        key={i}
-                                                        className="flex items-start gap-3 text-sm text-[var(--md-sys-color-on-surface-variant)]"
-                                                    >
-                                                        <span className="mt-1 text-[var(--md-sys-color-primary)] opacity-70">
-                                                            •
-                                                        </span>
-                                                        {req}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-
-                                        {/* Steps */}
-                                        <div>
-                                            <h4 className="text-sm font-bold tracking-wider uppercase text-[var(--md-sys-color-primary)] mb-3">
-                                                Steps
-                                            </h4>
-                                            <div className="space-y-4">
-                                                {platform.steps.map((step, i) => (
-                                                    <div key={i}>
-                                                        {step.type === "text" ? (
-                                                            <p className="text-sm text-[var(--md-sys-color-on-surface-variant)] mb-1">
-                                                                {step.content}
-                                                            </p>
-                                                        ) : (
-                                                            <CodeBlock
-                                                                code={step.content}
-                                                                label={step.label}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {/* Post Install */}
-                                        {platform.postInstall.length > 0 && (
-                                            <div className="pt-4 border-t border-[var(--md-sys-color-outline-variant)]">
-                                                <h4 className="text-sm font-bold tracking-wider uppercase text-[var(--md-sys-color-primary)] mb-2">
-                                                    Add to PATH
-                                                </h4>
-                                                {platform.postInstall.map((cmd, i) => (
-                                                    <CodeBlock key={i} code={cmd} />
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                </article>
-                            ))}
-                        </div>
-                    </section>
-
-                    {/* Common Commands & Verify Section */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        {/* Commands Table/List */}
-                        <div className="lg:col-span-2 bg-[var(--md-sys-color-surface-container)] rounded-[2rem] p-6 md:p-8">
-                            <div className="flex items-center gap-3 mb-6">
-                                <span className="p-2 rounded-xl bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]">
-                                    <Terminal />
-                                </span>
-                                <h2 className="text-2xl font-normal">Common Commands</h2>
-                            </div>
-
-                            <div className="overflow-hidden rounded-2xl border border-[var(--md-sys-color-outline-variant)]">
-                                <table className="w-full text-left border-collapse">
-                                    <thead className="bg-[var(--md-sys-color-surface-container-high)]">
-                                        <tr>
-                                            <th className="p-4 text-xs font-bold uppercase tracking-wider text-[var(--md-sys-color-on-surface-variant)]">
-                                                Command
-                                            </th>
-                                            <th className="p-4 text-xs font-bold uppercase tracking-wider text-[var(--md-sys-color-on-surface-variant)] hidden md:table-cell">
-                                                Action
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface-container-low)]">
-                                        {commands.map((cmd, i) => (
-                                            <tr
-                                                key={i}
-                                                className="group hover:bg-[var(--md-sys-color-surface-container-high)] transition-colors"
-                                            >
-                                                <td className="p-4">
-                                                    <code className="text-sm font-mono text-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)]/30 px-2 py-1 rounded-md">
-                                                        {cmd.command}
-                                                    </code>
-                                                    <p className="md:hidden mt-2 text-sm text-[var(--md-sys-color-on-surface-variant)]">
-                                                        {cmd.description}
-                                                    </p>
-                                                </td>
-                                                <td className="p-4 text-sm text-[var(--md-sys-color-on-surface)] hidden md:table-cell">
-                                                    {cmd.description}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        {/* Verify & Links (Sidebar) */}
-                        <div className="space-y-6">
-                            {/* Verification Card */}
-                            <div className="bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)] rounded-[2rem] p-8">
-                                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                                    <Check /> Verify
-                                </h3>
-                                <p className="mb-4 opacity-80 text-sm">
-                                    Run these to ensure your system is healthy:
-                                </p>
-                                <CodeBlock code="brew --version" />
-                                <div className="h-2"></div>
-                                <CodeBlock code="brew doctor" />
-                            </div>
-
-                            {/* Resources Card */}
-                            <div className="bg-[var(--md-sys-color-surface-container-high)] rounded-[2rem] p-8 border border-[var(--md-sys-color-outline-variant)]">
-                                <h3 className="text-xl font-normal mb-4">Resources</h3>
-                                <ul className="space-y-3">
-                                    {[
-                                        { name: "Documentation", url: "https://docs.brew.sh" },
-                                        {
-                                            name: "GitHub Repo",
-                                            url: "https://github.com/Homebrew/brew",
-                                        },
-                                        { name: "Formulae List", url: "https://formulae.brew.sh" },
-                                    ].map((link) => (
-                                        <li key={link.name}>
-                                            <a
-                                                href={link.url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="flex items-center justify-between p-3 rounded-xl bg-[var(--md-sys-color-surface)] hover:bg-[var(--md-sys-color-primary)] hover:text-[var(--md-sys-color-on-primary)] transition-all group"
-                                            >
-                                                <span className="font-medium text-sm">{link.name}</span>
-                                                <span className="group-hover:translate-x-1 transition-transform">
-                                                    →
-                                                </span>
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <footer className="text-center pt-8 border-t border-[var(--md-sys-color-outline-variant)]">
-                        <p className="text-sm text-[var(--md-sys-color-on-surface-variant)]">
-                            Designed with Material 3 Expressive
-                        </p>
-                    </footer>
-                </div>
+export default function HomebrewGuide() {
+  return (
+    <div className="min-h-screen  p-4 font-sans  md:p-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        
+        {/* --- Header Section (Full Width) --- */}
+        <div className="col-span-1 overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-700 p-8 shadow-lg md:col-span-2 xl:col-span-3">
+          <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
+            <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-6xl shadow-inner backdrop-blur-sm">
+              🍺
             </div>
+            <div className="max-w-3xl">
+              <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-white md:text-5xl">
+                Homebrew Installation Guide
+              </h1>
+              <p className="text-lg font-medium text-indigo-100 opacity-90">
+                The "missing package manager" for macOS (or Linux). 
+                A free and open-source tool that simplifies installing software.
+              </p>
+            </div>
+          </div>
         </div>
-    );
-};
 
-export default Installation;
+        {/* --- MacOS Installation --- */}
+        <BentoCard 
+          title="Installation on macOS" 
+          icon={<Apple className="h-6 w-6" />}
+          className="bg-blue-50/50 border-blue-100 dark:bg-blue-950/10 dark:border-blue-900"
+          headerClassName="text-blue-900 dark:text-blue-100"
+        >
+          <div className="space-y-4 text-sm">
+            <div className="space-y-2">
+              <h4 className="font-semibold text-slate-900 dark:text-white">Prerequisites:</h4>
+              <div className="flex flex-wrap gap-2">
+                <Pill color="blue">macOS Monterey 12+</Pill>
+                <Pill color="blue">Xcode CL Tools</Pill>
+                <Pill color="blue">64-bit Intel / Apple Silicon</Pill>
+              </div>
+            </div>
+
+            <div>
+              <p className="mb-2 font-medium">1. Run the Install Script:</p>
+              <CodeBlock 
+                label="Terminal" 
+                command='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' 
+              />
+            </div>
+
+            <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-slate-800">
+              <div className="mb-2 flex items-center gap-2 font-semibold text-slate-900 dark:text-white">
+                <Cpu className="h-4 w-4 text-orange-500" />
+                <span>Apple Silicon Post-Install</span>
+              </div>
+              <p className="mb-2 text-xs text-slate-500 dark:text-slate-400">Add to PATH (~/.zprofile):</p>
+              <CodeBlock command={`echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile\neval "$(/opt/homebrew/bin/brew shellenv)"`} />
+            </div>
+          </div>
+        </BentoCard>
+
+        {/* --- Linux Installation --- */}
+        <BentoCard 
+          title="Installation on Linux" 
+          icon={<Server className="h-6 w-6" />}
+          className="bg-emerald-50/50 border-emerald-100 dark:bg-emerald-950/10 dark:border-emerald-900"
+          headerClassName="text-emerald-900 dark:text-emerald-100"
+        >
+          <div className="space-y-4 text-sm">
+            <div className="space-y-2">
+              <h4 className="font-semibold text-slate-900 dark:text-white">1. Install Dependencies (Debian/Ubuntu):</h4>
+              <CodeBlock 
+                command="sudo apt update && sudo apt install build-essential procps curl file git" 
+              />
+            </div>
+
+            <div>
+              <h4 className="font-semibold text-slate-900 dark:text-white">2. Run Script:</h4>
+              <CodeBlock 
+                command='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' 
+              />
+            </div>
+
+            <div className="rounded-xl bg-emerald-100/50 p-3 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
+              <strong>Tip:</strong> Don't forget to add Homebrew to your <code className="rounded bg-emerald-200 px-1 py-0.5 text-xs dark:bg-emerald-800">~/.bashrc</code> or <code className="rounded bg-emerald-200 px-1 py-0.5 text-xs dark:bg-emerald-800">~/.zshrc</code> as prompted by the script!
+            </div>
+          </div>
+        </BentoCard>
+
+        {/* --- Windows Section (Smaller) --- */}
+        <BentoCard 
+          title="Windows (WSL)" 
+          icon={<Monitor className="h-6 w-6" />}
+          className="bg-orange-50/50 border-orange-100 dark:bg-orange-950/10 dark:border-orange-900 md:col-span-1"
+          headerClassName="text-orange-900 dark:text-orange-100"
+        >
+          <div className="flex h-full flex-col justify-between">
+            <div className="space-y-3 text-sm">
+              <p>Homebrew does <strong>not</strong> run natively on Windows.</p>
+              <p>You must use <strong>Windows Subsystem for Linux (WSL)</strong>.</p>
+              <ul className="list-inside list-disc space-y-1 text-slate-600 dark:text-slate-400">
+                <li>Install WSL2 (Ubuntu recommended).</li>
+                <li>Open your WSL terminal.</li>
+                <li>Follow the <strong>Linux</strong> installation instructions.</li>
+              </ul>
+            </div>
+          </div>
+        </BentoCard>
+
+        {/* --- Common Commands (Wide) --- */}
+        <BentoCard 
+          title="Common Commands" 
+          icon={<Command className="h-6 w-6" />}
+          className="bg-purple-50/50 border-purple-100 dark:bg-purple-950/10 dark:border-purple-900 md:col-span-2 xl:col-span-2"
+          headerClassName="text-purple-900 dark:text-purple-100"
+        >
+          <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-700">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100">
+                <tr>
+                  <th className="px-4 py-3 font-semibold">Command</th>
+                  <th className="px-4 py-3 font-semibold">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-700">
+                <tr className="bg-white dark:bg-slate-900">
+                  <td className="px-4 py-2 font-mono text-purple-600 dark:text-purple-400">brew install [pkg]</td>
+                  <td className="px-4 py-2">Install a package (e.g., wget)</td>
+                </tr>
+                <tr className="bg-slate-50 dark:bg-slate-800/50">
+                  <td className="px-4 py-2 font-mono text-purple-600 dark:text-purple-400">brew install --cask [app]</td>
+                  <td className="px-4 py-2">Install GUI app (macOS only)</td>
+                </tr>
+                <tr className="bg-white dark:bg-slate-900">
+                  <td className="px-4 py-2 font-mono text-purple-600 dark:text-purple-400">brew update</td>
+                  <td className="px-4 py-2">Update Homebrew & formula list</td>
+                </tr>
+                <tr className="bg-slate-50 dark:bg-slate-800/50">
+                  <td className="px-4 py-2 font-mono text-purple-600 dark:text-purple-400">brew upgrade</td>
+                  <td className="px-4 py-2">Upgrade all installed packages</td>
+                </tr>
+                <tr className="bg-white dark:bg-slate-900">
+                  <td className="px-4 py-2 font-mono text-purple-600 dark:text-purple-400">brew list</td>
+                  <td className="px-4 py-2">List installed packages</td>
+                </tr>
+                <tr className="bg-slate-50 dark:bg-slate-800/50">
+                  <td className="px-4 py-2 font-mono text-purple-600 dark:text-purple-400">brew doctor</td>
+                  <td className="px-4 py-2">Check system for problems</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 flex flex-col gap-2 rounded-lg bg-white p-3 text-sm shadow-sm dark:bg-slate-800 sm:flex-row sm:items-center">
+            <span className="font-semibold">Example:</span>
+            <code className="rounded bg-slate-100 px-2 py-1 font-mono text-slate-800 dark:bg-slate-700 dark:text-slate-200">
+              brew install --cask firefox
+            </code>
+          </div>
+        </BentoCard>
+
+        {/* --- Verification --- */}
+        <BentoCard 
+          title="Verification" 
+          icon={<CheckCircle2 className="h-6 w-6" />}
+          className="bg-teal-50/50 border-teal-100 dark:bg-teal-950/10 dark:border-teal-900"
+          headerClassName="text-teal-900 dark:text-teal-100"
+        >
+          <div className="flex h-full flex-col">
+            <p className="mb-4 text-sm">
+              Run the doctor command to ensure everything is set up correctly. It will warn you about issues and suggest fixes.
+            </p>
+            <div className="mt-auto">
+              <CodeBlock command="brew doctor" />
+            </div>
+          </div>
+        </BentoCard>
+
+        {/* --- Resources --- */}
+        <div className="col-span-1 flex flex-col gap-6 md:col-span-2 xl:col-span-3">
+          <BentoCard 
+            title="Additional Resources" 
+            icon={<BookOpen className="h-6 w-6" />}
+            className="bg-indigo-50/50 border-indigo-100 dark:bg-indigo-950/10 dark:border-indigo-900"
+            headerClassName="text-indigo-900 dark:text-indigo-100"
+          >
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <a 
+                href="https://docs.brew.sh" 
+                target="_blank" 
+                rel="noreferrer"
+                className="group flex items-center justify-between rounded-xl bg-white p-4 shadow-sm transition-all hover:bg-indigo-50 hover:shadow-md dark:bg-slate-800 dark:hover:bg-slate-700"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300">
+                    <BookOpen size={20} />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-slate-900 dark:text-white">Documentation</div>
+                    <div className="text-xs text-slate-500">docs.brew.sh</div>
+                  </div>
+                </div>
+                <ExternalLink size={16} className="text-slate-400 group-hover:text-indigo-500" />
+              </a>
+
+              <a 
+                href="https://github.com/Homebrew/brew" 
+                target="_blank" 
+                rel="noreferrer"
+                className="group flex items-center justify-between rounded-xl bg-white p-4 shadow-sm transition-all hover:bg-indigo-50 hover:shadow-md dark:bg-slate-800 dark:hover:bg-slate-700"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300">
+                    <Server size={20} />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-slate-900 dark:text-white">GitHub Repo</div>
+                    <div className="text-xs text-slate-500">github.com/Homebrew</div>
+                  </div>
+                </div>
+                <ExternalLink size={16} className="text-slate-400 group-hover:text-indigo-500" />
+              </a>
+            </div>
+          </BentoCard>
+        </div>
+
+      </div>
+    </div>
+  );
+}

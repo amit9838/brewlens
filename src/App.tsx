@@ -10,7 +10,7 @@ import { BrewList } from './components/page/BrewList';
 import { type BrewType } from "./types";
 import { Routes, Route } from 'react-router-dom';
 import { CaskDetail } from './components/page/CaskDetail';
-import Installation from './components/page/installation';
+import Installation from './components/page/Installation';
 import FormulaeDetail from './components/page/FormulaeDetail';
 
 const queryClient = new QueryClient();
