@@ -15,7 +15,9 @@
   <img src="https://img.shields.io/github/languages/top/amit9838/brewlens" alt="Top language">
 </div>
 
----
+<br>
+
+<img style = "border-radius:1rem" src="demo/demo.gif">
 
 ## ✨ What is BrewLens?
 
