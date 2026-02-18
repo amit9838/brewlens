@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { type BrewItem, type BrewType } from "../../types";
+import { type BrewItem } from "../../types";
 import { useLocation } from "react-router-dom";
-import { ExternalLink, Box, Zap, Trash2, Info, Download } from "lucide-react";
+import { ExternalLink, Box, Zap, Trash2, Info } from "lucide-react";
 import { Share2, ChevronLeft } from 'lucide-react';
 import { Check, Copy } from "lucide-react";
 import { NavLink } from "react-router-dom";
