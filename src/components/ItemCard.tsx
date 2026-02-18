@@ -22,9 +22,11 @@ export const ItemCard = memo(({ item }: { item: BrewItem }) => {
                         className="w-11 h-11 rounded-full bg-gray-200 dark:bg-zinc-700 p-1 border-0 border-gray-300 dark:border-gray-600"
                         alt=""
                     />
-                    <div className="min-w-0">
+                    <div className="min-w-0 ">
                         <h3 className="font-bold text-gray-900 dark:text-gray-100 truncate">{item.name}</h3>
-                        <span className="bg-gray-100 dark:bg-zinc-700/30 px-2 py-1 text-xs text-zinc-500 dark:text-zinc-400 rounded-full max-w-[8rem] overflow-hidden text-ellipsis text-nowrap" title={item.version}>v{item.version}</span>
+                        <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-zinc-500 dark:text-zinc-400 rounded-full">
+                            <span className=" bg-gray-100 dark:bg-zinc-700/30 px-2 py-1 text-xs rounded-full " title={item.version}>v{item.version}</span>
+                        </div>
                     </div>
                 </div>
 

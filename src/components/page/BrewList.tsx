@@ -6,6 +6,7 @@ import { ItemCard } from "../ItemCard";
 import { Button } from "../ui/Button";
 import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
+import SkeletonGrid from "./SkeletonGrid";
 
 interface Props {
     type: BrewType;
@@ -62,14 +63,14 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         {/* GRID */}
         {
             isLoading ? (
-                <div className="py-20 text-center animate-pulse">Loading data...</div>
+                <SkeletonGrid count={itemsPerPage} />
             ) : error ? (
                 <div className="py-20 text-center text-red-500">Failed to load data.</div>
             ) : (
                 <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {currentData.map(item => (
-                            <ItemCard key={item.id} item={item}/>
+                            <ItemCard key={item.id} item={item} />
                         ))}
                     </div>
 

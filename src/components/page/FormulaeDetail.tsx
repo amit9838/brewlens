@@ -98,6 +98,14 @@ export const FormulaeDetail = () => {
                                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                                 </button>
                             </div>
+                            <a
+                                href={`https://formulae.brew.sh/api/formula/${data.token}.json`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-full text-xs font-medium border border-white/10"
+                            >
+                                JSON <ExternalLink size={14} />
+                            </a>
                             {"|"}
                             {homepage && (
                                 <a
