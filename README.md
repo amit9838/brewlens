@@ -3,7 +3,7 @@
   <p><strong>A modern, web-based explorer for Homebrew Casks and Formulae.</strong></p>
 
   <p>
-    <a href="https://amit9838.github.io/brewlens/">View Live Demo</a>
+    <a href="https://amit9838.github.io/brewlens/">Website</a>
     ·
     <a href="https://github.com/amit9838/brewlens/issues">Report Bug</a>
     ·
