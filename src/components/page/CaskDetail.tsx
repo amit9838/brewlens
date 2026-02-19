@@ -5,6 +5,7 @@ import { ExternalLink, Box, Zap, Trash2, Info } from "lucide-react";
 import { Share2, ChevronLeft } from 'lucide-react';
 import { Check, Copy } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { Button } from "../ui/Button";
 
 /**
  * Formats an artifact value for display.
@@ -68,10 +69,10 @@ export function CaskDetail() {
         <NavLink
           to={`/brewlens`}
         >
-          <button className="flex items-center gap-2 opacity-80 hover:opacity-100 transition-colors">
+          <Button variant="ghost" size="sm">
             <ChevronLeft size={20} />
             <span className="text-sm font-medium">Cask Details</span>
-          </button>
+          </Button>
         </NavLink>
         <div className="flex gap-4 text-zinc-400">
           <Share2 size={20} className="cursor-pointer hover:text-white" />
@@ -80,65 +81,61 @@ export function CaskDetail() {
       </div>
 
       {/* Main Header Card */}
-      <header className="relative mb-6  overflow-hidden rounded-3xl bg-[#c6ebe0] dark:bg-[#09271e] p-10 border border-white/5">
+      <header className="relative mb-6  overflow-hidden rounded-3xl bg-[#376154] dark:bg-[#09271e] p-10 border border-white/5">
         <div className="flex flex-col md:flex-row items-center gap-6">
-          <div className="h-24 w-24 flex-shrink-0 rounded-2xl  bg-[#1a1a1a] p-4 shadow-2xl">
-            {/* Using a placeholder/fallback for the icon */}
+          <div className="w-24 h-24 bg-zinc-200 dark:bg-black rounded-2xl flex items-center justify-center border border-white/10 shadow-xl">
+            {/* Replace with actual icon logic if available */}
             <img
               src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`}
-              alt={displayName[0]}
-              className="h-full w-full object-contain rounded"
-              onError={(e) =>
-              (e.currentTarget.src =
-                "https://brew.sh/assets/img/homebrew-256x256.png")
-              }
-            />
+              alt={item.name[0]}
+              className="opacity-80 invert rounded-md" />
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <p className="text-xs font-bold tracking-widest text-emerald-700/80 dark:text-emerald-500/80 uppercase mb-2">
+            <p className="text-xs font-bold tracking-widest text-emerald-500/80 uppercase mb-2">
               HOMEBREW CASK: {token}
               {packageStatus(item).isNotInstallable &&
-                <span className="float-end rounded-full bg-orange-400/50 text-orange-700  dark:text-orange-100 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10" >{packageStatus(item).reason}</span>
+                <span className="float-end rounded-full bg-orange-400/50 text-orange-700 dark:text-orange-100 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10" >{packageStatus(item).reason}</span>
               }
             </p>
 
-            <h1 className="text-5xl font-bold tracking-tight dark:text-white mb-4">
+            <h1 className="text-5xl font-bold tracking-tight text-white mb-4">
               {displayName}
             </h1>
 
             <div className="flex flex-wrap items-center gap-2">
-              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-zinc-200/40 dark:bg-black/40 px-5 py-2.5 backdrop-blur-sm">
-                <span className="text-sm font-medium text-gray-800 dark:text-gray-400">
+              <div className="flex items-center gap-3 rounded-full border border-white/10 bg-black/40 px-5 py-2.5 backdrop-blur-sm">
+                <span className="text-sm font-medium text-gray-300">
                   Install &gt;
                 </span>
-                <code className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                <code className="text-sm font-semibold text-emerald-400">
                   {installCommand}
                 </code>
               </div>
 
-              <div className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-1 py-2 rounded-full text-xs font-medium border border-white/10">
-                <button onClick={copyCmd.bind(null, item)} className="px-3">
-                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                </button>
-              </div>
-              {"|"}
+              <Button onClick={copyCmd.bind(null, item)} isPill={true} variant="glass" className="text-zinc-200 hover:text-zinc-100" >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </Button>
+
               <a
                 href={`https://formulae.brew.sh/api/cask/${item.token}.json`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-full text-xs font-medium border border-white/10"
               >
-                JSON <ExternalLink size={14} />
+                <Button isPill={true} variant="glass" className="text-zinc-200 hover:text-zinc-100" >
+                  JSON <ExternalLink size={14} />
+                </Button>
               </a>
+
               {homepage && (
                 <a
                   href={homepage}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-full text-xs font-medium border border-white/10"
                 >
-                  View Website <ExternalLink size={14} />
+                  <Button isPill={true} variant="glass" className="text-zinc-200 hover:text-zinc-100" >
+                    View Website <ExternalLink size={14} />
+                  </Button>
                 </a>
               )}
             </div>
@@ -168,7 +165,7 @@ export function CaskDetail() {
           </section>
 
           {/* Included Artifacts Section */}
-          <section className="bg-zinc-100 dark:bg-zinc-900 p-6 rounded-3xl border-black/5 dark:border-white/5 ">
+          <section className="bg-zinc-100 dark:bg-zinc-900 p-6 rounded-3xl border border-black/5 dark:border-white/5">
             <div className="flex items-center gap-2 mb-4 pr-2">
               <Box size={18} className="text-emerald-500" />
               <h2 className="text-xl font-semibold ">Included Artifacts</h2>
@@ -219,7 +216,7 @@ export function CaskDetail() {
 
         {/* Right Column: Package Info */}
         <aside className="space-y-6">
-          <section className="rounded-3xl bg-zinc-100 dark:bg-zinc-900 p-8 border border-white/5 h-full">
+          <section className="rounded-3xl bg-zinc-100 dark:bg-zinc-900 p-8 border border-black/5 dark:border-white/5 h-full">
             <h2 className="text-xl font-semibold  mb-6">Package Info</h2>
 
             <div className="space-y-8 ">

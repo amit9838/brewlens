@@ -3,11 +3,11 @@ import { useBrewData } from "../../hooks/useBrewData";
 import { useDeferredValue } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { ItemCard } from "../ItemCard";
-import { Button } from "../ui/Button";
 import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
 import { Search, X } from "lucide-react";
+import { Pagination } from "../ui/Pagination";
 
 interface Props {
     type: BrewType;
@@ -28,7 +28,8 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         return data.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
     }, [data, deferredSearch]);
 
-    const { currentData, currentPage, setCurrentPage, totalPages } = usePagination(filtered, itemsPerPage, "currentPage");
+    const pagination = usePagination(filtered, itemsPerPage, "currentPage");
+    const { currentData, setCurrentPage, totalPages } = pagination
 
     const changeType = (type: BrewType) => {
         setType(type);
@@ -63,19 +64,6 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     ))}
                 </div>
             </div>
-
-            {totalPages > 1 && (
-                <div className="flex items-center gap-3 text-sm min-w-40">
-                    <span className="text-gray-500">Items per page:</span>
-                    <select
-                        className="bg-transparent font-medium cursor-pointer outline-none"
-                        value={itemsPerPage}
-                        onChange={e => setItemsPerPage(Number(e.target.value))}
-                    >
-                        {[12, 24, 48].map(n => <option key={n} value={n}>{n}</option>)}
-                    </select>
-                </div>
-            )}
         </div>
 
         {/* GRID */}
@@ -89,16 +77,10 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
             </div>
 
             {/* PAGINATION */}
-            {totalPages > 1 && (
-                <div className="flex justify-center gap-4 pt-8">
-                    <Button variant="secondary" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}>Prev</Button>
-                    <span className="py-2 text-sm font-mono text-zinc-500">Page {currentPage} of {totalPages}</span>
-                    <Button variant="secondary" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}>Next</Button>
-                </div>
-            )}
+            {totalPages > 1 && <Pagination pagination={pagination} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />}
 
         </>}
-        {currentData.length === 0 && <>
+        {currentData.length === 0 && !isLoading && <>
             <div className="h-120 flex flex-col items-center justify-center p-20 text-gray-500">
                 <Search className="mb-4 h-12 w-12 opacity-40 text-zinc-800 dark:text-zinc-100" />
                 <p className="text-lg">No data found. Try something else?</p>
