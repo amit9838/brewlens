@@ -106,6 +106,9 @@ export const FormulaeDetail = () => {
                         <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
                             <div className=" flex flex-wrap items-center gap-2">
                                 <div className="group relative flex items-center gap-1 rounded-full border border-white/10 bg-black/40 px-5 py-2.5">
+                                    <span className="text-sm font-medium text-gray-300">
+                                        Install:
+                                    </span>
                                     <code className="text-sm font-semibold text-emerald-400">
                                         {installCmd}
                                     </code>
