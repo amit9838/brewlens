@@ -71,7 +71,7 @@ export const FormulaeDetail = () => {
                 {/* Top Navigation Bar */}
                 <div className="flex items-center justify-between mb-4">
                     <NavLink
-                        to={`/brewlens`}
+                        to={`/`}
                     >
                         <Button variant="ghost" size="sm">
                             <ChevronLeft size={20} />

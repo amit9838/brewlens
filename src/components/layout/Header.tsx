@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
         >
           <MenuIcon size={20} />
         </Button>
-        <NavLink to="/brewlens" className="flex items-center gap-2 text-gray-600 dark:text-gray-100 hover:text-gray-800 dark:hover:text-gray-200">
+        <NavLink to="/" className="flex items-center gap-2 text-gray-600 dark:text-gray-100 hover:text-gray-800 dark:hover:text-gray-200">
           <Terminal size={20} className="bg-green-600 text-white p-1.5 w-8 h-8 rounded-md" />
           <h1 className="text-3xl my-auto font-bold">
             Brew<span className="font-light opacity-70">Lens</span>
