@@ -31,7 +31,7 @@ function HomebrewExplorer() {
         <Routes>
           <Route path="/install" element={<div>Install Guide</div>} />
           {/* <BrewList search={search} setSearch={setSearch} type={type} setType={setType} /> */}
-          <Route path="/brewlens" element={<BrewList search={search} setSearch={setSearch} type={type} setType={setType} />} />
+          <Route path="/" element={<BrewList search={search} setSearch={setSearch} type={type} setType={setType} />} />
           <Route path="/installation" element={<Installation />} />
           <Route path="/cask/:token" element={<CaskDetail />} />
           <Route path="/formula/:token" element={<FormulaeDetail />} />
