@@ -6,6 +6,7 @@ import { ItemCard } from "../ItemCard";
 import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
+import ErrorState from "./Error";
 import { Search, X } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
 
@@ -68,7 +69,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
 
         {/* GRID */}
         {isLoading && <SkeletonGrid count={itemsPerPage} />}
-        {error && <div className="py-20 text-center text-red-500">Failed to load data.</div>}
+        {error && <ErrorState error={error} />}
         {currentData && <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {currentData.map(item => (
@@ -80,7 +81,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
             {totalPages > 1 && <Pagination pagination={pagination} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />}
 
         </>}
-        {currentData.length === 0 && !isLoading && <>
+        {currentData.length === 0 && !isLoading && !error && <>
             <div className="h-120 flex flex-col items-center justify-center p-20 text-gray-500">
                 <Search className="mb-4 h-12 w-12 opacity-40 text-zinc-800 dark:text-zinc-100" />
                 <p className="text-lg">No data found. Try something else?</p>

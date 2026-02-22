@@ -36,9 +36,53 @@ export const normalizeItem = (item: any, type: BrewType): BrewItem => {
 };
 
 export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewItem[]> => {
-    let full_url = url || API_CONFIG[type].url;
+    const full_url = url || API_CONFIG[type].url;
     const res = await fetch(full_url);
-    if (!res.ok) throw new Error(`Failed to fetch ${type}s`);
+    if (!res.ok) throw new Error(`Failed to fetch ${type} data from ${full_url}`);
     const json = await res.json();
-    return json.map((item: any) => normalizeItem(item, type));
+    // Handle both single objects (individual formula) and arrays (list)
+    const data = Array.isArray(json) ? json : [json];
+    return data.map((item: any) => normalizeItem(item, type));
+};
+
+
+export const getSourceCodeStatus = (item: BrewItem) => {
+    // 1. Collect all potential URLs to check for Open Source domains
+    const urlSpecsValues = Object.values(item.raw.url_specs ?? {});
+    const websiteUrl = item.homepage || "";
+
+    // Combine them into a single searchable string
+    let allTextToSearch = [...urlSpecsValues, websiteUrl].join(" ").toLowerCase();
+
+    if (item.type === "formula") {
+        let source_url = item.raw.urls?.head?.url || "";
+        allTextToSearch += " " + source_url;
+    }
+    // 2. Define our Open Source indicators
+    const osDomains = ["github.com", "gitlab.com", "bitbucket.org", "codeberg.org"];
+    const isOSS = osDomains.some(domain => allTextToSearch.includes(domain));
+
+    if (item.type === "formula") {
+        return {
+            verified: true,
+            isOSS,
+            url: item.raw.urls?.head?.url || null,
+        };
+    }
+
+    // 3. Handle the "No Source" case
+    if (urlSpecsValues.length === 0) {
+        return {
+            verified: false,
+            isOSS,
+            url: null,
+        };
+    }
+
+    // 4. Return the full status object
+    return {
+        verified: true,
+        isOSS,
+        url: `http://${urlSpecsValues[0]}` || null // Returns the first repository link found
+    };
 };

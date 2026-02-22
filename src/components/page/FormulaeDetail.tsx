@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useLocation } from 'react-router-dom';
-import { ExternalLink, Info, Share2, ChevronLeft, Check, Clipboard, Box } from 'lucide-react';
-import type { BrewItem } from '../../types';
+import { useBrewData } from "../../hooks/useBrewData";
+import { ExternalLink, Info, Share2, ChevronLeft, Check, Clipboard, Box, Download, Code } from 'lucide-react';
+import type { BrewItem, BrewType } from '../../types';
 import { NavLink } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
+import SkeletonDetails from "./SkeletonDetails";
+import { getSourceCodeStatus } from "../../lib/utils";
 
 
 export const Tag = ({ label }: { label: string | null }) => {
@@ -27,24 +30,38 @@ export const Tag = ({ label }: { label: string | null }) => {
 export const FormulaeDetail = () => {
     const [copied, setCopied] = useState(false);
     const location = useLocation();
-    const data = location.state?.caskData as BrewItem | undefined;
 
-    if (!data) {
+    const pathSegments = location.pathname.split('/');
+    const token = pathSegments[pathSegments.length - 1];
+    const type = pathSegments[pathSegments.length - 2] as BrewType;
+
+    const url = `https://formulae.brew.sh/api/${type}/${token}.json`
+    const { data = [], isLoading, error } = useBrewData(type, url);
+
+    const item: BrewItem = data[0];
+
+
+    if (!item) {
         return (
-            <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-zinc-400">
-                No formula data found. Try refreshing?
-            </div>
+            <>
+                {isLoading && <SkeletonDetails />}
+                {error && <div className="flex flex-col items-center justify-center p-20 text-gray-500">
+                    <Info className="mb-4 h-12 w-12 opacity-20" />
+                    <p className="text-lg">No data found. Try refreshing?</p>
+                </div>}
+            </>
         );
     }
 
-    const raw = data.raw;
+
+    const raw = item.raw;
     const tap = (raw.tap || 'homebrew/core').toUpperCase();
-    const name = data.name;
-    const installCmd = data.installCmd || `brew install ${data.token}`;
-    const homepage = data.homepage || raw.homepage;
-    const description = data.desc || raw.desc;
+    const name = item.name;
+    const installCmd = item.installCmd || `brew install ${item.token}`;
+    const homepage = item.homepage || raw.homepage;
+    const description = item.desc || raw.desc;
     const license = raw.license || 'N/A';
-    const version = raw.versions?.stable || raw.version || data.version;
+    const version = raw.versions?.stable || raw.version || item.version;
     const hasBottle = raw.bottle ? 'Yes' : 'No';
     const revision = raw.revision ?? '0';
     const kegOnly = raw.keg_only ? 'Yes' : 'No';
@@ -64,6 +81,29 @@ export const FormulaeDetail = () => {
         setTimeout(() => setCopied(false), 1500);
     };
 
+    const copyURL = () => {
+        navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+    };
+
+    let monthly = item.raw.analytics.install["30d"][item.token];
+    let threeMonthly = item.raw.analytics.install["90d"][item.token];
+    let yearly = item.raw.analytics.install["365d"][item.token];
+
+    const getDisplayInstallValue = (value: Number) => {
+        if (Number(value) > 1000) {
+            return (Number(value) / 1000).toFixed(1).toString() + "K";
+        }
+        return value.toString();
+    }
+
+    const installAnalyticsMap = new Map([
+        ["1 month", { "original": monthly, "diaplay": getDisplayInstallValue(monthly) }],
+        ["3 months", { "original": threeMonthly, "diaplay": getDisplayInstallValue(threeMonthly) }],
+        ["1 year", { "original": yearly, "diaplay": getDisplayInstallValue(yearly) }],
+    ]);
+
 
     return (
         <div className="min-h-screen text-zinc-800 dark:text-zinc-100 p-2 font-sans">
@@ -78,9 +118,24 @@ export const FormulaeDetail = () => {
                             <span className="text-sm font-medium">Formula Details</span>
                         </Button>
                     </NavLink>
-                    <div className="flex gap-4 text-zinc-900 dark:text-zinc-200 opacity-70">
-                        <Share2 size={20} className="cursor-pointer hover:opacity-100" />
-                        <Info size={20} className="cursor-pointer hover:opacity-100" />
+                    {/* Header Action Buttons */}
+                    <div className="flex gap-2 text-zinc-400">
+                        <Button
+                            onClick={() => copyURL()}
+                            variant="ghost"
+                            size="sm"
+                        >
+                            {copied ? <Check size={18} /> : <Share2 size={18} />}
+                        </Button>
+                        <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <Button variant="ghost" size="sm" >
+                                <Info size={20} />
+                            </Button>
+                        </a>
                     </div>
                 </div>
 
@@ -89,7 +144,7 @@ export const FormulaeDetail = () => {
                     <div className="w-24 h-24 bg-zinc-200  rounded-2xl flex items-center justify-center border border-white/10 shadow-xl overflow-hidden">
                         {/* Replace with actual icon logic if available */}
                         <img
-                            src={`https://www.google.com/s2/favicons?domain=${data.homepage}&sz=256`}
+                            src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=256`}
                             alt={name[0]}
                             className="w-24 h-24 rounded-md" />
                     </div>
@@ -97,8 +152,8 @@ export const FormulaeDetail = () => {
                     <div className="flex-1 text-center md:text-left">
                         <div className="text-[10px] tracking-widest font-bold text-zinc-300 mb-2 uppercase">
                             HOMEBREW FORMULA: {tap}
-                            {packageStatus(data).isNotInstallable &&
-                                <span className="float-end rounded-full bg-orange-500/70 text-white px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10" >{packageStatus(data).reason}</span>
+                            {packageStatus(item).isNotInstallable &&
+                                <span className="float-end rounded-full bg-orange-500/70 text-white px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10" >{packageStatus(item).reason}</span>
                             }
                         </div>
                         <h1 className="text-5xl font-bold mb-4 tracking-tight">{name}</h1>
@@ -113,7 +168,7 @@ export const FormulaeDetail = () => {
                                         {installCmd}
                                     </code>
                                     <Button
-                                        onClick={copyCmd.bind(null, data)}
+                                        onClick={copyCmd.bind(null, item)}
                                         variant="glass"
                                         size="icon"
                                         className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all" >
@@ -121,16 +176,7 @@ export const FormulaeDetail = () => {
                                     </Button>
                                 </div>
                             </div>
-                            <a
-                                href={`https://formulae.brew.sh/api/formula/${data.token}.json`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                <Button variant="glass">
-                                    JSON <ExternalLink size={14} />
-                                </Button>
-                            </a>
-                            {"|"}
+
                             {homepage && (
                                 <a
                                     href={homepage}
@@ -142,6 +188,15 @@ export const FormulaeDetail = () => {
                                     </Button>
                                 </a>
                             )}
+                            {getSourceCodeStatus(item).verified && <a
+                                href={getSourceCodeStatus(item).url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <Button variant="glass"    >
+                                    <Code size={20} />Source
+                                </Button>
+                            </a>}
                         </div>
                     </div>
                 </div>
@@ -152,31 +207,36 @@ export const FormulaeDetail = () => {
                     {/* Left Column: Overview & Dependencies */}
                     <div className="lg:col-span-2 space-y-6">
                         {/* Overview Card */}
-                        <div className="bg-zinc-200 dark:bg-zinc-900 rounded-3xl p-8 border border-black/5 dark:border-white/5">
+                        <div className="bg-zinc-100/60 dark:bg-zinc-900 rounded-3xl p-8 border border-black/5 dark:border-white/5">
                             <div className="flex items-center gap-2 mb-6 pr-2">
-                                <Info size={18} className="text-orange-600 mb-1 opacity-50" />
+                                <Info size={18} className="text-zinc-500 mb-1 opacity-50" />
                                 <h2 className="text-xl font-semibold  text-zinc-700 dark:text-zinc-300">Dependencies</h2>
                             </div>
                             <p className="text-xl  mb-6 leading-relaxed opacity-70">
                                 {description || 'No description available.'}
                             </p>
                             <div className="flex flex-wrap gap-3 cursor-default">
-                                <div className="bg-[#abcbbc]  dark:bg-[#122512] text-[#0d520d] dark:text-[#a7f3d0] px-3 py-1 rounded-full text-xs font-medium border border-[#3e5a3e]/10">
+                                <span className="bg-[#abcbbc]  dark:bg-[#122512] text-[#0d520d] dark:text-[#a7f3d0] px-3 py-1.5 rounded-full text-xs font-medium border border-[#3e5a3e]/10">
                                     License: {license}
-                                </div>
-                                <div className="bg-[#86a3d2a7] dark:bg-[#0f1a2c] text-[#164fad] dark:text-[#93c5fd] px-3 py-1 rounded-full text-xs font-medium border border-[#334155]/10">
+                                </span>
+                                <span className="bg-[#86a3d2a7] dark:bg-[#0f1a2c] text-[#164fad] dark:text-[#93c5fd] px-3 py-1.5 rounded-full text-xs font-medium border border-[#334155]/10">
                                     Version: {version}
-                                </div>
-                                <div className=" bg-[#d2b4d9bd] dark:bg-[#3b2341] text-[#ad40c8] dark:text-[#f5d0fe] px-3 py-1 rounded-full text-xs font-medium border border-[#583361]/10">
+                                </span>
+                                <span className=" bg-[#d2b4d9bd] dark:bg-[#3b2341] text-[#ad40c8] dark:text-[#f5d0fe] px-3 py-1.5 rounded-full text-xs font-medium border border-[#583361]/10">
                                     Bottle: {hasBottle}
-                                </div>
+                                </span>
+                                {getSourceCodeStatus(item).isOSS &&
+                                    <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs border border-white/10">
+                                        Open Source
+                                    </span>
+                                }
                             </div>
                         </div>
 
                         {/* Dependencies Card */}
-                        <div className="bg-zinc-200 dark:bg-zinc-900 rounded-3xl p-8 border border-black/5 dark:border-white/5">
+                        <div className="bg-zinc-100/60 dark:bg-zinc-900 rounded-3xl p-8 border border-black/5 dark:border-white/5">
                             <div className="flex items-center gap-2 mb-4 pr-2">
-                                <Box size={18} className="text-orange-600 mb-1 opacity-50" />
+                                <Box size={18} className="text-zinc-500 mb-1 opacity-50" />
                                 <h2 className="text-xl font-semibold text-zinc-700 dark:text-zinc-300">Dependencies</h2>
                             </div>
                             <div className="space-y-8">
@@ -202,9 +262,9 @@ export const FormulaeDetail = () => {
                     </div>
 
                     {/* Right Column: Technical Details */}
-                    <div className="bg-zinc-200 dark:bg-zinc-900 rounded-3xl p-8 border border-black/5 dark:border-white/5 h-fit">
+                    <div className="bg-zinc-100/60 dark:bg-zinc-900 rounded-3xl p-8 border border-black/5 dark:border-white/5 h-fit">
                         <div className="flex items-center gap-2 mb-6 pr-2">
-                            <Info size={18} className="text-orange-600 mb-1 opacity-50" />
+                            <Info size={18} className="text-zinc-500 mb-1 opacity-50" />
                             <h2 className="text-xl font-semibold  text-zinc-700 dark:text-zinc-300">Technical Details</h2>
                         </div>
                         <div className="space-y-3 px-1">
@@ -213,7 +273,7 @@ export const FormulaeDetail = () => {
                                     {Object.entries({
                                         "Revision": revision,
                                         "Keg Only": kegOnly,
-                                        "Tap": data.raw.tap,
+                                        "Tap": item.raw.tap,
                                         "Bottle": hasBottle
                                     }).map(([key, value], index) => (
                                         <tr key={index} className="h-7">
@@ -223,6 +283,24 @@ export const FormulaeDetail = () => {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                        <div className="flex items-center gap-2 mb-4 mt-10 pr-2">
+                            <Download size={18} className="text-zinc-500 mb-1 opacity-70" />
+                            <h2 className="text-xl font-semibold ">Installs</h2>
+                        </div>
+                        <div className="flex  gap-2">
+                            {Array.from(installAnalyticsMap).map(([label, value]) => (
+                                <div key={label} className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800 p-4 border border-white/5">
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
+                                        {label}
+                                    </p>
+                                    <p
+                                        title={value.original}
+                                        className=" text-gray-700 dark:text-gray-300 break-all text-2xl leading-tight">
+                                        {value.diaplay}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
