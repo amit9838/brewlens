@@ -1,6 +1,8 @@
 import { memo } from "react";
 import { type BrewItem } from "../types";
 import { NavLink } from "react-router-dom";
+import { getSourceCodeStatus } from "../lib/utils";
+
 export const ItemCard = memo(({ item }: { item: BrewItem }) => {
 
     const packageStatus = (item: BrewItem) => {
@@ -12,7 +14,6 @@ export const ItemCard = memo(({ item }: { item: BrewItem }) => {
     return (
         <NavLink
             to={`/${item.type}/${item.token}`}
-            state={{ caskData: item }} // Pass the object here
         >
             <div className="flex flex-col p-4 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:shadow-lg hover:border-green-500 transition-all h-full group">
                 <div className="flex gap-4 items-start mb-3 ">
@@ -31,6 +32,11 @@ export const ItemCard = memo(({ item }: { item: BrewItem }) => {
                     <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-zinc-500 dark:text-zinc-400 rounded-full">
                         <span className=" bg-gray-100 dark:bg-zinc-700/30 px-3 py-2 text-xs rounded-full " title={item.version}>v{item.version}</span>
                     </div>
+                    {getSourceCodeStatus(item).isOSS &&
+                        <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-blue-500 dark:text-blue-400 rounded-full">
+                            <span className=" bg-gray-100 dark:bg-blue-700/10 px-3 py-2 text-xs rounded-full " >{"OpenSource"}</span>
+                        </div>
+                    }
                     <div className="mt-auto space-y-1">
                         <div className="flex items-center gap-1.5 text-xs text-zinc-400">
                             {packageStatus(item).isNotInstallable &&

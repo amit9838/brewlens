@@ -328,6 +328,18 @@ export default function HomebrewGuide() {
               ))}
             </div>
           </BentoCard>
+          <BentoCard
+            title="Do you Know?"
+            icon={<BookOpen className="h-5 w-5 sm:h-6 sm:w-6" />}
+            className="bg-blue-50/50 border-blue-100 dark:bg-blue-950/10 dark:border-blue-900"
+            headerClassName="text-indigo-900 dark:text-indigo-100"
+          >
+            <p className="text-sm mt-2 px-4 sm:text-base md:text-md  text-zinc-700 dark:text-zinc-300 opacity-90">
+              <strong>- Formulae</strong>  are for open-source, command-line tools and libraries (like Python or Git),
+              <br /> <strong> - Casks</strong> are for installing macOS GUI applications and binaries (like Chrome, Slack, or Discord).
+              <br />- A <strong> Tap</strong> is simply an extra repository (a "plug-in" source) you add to Homebrew to access packages not included in the default collection.
+            </p>
+          </BentoCard>
         </div>
       </div>
     </div>
