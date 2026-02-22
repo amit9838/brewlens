@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { type BrewItem, type BrewType } from "../../types";
 import { useLocation } from "react-router-dom";
-import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, WrenchIcon, Code } from "lucide-react";
+import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, WrenchIcon, Code, Download } from "lucide-react";
 import { Share2, ChevronLeft } from 'lucide-react';
 import { NavLink } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -316,7 +316,7 @@ export function CaskDetail() {
             </div>
 
             <div className="flex items-center gap-2 mb-4 mt-10 pr-2">
-              <Box size={18} className="text-zinc-500 mb-1 opacity-70" />
+              <Download size={18} className="text-zinc-500 mb-1 opacity-70" />
               <h2 className="text-xl font-semibold ">Installs</h2>
             </div>
             <div className="flex gap-2">

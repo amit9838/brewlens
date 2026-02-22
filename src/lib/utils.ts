@@ -64,7 +64,7 @@ export const getSourceCodeStatus = (item: BrewItem) => {
 
     if (item.type === "formula") {
         return {
-            verified: true,
+            verified: item.raw.urls?.head?.url ? true : false,
             isOSS,
             url: item.raw.urls?.head?.url || null,
         };
