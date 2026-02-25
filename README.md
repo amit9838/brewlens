@@ -1,5 +1,7 @@
 <div align="center">
-  <h1>🍺 BrewLens</h1>
+<img style = "border-radius:1rem" src="demo/brewlens_logo.png" width="80px">
+  <h1>
+  <strong>Brew</strong>Lens</h1>
   <p><strong>A modern, web-based explorer for Homebrew Casks and Formulae.</strong></p>
 
   <p>
@@ -32,17 +34,6 @@ You can browse both **Casks (macOS Apps)** and **Formulae (CLI Tools)** , inspec
 *   Artifacts (for casks)
 *   Full JSON representation
 *   Deprecation and disable status
-
-## ⭐ Key Features
-
-### 📦 **Cask & Formula Switcher**
-Instantly toggle between browsing the entire **Cask** (macOS apps) or **Formula** (CLI tools) database.
-
-### 🔍 **Powerful Search**
-Instantly search across thousands of Homebrew packages with pagination and fast filtering. Filter by name, token, description keywords, and more.
-
-### 🌗 **Dynamic Light/Dark Theme**
-The entire UI (body, cards, header, modals) updates instantly when switching themes and remembers your preference for a seamless experience.
 
 ## 🎯 Who is it For?
 
@@ -101,9 +92,9 @@ If you have a suggestion that would make this better, please fork the repo and c
 
 Distributed under the MIT License. See `LICENSE` file for more information.
 
-## 📬 Contact
+## 📬 Thanks to
 
-Project Link: [https://github.com/amit9838/brewlens](https://github.com/amit9838/brewlens)
+[Homebrew](https://docs.brew.sh/)
 
 ---
 

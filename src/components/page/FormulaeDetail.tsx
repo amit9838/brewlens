@@ -215,11 +215,11 @@ export const FormulaeDetail = () => {
                             <p className="text-xl  mb-6 leading-relaxed opacity-70">
                                 {description || 'No description available.'}
                             </p>
-                            <div className="flex flex-wrap gap-3 cursor-default">
+                            <div className="flex flex-wrap gap-2 cursor-default">
                                 <span className="bg-[#abcbbc]  dark:bg-[#122512] text-[#0d520d] dark:text-[#a7f3d0] px-3 py-1.5 rounded-full text-xs font-medium border border-[#3e5a3e]/10">
                                     License: {license}
                                 </span>
-                                <span className="bg-[#86a3d2a7] dark:bg-[#0f1a2c] text-[#164fad] dark:text-[#93c5fd] px-3 py-1.5 rounded-full text-xs font-medium border border-[#334155]/10">
+                                <span className="bg-[#86a3d2a7] dark:bg-[#142642] text-[#164fad] dark:text-[#93c5fd] px-3 py-1.5 rounded-full text-xs font-medium border border-[#334155]/10">
                                     Version: {version}
                                 </span>
                                 <span className=" bg-[#d2b4d9bd] dark:bg-[#3b2341] text-[#ad40c8] dark:text-[#f5d0fe] px-3 py-1.5 rounded-full text-xs font-medium border border-[#583361]/10">

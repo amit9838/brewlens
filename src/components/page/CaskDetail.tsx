@@ -214,7 +214,7 @@ export function CaskDetail() {
             <p className="text-lg opacity-70 leading-relaxed mb-6">
               {description}
             </p>
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-xs font-bold text-emerald-400 border border-emerald-500/20">
                 Version {version}
               </span>

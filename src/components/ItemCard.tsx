@@ -34,7 +34,7 @@ export const ItemCard = memo(({ item }: { item: BrewItem }) => {
                     </div>
                     {getSourceCodeStatus(item).isOSS &&
                         <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-blue-500 dark:text-blue-400 rounded-full">
-                            <span className=" bg-gray-100 dark:bg-blue-700/10 px-3 py-2 text-xs rounded-full " >{"OpenSource"}</span>
+                            <span className=" bg-gray-100 dark:bg-blue-700/10 px-3 py-2 text-xs rounded-full " >{"Open Source"}</span>
                         </div>
                     }
                     <div className="mt-auto space-y-1">

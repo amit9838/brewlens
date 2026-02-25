@@ -48,7 +48,7 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
             {/* Sidebar Content */}
             <div
                 className={cn(
-                    "fixed top-0 left-0 h-full w-80 max-w-full bg-white dark:bg-gray-900 shadow-2xl p-6 transition-transform duration-300 overflow-y-auto",
+                    "fixed top-0 left-0 h-full w-80 max-w-full bg-white dark:bg-zinc-900 shadow-2xl p-6 transition-transform duration-300 overflow-y-auto",
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 )}
                 role="menu"
