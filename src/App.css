@@ -1,8 +1,14 @@
+/* 1. Import the font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
 @import "tailwindcss";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Graphik", sans-serif;
+  /* 2. Update the global sans variable to use "Inter" */
+  --font-sans: "Inter", "Graphik", ui-sans-serif, system-ui, sans-serif;
+  
   --font-serif: "Merriweather", serif;
 
   --breakpoint-sm: 40rem;
