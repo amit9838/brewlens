@@ -7,7 +7,7 @@ import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
 import ErrorState from "./Error";
-import { Search, X} from "lucide-react";
+import { Search, X } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
 import { Button } from "../ui/Button";
 import { useModal } from '../contexts/ModalContexts';
@@ -28,6 +28,10 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
 
     // Queries & Derived State
     const { data = [], isLoading, error } = useBrewData(type);
+
+    // sort the data by name
+    data.sort((a, b) => a.name.localeCompare(b.name));
+
     const deferredSearch = useDeferredValue(search);
 
     const filtered = useMemo(() => {
