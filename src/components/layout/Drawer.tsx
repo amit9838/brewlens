@@ -1,4 +1,4 @@
-import { X, Github, BookOpen, Terminal } from 'lucide-react';
+import { X, Github, BookOpen, Terminal, Info } from 'lucide-react';
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
 import { NavLink } from "react-router-dom";
@@ -65,7 +65,7 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
                     </Button>
                 </div>
 
-                <nav className="space-y-4">
+                <nav className="relative space-y-4 h-[80vh]">
 
                     {/* Action Button: Installation Details */}
                     <NavLink
@@ -92,6 +92,22 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
                             <DrawerLink key={link.name} {...link} onClose={onClose} />
                         ))}
                     </div>
+
+
+                    <NavLink
+                        to={`/about`}
+                        onClick={onClose}
+                    >
+                        <Button
+                            className="absolute bottom-0 flex w-full justify-start font-bold py-3 text-base"
+                            variant="ghost"
+                        >
+                            <Info className="w-5 h-5 mr-3" />
+                            <span>
+                                About
+                            </span>
+                        </Button>
+                    </NavLink>
 
                 </nav>
             </div>

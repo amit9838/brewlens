@@ -1,9 +1,8 @@
 import './App.css'
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { X } from 'lucide-react'
 import { Modal } from './components/ui/Modal';
-import { Footer } from './components/layout/Footer';
+import { ModalProvider } from './components/contexts/ModalContexts';
 import { NavDrawer } from './components/layout/Drawer';
 import { Header } from './components/layout/Header';
 import { BrewList } from './components/page/BrewList';
@@ -12,11 +11,11 @@ import { Routes, Route } from 'react-router-dom';
 import { CaskDetail } from './components/page/CaskDetail';
 import Installation from './components/page/Installation';
 import FormulaeDetail from './components/page/FormulaeDetail';
+import About from './components/page/About';
 
 const queryClient = new QueryClient();
 
 function HomebrewExplorer() {
-  const [modalItem, setModalItem] = useState<any>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [search, setSearch] = useState('');
   const [type, setType] = useState<BrewType>('cask');
@@ -35,21 +34,10 @@ function HomebrewExplorer() {
           <Route path="/installation" element={<Installation />} />
           <Route path="/cask/:token" element={<CaskDetail />} />
           <Route path="/formula/:token" element={<FormulaeDetail />} />
+          <Route path="/about" element={<About />} />
         </Routes>
 
         {/* Footer */}
-        <Footer />
-        {/* JSON MODAL */}
-        <Modal isOpen={!!modalItem} onClose={() => setModalItem(null)}>
-          <div className="flex justify-between items-center p-4 border-b dark:border-gray-700">
-            <h3 className="font-bold">Raw JSON</h3>
-            <button onClick={() => setModalItem(null)}><X size={20} /></button>
-          </div>
-          <div className="p-4 bg-gray-50 dark:bg-black overflow-auto max-h-[60vh]">
-            <pre className="text-xs font-mono text-gray-600 dark:text-gray-400">{JSON.stringify(modalItem, null, 2)}</pre>
-          </div>
-        </Modal>
-
       </div>
     </div>
   );
@@ -58,7 +46,10 @@ function HomebrewExplorer() {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <HomebrewExplorer />
+      <ModalProvider>
+        <HomebrewExplorer />
+        <Modal />
+      </ModalProvider>
     </QueryClientProvider>
   );
 }

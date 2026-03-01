@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { useDeferredValue } from "react";
 import { usePagination } from "../../hooks/usePagination";
@@ -7,8 +7,12 @@ import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
 import ErrorState from "./Error";
-import { Search, X } from "lucide-react";
+import { Search, X} from "lucide-react";
 import { Pagination } from "../ui/Pagination";
+import { Button } from "../ui/Button";
+import { useModal } from '../contexts/ModalContexts';
+import SearchIndexModal from "../ui/SearchIndexModal";
+
 
 interface Props {
     type: BrewType;
@@ -19,6 +23,8 @@ interface Props {
 
 export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) => {
     const [itemsPerPage, setItemsPerPage] = useState(24);
+    const [newChar, setNewChar] = useState<string>('#');
+    const { openModal, closeModal } = useModal();
 
     // Queries & Derived State
     const { data = [], isLoading, error } = useBrewData(type);
@@ -31,6 +37,30 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
 
     const pagination = usePagination(filtered, itemsPerPage, "currentPage");
     const { currentData, setCurrentPage, totalPages } = pagination
+
+
+    useEffect(() => {
+        if (newChar === '#') {
+            setCurrentPage(1);
+            return
+        }
+
+        const index = data.findIndex(i => i.name.toLowerCase().startsWith(newChar.toLowerCase()));
+        if (index === -1) return;
+
+        const page = Math.ceil((index + 1) / itemsPerPage);
+        setCurrentPage(page);
+        setTimeout(() => {
+            closeModal();
+        }, 100);
+
+    }, [newChar, itemsPerPage]);
+
+
+    const handleOpenIndexSearch = () => {
+        openModal(<SearchIndexModal setNewChar={setNewChar} />, { size: 'lg', closeOnBackdropClick: true });
+    };
+
 
     const changeType = (type: BrewType) => {
         setType(type);
@@ -65,6 +95,18 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     ))}
                 </div>
             </div>
+
+            <div className="right px-1">
+                <Button
+                    onClick={handleOpenIndexSearch}
+                    variant="secondary"
+                    size="sm"
+                    className="w-14">
+                    <span className="text-sm font-semibold opacity-90 hover:opacity-100">
+                        A-Z
+                    </span>
+                </Button>
+            </div>
         </div>
 
         {/* GRID */}
@@ -87,6 +129,8 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                 <p className="text-lg">No data found. Try something else?</p>
             </div>
         </>}
+
+
 
     </div>
 
