@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
 
   const reset_pagination = () => {
     ["cp_cask", "cp_formula"].forEach(key => localStorage.setItem(key, "1"));
-    window.location.href = "/";
+    window.location.href = "/brewlens/#/";
   }
 
   return (
