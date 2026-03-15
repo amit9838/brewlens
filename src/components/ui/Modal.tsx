@@ -70,7 +70,7 @@ export const Modal: React.FC = () => {
                 )}
 
                 {/* Modal content */}
-                <div className="m-1 md:p-3 pt-0">{modalContent}</div>
+                <div className="m-1 md:p-3 pt-0">{modalContent?.()}</div>
             </div>
         </div>
     );

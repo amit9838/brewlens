@@ -19,7 +19,7 @@
 
 <br>
 
-<img style = "border-radius:1rem" src="demo/homepage.png">
+<img style = "border-radius:1rem" src="demo/banner.png">
 
 ## ✨ What is BrewLens?
 

@@ -12,6 +12,7 @@ import { CaskDetail } from './components/page/CaskDetail';
 import Installation from './components/page/Installation';
 import FormulaeDetail from './components/page/FormulaeDetail';
 import About from './components/page/About';
+import Analytics from './components/page/Analytics';
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ function HomebrewExplorer() {
           <Route path="/cask/:token" element={<CaskDetail />} />
           <Route path="/formula/:token" element={<FormulaeDetail />} />
           <Route path="/about" element={<About />} />
+          <Route path="/analytics" element={<Analytics />} />
         </Routes>
 
         {/* Footer */}
