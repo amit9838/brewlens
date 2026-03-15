@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { type BrewItem, type BrewType } from "../types";
+import { type BrewItem, type BrewType, type BrewPackage } from "../types";
 
 // Tailwind Class Merger
 export function cn(...inputs: ClassValue[]) {
@@ -14,24 +14,25 @@ const API_CONFIG = {
 };
 
 // Data Normalizer
-export const normalizeItem = (item: any, type: BrewType): BrewItem => {
+export const normalizeItem = (rawData: any, type: BrewType): BrewItem => {
     const isCask = type === 'cask';
-    const id = isCask ? item.full_token : item.name;
-    const name = isCask && Array.isArray(item.name) ? item.name[0] : item.name;
+    const id = isCask ? rawData.full_token : rawData.name;
+    const name = isCask && Array.isArray(rawData.name) ? rawData.name[0] : rawData.name;
 
     return {
         id,
         type: type,
         name: name || id,
-        token: isCask ? item.full_token : item.full_name,
-        desc: item.desc || "No description available.",
-        version: isCask ? item.version : item.versions?.stable || 'N/A',
-        homepage: item.homepage,
-        deprecated: item.deprecated,
-        disabled: item.disabled,
+        token: isCask ? rawData.full_token : rawData.full_name,
+        desc: rawData.desc || "No description available.",
+        version: isCask ? rawData.version : rawData.versions?.stable || 'N/A',
+        homepage: rawData.homepage,
+        deprecated: rawData.deprecated,
+        disabled: rawData.disabled,
         installCmd: `${API_CONFIG[type].installPrefix} ${id}`,
-        raw: item,
-        _searchString: `${id} ${name} ${item.desc || ''}`.toLowerCase()
+        package: getSourceCodeStatus(rawData, type),
+        raw: rawData,
+        _searchString: `${id} ${name} ${rawData.desc || ''}`.toLowerCase()
     };
 };
 
@@ -46,43 +47,35 @@ export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewI
 };
 
 
-export const getSourceCodeStatus = (item: BrewItem) => {
-    // 1. Collect all potential URLs to check for Open Source domains
-    const urlSpecsValues = Object.values(item.raw.url_specs ?? {});
-    const websiteUrl = item.homepage || "";
+export const getSourceCodeStatus = (rawData: any, type: BrewType): BrewPackage => {
+    const isCask = type === 'cask';
+    const urlSpecsValues = Object.values(rawData.url_specs ?? {}) as string[];
+    const websiteUrl = rawData.homepage || "";
 
-    // Combine them into a single searchable string
     let allTextToSearch = [...urlSpecsValues, websiteUrl].join(" ").toLowerCase();
 
-    if (item.type === "formula") {
-        let source_url = item.raw.urls?.head?.url || "";
-        allTextToSearch += " " + source_url;
+    if (!isCask) {
+        allTextToSearch += " " + (rawData.urls?.head?.url || "");
     }
-    // 2. Define our Open Source indicators
+
     const osDomains = ["github.com", "gitlab.com", "bitbucket.org", "codeberg.org"];
-    const isOSS = osDomains.some(domain => allTextToSearch.includes(domain));
+    const isFoss = osDomains.some(domain => allTextToSearch.includes(domain));
 
-    if (item.type === "formula") {
+    if (!isCask) {
         return {
-            verified: item.raw.urls?.head?.url ? true : false,
-            isOSS,
-            url: item.raw.urls?.head?.url || null,
+            verified: !!rawData.urls?.head?.url,
+            isFoss,
+            fossUrl: rawData.urls?.head?.url || "",
         };
     }
 
-    // 3. Handle the "No Source" case
     if (urlSpecsValues.length === 0) {
-        return {
-            verified: false,
-            isOSS,
-            url: null,
-        };
+        return { verified: false, isFoss, fossUrl: "" };
     }
 
-    // 4. Return the full status object
     return {
         verified: true,
-        isOSS,
-        url: `http://${urlSpecsValues[0]}` || null // Returns the first repository link found
+        isFoss,
+        fossUrl: `http://${urlSpecsValues[0]}`,
     };
 };

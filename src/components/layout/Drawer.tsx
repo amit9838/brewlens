@@ -29,6 +29,7 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
     // Link Definitions
     const externalLinks = [
         { name: "Official Homebrew Docs", href: "https://docs.brew.sh/", icon: BookOpen },
+        { name: "Homebrew GitHub", href: "https://github.com/Homebrew", icon: Github },
         { name: "BrewLens GitHub", href: "https://github.com/amit9838/brewlens/", icon: Github },
     ];
 

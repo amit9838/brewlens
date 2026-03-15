@@ -1,17 +1,17 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useCallback, useDeferredValue } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
-import { useDeferredValue } from "react";
 import { usePagination } from "../../hooks/usePagination";
 import { ItemCard } from "../ItemCard";
 import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
 import ErrorState from "./Error";
-import { Search, X } from "lucide-react";
+import { Search, X, Sparkles } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
 import { Button } from "../ui/Button";
 import { useModal } from '../contexts/ModalContexts';
 import SearchIndexModal from "../ui/SearchIndexModal";
+import QuickSearchModal from "../ui/QuickSearchModal";
 
 
 interface Props {
@@ -23,30 +23,57 @@ interface Props {
 
 export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) => {
     const [itemsPerPage, setItemsPerPage] = useState(24);
-    const [newChar, setNewChar] = useState<string>('#');
+    const [newChar, setNewChar] = useState<string | null>(null);
+    const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
+    const [showFonts, setShowFonts] = useState(false);
     const { openModal, closeModal } = useModal();
 
     // Queries & Derived State
     const { data = [], isLoading, error } = useBrewData(type);
 
-    // sort the data by name
-    data.sort((a, b) => a.name.localeCompare(b.name));
 
     const deferredSearch = useDeferredValue(search);
 
-    const filtered = useMemo(() => {
-        if (!deferredSearch) return data;
-        return data.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
-    }, [data, deferredSearch]);
+    const groups: Record<string, string[]> = {
+        foss: ['oss', 'proprietary'],
+        status: ['active', 'inactive'],
+    };
 
-    const pagination = usePagination(filtered, itemsPerPage, "currentPage");
+    const toggleFilter = (f: string) =>
+        setActiveFilters(prev => {
+            const next = new Set(prev);
+            if (next.has(f)) {
+                next.delete(f);
+            } else {
+                // clear siblings in the same group
+                const siblings = Object.values(groups).find(g => g.includes(f)) ?? [];
+                siblings.forEach(s => next.delete(s));
+                next.add(f);
+            }
+            return next;
+        });
+
+    const filtered = useMemo(() => {
+        // sort the data by name
+        data.sort((a, b) => a.name.localeCompare(b.name));
+        let result = data;
+        if (deferredSearch) result = result.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
+        if (activeFilters.has('oss')) result = result.filter(i => i.package.isFoss);
+        if (activeFilters.has('proprietary')) result = result.filter(i => !i.package.isFoss);
+        if (activeFilters.has('active')) result = result.filter(i => !i.deprecated && !i.disabled);
+        if (activeFilters.has('inactive')) result = result.filter(i => i.deprecated || i.disabled);
+        if (!showFonts) result = result.filter(i => !i.token.startsWith('font-'));
+        return result;
+    }, [data, deferredSearch, activeFilters, showFonts]);
+
+    const pagination = usePagination(filtered, itemsPerPage, `cp_${type}`);
     const { currentData, setCurrentPage, totalPages } = pagination
 
 
     useEffect(() => {
-        if (newChar === '#') {
-            setCurrentPage(1);
-            return
+        if (!newChar || newChar === '#') {
+            if (newChar === '#') setCurrentPage(1);
+            return;
         }
 
         const index = data.findIndex(i => i.name.toLowerCase().startsWith(newChar.toLowerCase()));
@@ -62,29 +89,37 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
 
 
     const handleOpenIndexSearch = () => {
-        openModal(<SearchIndexModal setNewChar={setNewChar} />, { size: 'lg', closeOnBackdropClick: true });
+        openModal(() => <SearchIndexModal setNewChar={setNewChar} />, { size: 'lg', closeOnBackdropClick: true });
     };
+
+    const handleQuickSearch = useCallback(() => {
+        openModal(() => <QuickSearchModal onSelect={setSearch} />, { closeOnBackdropClick: true });
+    }, [setSearch]);
 
 
     const changeType = (type: BrewType) => {
         setType(type);
-        setCurrentPage(1);
+        setActiveFilters(new Set());
     }
 
     {/* CONTROLS */ }
-    return <div className="contasiner max-w-[1400px] mx-auto">
-        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
-            <div className="w-full flex flex-wrap justify-left gap-2">
-                <div className="relative w-full max-w-[20rem]">
+   return <div className="container max-w-[1400px] mx-auto px-4">
+        <div className="flex w-full flex-wrap justify-between items-center gap-4 mb-8">
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto items-center">
+                <div className="relative w-full sm:w-auto sm:min-w-[16rem] sm:max-w-[20rem]">
                     <Search className="absolute left-3 top-3 text-gray-400" size={18} />
                     <input
-                        className="w-full minz-w-80 pl-10  pr-10 py-2 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
+                        className="w-full pl-10 pr-10 py-2 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
                         placeholder={`Search...`}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                     {search && <X className="absolute right-3 top-3 text-gray-400 bg-zinc-300/10 hover:bg-zinc-300 p-[2px] rounded-full cursor-pointer" size={18} onClick={() => setSearch("")} />}
                 </div>
+
+                <Button variant="secondary" size="md" onClick={handleQuickSearch} title="Quick search">
+                    <Sparkles size={15} />
+                </Button>
                 <div className="bg-gray-200 dark:bg-zinc-800 p-1 rounded-lg flex">
                     {(['cask', 'formula'] as const).map(t => (
                         <button
@@ -100,7 +135,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                 </div>
             </div>
 
-            <div className="right px-1">
+            <div className="px-1 flex gap-2">
                 <Button
                     onClick={handleOpenIndexSearch}
                     variant="secondary"
@@ -112,6 +147,59 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                 </Button>
             </div>
         </div>
+
+        <div className=" flex items-center justify-between gap-2 flex-wrap mb-5">
+            {/* FILTER TAGS */}
+            <div className="quick-action-left flex items-center gap-2 flex-wrap">
+                <Button isPill size="sm" variant={!activeFilters.has('oss') && !activeFilters.has('proprietary') ? 'glass' : 'outline'}
+                    onClick={() => setActiveFilters(prev => { const next = new Set(prev); next.delete('oss'); next.delete('proprietary'); return next; })}>
+                    All
+                </Button>
+                {(['oss', 'proprietary'] as const).map(f => (
+                    <Button key={f} isPill size="sm" variant={activeFilters.has(f) ? (f === 'oss' ? 'blue' : 'primary') : 'outline'} onClick={() => toggleFilter(f)}>
+                        {f === 'oss' ? 'Open Source' : 'Proprietary'}
+                    </Button>
+                ))}
+                <span className="text-gray-300 dark:text-zinc-600">|</span>
+                {(['active', 'inactive'] as const).map(s => (
+                    <Button key={s} isPill size="sm"
+                        variant={activeFilters.has(s) ? (s === 'active' ? 'primary' : 'destructive') : 'outline'}
+                        onClick={() => toggleFilter(s)}>
+                        {s === 'inactive' ? 'Inactive' : 'Active'}
+                    </Button>
+                ))}
+                {activeFilters.size > 0 && (
+                    <Button isPill size="sm" variant="ghost" onClick={() => setActiveFilters(new Set())}
+                        className="text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
+                        <X size={12} /> Clear
+                    </Button>
+                )}
+            </div>
+
+
+        <div className="quick-action-right">
+            {type === 'cask' && (
+                <>
+                    {/* <span className="text-gray-300 dark:text-zinc-600">|</span> */}
+                    <label className="flex items-center gap-2 mr-6 cursor-pointer select-none text-xs text-zinc-500 dark:text-zinc-400">
+                        <span>Fonts</span>
+                        <div
+                            onClick={() => setShowFonts(p => !p)}
+                            className={cn(
+                                "relative w-8 h-4 rounded-full transition-colors duration-200",
+                                showFonts ? "bg-green-500" : "bg-zinc-300 dark:bg-zinc-600"
+                            )}
+                        >
+                            <div className={cn(
+                                "absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-200",
+                                showFonts ? "translate-x-4" : "translate-x-0.5"
+                            )} />
+                        </div>
+                    </label>
+                </>
+            )}
+        </div>
+                </div>
 
         {/* GRID */}
         {isLoading && <SkeletonGrid count={itemsPerPage} />}
@@ -133,9 +221,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                 <p className="text-lg">No data found. Try something else?</p>
             </div>
         </>}
-
-
-
     </div>
 
 };
+

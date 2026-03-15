@@ -94,6 +94,8 @@ export function CaskDetail() {
     return value.toString();
   }
 
+  const { verified, isFoss, fossUrl } = getSourceCodeStatus(item.raw, type)
+
   const installAnalyticsMap = new Map([
     ["1 month", { "original": monthly, "diaplay": getDisplayInstallValue(monthly) }],
     ["3 months", { "original": threeMonthly, "diaplay": getDisplayInstallValue(threeMonthly) }],
@@ -187,8 +189,8 @@ export function CaskDetail() {
                 </a>
               )}
 
-              {getSourceCodeStatus(item).verified && <a
-                href={getSourceCodeStatus(item).url}
+              {verified && <a
+                href={fossUrl || ""}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -221,7 +223,7 @@ export function CaskDetail() {
               <span className="rounded-full bg-black/5 dark:bg-white/5 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
                 Type: GUI Application
               </span>
-              {getSourceCodeStatus(item).isOSS &&
+              {isFoss &&
                 <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs font-bold border border-white/10">
                   Open Source
                 </span>

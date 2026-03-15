@@ -98,6 +98,8 @@ export const FormulaeDetail = () => {
         return value.toString();
     }
 
+    const { verified, isFoss, fossUrl } = getSourceCodeStatus(item.raw, type)
+
     const installAnalyticsMap = new Map([
         ["1 month", { "original": monthly, "diaplay": getDisplayInstallValue(monthly) }],
         ["3 months", { "original": threeMonthly, "diaplay": getDisplayInstallValue(threeMonthly) }],
@@ -188,8 +190,8 @@ export const FormulaeDetail = () => {
                                     </Button>
                                 </a>
                             )}
-                            {getSourceCodeStatus(item).verified && <a
-                                href={getSourceCodeStatus(item).url}
+                            {verified && <a
+                                href={fossUrl || ""}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -225,7 +227,7 @@ export const FormulaeDetail = () => {
                                 <span className=" bg-[#d2b4d9bd] dark:bg-[#3b2341] text-[#ad40c8] dark:text-[#f5d0fe] px-3 py-1.5 rounded-full text-xs font-medium border border-[#583361]/10">
                                     Bottle: {hasBottle}
                                 </span>
-                                {getSourceCodeStatus(item).isOSS &&
+                                {isFoss &&
                                     <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs border border-white/10">
                                         Open Source
                                     </span>
