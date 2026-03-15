@@ -17,7 +17,7 @@ export interface BrewItem {
     deprecated?: boolean;
     disabled?: boolean;
     installCmd: string;
-    package: BrewPackage | {};
+    package: BrewPackage;
     raw: any;
     _searchString: string; // Optimized for filtering
 }

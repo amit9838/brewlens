@@ -24,6 +24,7 @@ interface Props {
 export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) => {
     const [itemsPerPage, setItemsPerPage] = useState(24);
     const [newChar, setNewChar] = useState<string>('#');
+    const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
     const { openModal, closeModal } = useModal();
 
     // Queries & Derived State
@@ -34,12 +35,36 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
 
     const deferredSearch = useDeferredValue(search);
 
-    const filtered = useMemo(() => {
-        if (!deferredSearch) return data;
-        return data.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
-    }, [data, deferredSearch]);
+    const groups: Record<string, string[]> = {
+        foss: ['oss', 'proprietary'],
+        status: ['active', 'inactive'],
+    };
 
-    const pagination = usePagination(filtered, itemsPerPage, "currentPage");
+    const toggleFilter = (f: string) =>
+        setActiveFilters(prev => {
+            const next = new Set(prev);
+            if (next.has(f)) {
+                next.delete(f);
+            } else {
+                // clear siblings in the same group
+                const siblings = Object.values(groups).find(g => g.includes(f)) ?? [];
+                siblings.forEach(s => next.delete(s));
+                next.add(f);
+            }
+            return next;
+        });
+
+    const filtered = useMemo(() => {
+        let result = data;
+        if (deferredSearch) result = result.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
+        if (activeFilters.has('oss')) result = result.filter(i => i.package.isFoss);
+        if (activeFilters.has('proprietary')) result = result.filter(i => !i.package.isFoss);
+        if (activeFilters.has('active')) result = result.filter(i => !i.deprecated && !i.disabled);
+        if (activeFilters.has('inactive')) result = result.filter(i => i.deprecated || i.disabled);
+        return result;
+    }, [data, deferredSearch, activeFilters]);
+
+    const pagination = usePagination(filtered, itemsPerPage, `currentPage_${type}`);
     const { currentData, setCurrentPage, totalPages } = pagination
 
 
@@ -69,6 +94,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     const changeType = (type: BrewType) => {
         setType(type);
         setCurrentPage(1);
+        setActiveFilters(new Set());
     }
 
     {/* CONTROLS */ }
@@ -111,6 +137,33 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     </span>
                 </Button>
             </div>
+        </div>
+
+        {/* FILTER TAGS */}
+        <div className="flex items-center gap-2 mb-5 flex-wrap">
+            <Button isPill size="sm" variant={!activeFilters.has('oss') && !activeFilters.has('proprietary') ? 'glass' : 'outline'}
+                onClick={() => setActiveFilters(prev => { const next = new Set(prev); next.delete('oss'); next.delete('proprietary'); return next; })}>
+                All
+            </Button>
+            {(['oss', 'proprietary'] as const).map(f => (
+                <Button key={f} isPill size="sm" variant={activeFilters.has(f) ? (f === 'oss' ? 'blue' : 'primary') : 'outline'} onClick={() => toggleFilter(f)}>
+                    {f === 'oss' ? 'Open Source' : 'Proprietary'}
+                </Button>
+            ))}
+            <span className="text-gray-300 dark:text-zinc-600">|</span>
+            {(['active', 'inactive'] as const).map(s => (
+                <Button key={s} isPill size="sm"
+                    variant={activeFilters.has(s) ? (s === 'active' ? 'primary' : 'destructive') : 'outline'}
+                    onClick={() => toggleFilter(s)}>
+                    {s === 'inactive' ? 'Inactive' : 'Active'}
+                </Button>
+            ))}
+            {activeFilters.size > 0 && (
+                <Button isPill size="sm" variant="ghost" onClick={() => setActiveFilters(new Set())}
+                    className="text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
+                    <X size={12} /> Clear
+                </Button>
+            )}
         </div>
 
         {/* GRID */}

@@ -4,7 +4,7 @@ import { cn } from "../../lib/utils";
 import { Loader2 } from "lucide-react"; // Or any spinner icon
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'primary' | 'secondary' | 'ghost' | 'destructive' | 'outline' | 'link' | 'black' | 'white' | 'glass';
+    variant?: 'primary' | 'secondary' | 'ghost' | 'destructive' | 'outline' | 'link' | 'black' | 'white' | 'glass' | 'blue';
     size?: 'sm' | 'md' | 'lg' | 'icon';
     asChild?: boolean;
     isLoading?: boolean;
@@ -26,6 +26,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             outline: "bg-transparent border border-zinc-300 text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white",
             ghost: "bg-transparent text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 border border-transparent",
             glass: "flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-full text-xs font-medium border border-white/10  backdrop-blur-xs",
+            blue: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-800 dark:active:bg-blue-900 shadow-sm border border-transparent",
             link: "bg-transparent text-green-600 underline-offset-4 hover:underline p-0 h-auto border-none dark:text-green-500",
         };
 
