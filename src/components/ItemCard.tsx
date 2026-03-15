@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { type BrewItem } from "../types";
 import { NavLink } from "react-router-dom";
-import { getSourceCodeStatus } from "../lib/utils";
 
 export const ItemCard = memo(({ item }: { item: BrewItem }) => {
 
@@ -32,7 +31,7 @@ export const ItemCard = memo(({ item }: { item: BrewItem }) => {
                     <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-zinc-500 dark:text-zinc-400 rounded-full">
                         <span className=" bg-gray-100 dark:bg-zinc-700/30 px-3 py-2 text-xs rounded-full " title={item.version}>v{item.version}</span>
                     </div>
-                    {getSourceCodeStatus(item).isOSS &&
+                    {item.package.isFoss &&
                         <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-blue-500 dark:text-blue-400 rounded-full">
                             <span className=" bg-gray-100 dark:bg-blue-700/10 px-3 py-2 text-xs rounded-full " >{"Open Source"}</span>
                         </div>
