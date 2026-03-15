@@ -223,7 +223,7 @@ export function CaskDetail() {
               <span className="rounded-full bg-black/5 dark:bg-white/5 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
                 Type: GUI Application
               </span>
-              {getSourceCodeStatus(item, type).isFoss &&
+              {isFoss &&
                 <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs font-bold border border-white/10">
                   Open Source
                 </span>
