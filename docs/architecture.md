@@ -8,13 +8,13 @@ BrewLens is a fully client-side React SPA. There is no backend — all data is f
 ┌─────────────────────────────────────────────────────────┐
 │                        Browser                          │
 │                                                         │
-│  ┌──────────┐   ┌──────────────┐   ┌─────────────────┐ │
-│  │  Router  │──▶│  App Shell   │──▶│  Page Components│ │
-│  │(HashRouter)  │(QueryClient, │   │  BrewList       │ │
-│  └──────────┘   │ ModalProvider│   │  CaskDetail     │ │
-│                 └──────────────┘   │  FormulaeDetail │ │
-│                                    │  Analytics      │ │
-│                                    └────────┬────────┘ │
+│  ┌──────────┐   ┌──────────────┐   ┌─────────────────┐  │
+│  │  Router  │──▶│  App Shell   │──▶│  Page Components│  │
+│  │(HashRouter)  │(QueryClient, │   │  BrewList       │  │
+│  └──────────┘   │ ModalProvider│   │  CaskDetail     │  │
+│                 └──────────────┘   │  FormulaeDetail │  │
+│                                    │  Analytics      │  │
+│                                    └────────┬────────┘  │
 │                                             │           │
 │                        ┌────────────────────┘           │
 │                        ▼                                │
@@ -88,3 +88,6 @@ All routes are hash-based (`/#/path`) for static hosting compatibility (GitHub P
 - **Factory pattern for modals** — `openModal(() => <Component />)` prevents re-render loops from JSX stored in context state
 - **`_searchString` pre-computation** — search string is built once at normalization time, not on every filter pass
 - **Font exclusion by default** — 2,500+ font casks are hidden unless explicitly toggled, keeping the list clean
+
+---
+*Updated: Mar 23, 2026*

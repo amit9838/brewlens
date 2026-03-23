@@ -95,7 +95,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
             return;
         }
 
-        const index = data.findIndex(i => i.name.toLowerCase().startsWith(newChar.toLowerCase()));
+        const index = filtered.findIndex(i => i.name.toLowerCase().startsWith(newChar.toLowerCase()));
         if (index === -1) return;
 
         const page = Math.ceil((index + 1) / itemsPerPage);
