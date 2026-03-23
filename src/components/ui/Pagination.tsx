@@ -1,3 +1,12 @@
+/**
+ * @file Pagination.tsx
+ * Pagination controls with sliding page window, page jump input,
+ * and items-per-page selector.
+ *
+ * Shows a window of ±2 pages around the current page.
+ * Supports jumping to an arbitrary page via a number input.
+ * Items per page options: 12, 24, 48.
+ */
 import React, { useState } from 'react';
 import { Button } from './Button';
 

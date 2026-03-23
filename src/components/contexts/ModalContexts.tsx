@@ -1,3 +1,18 @@
+/**
+ * @file ModalContexts.tsx
+ * Global modal state management via React Context.
+ *
+ * Uses a factory pattern: `openModal` accepts `() => ReactNode` rather than
+ * `ReactNode` directly. This prevents an infinite re-render loop that would
+ * occur if JSX were stored in context state — each parent re-render would
+ * create new JSX, update context, trigger re-renders, and loop indefinitely.
+ *
+ * Usage:
+ * ```tsx
+ * const { openModal, closeModal } = useModal();
+ * openModal(() => <MyModal />, { closeOnBackdropClick: true });
+ * ```
+ */
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { type ReactNode } from 'react';
 

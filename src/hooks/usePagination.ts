@@ -1,5 +1,28 @@
+/**
+ * @file usePagination.ts
+ * Generic pagination hook with localStorage persistence.
+ * Saves and restores the current page across navigation using a storage key.
+ */
+
 import { useState, useEffect, useMemo } from 'react';
 
+/**
+ * Provides pagination state and helpers for any array of data.
+ *
+ * Persists the current page to `localStorage` when a `storageKey` is provided,
+ * allowing the page to be restored after navigating away and back.
+ *
+ * Page clamping is skipped when `data` is empty to avoid overwriting a saved
+ * page before the async data has loaded.
+ *
+ * @param data - The full array of items to paginate
+ * @param itemsPerPage - Number of items per page
+ * @param storageKey - Optional localStorage key for page persistence
+ * @returns `{ currentPage, setCurrentPage, totalPages, currentData }`
+ *
+ * @example
+ * const { currentData, setCurrentPage, totalPages } = usePagination(items, 24, 'cp_cask');
+ */
 export function usePagination<T>(
     data: T[],
     itemsPerPage: number,

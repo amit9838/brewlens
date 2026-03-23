@@ -1,3 +1,9 @@
+/**
+ * @file ItemCard.tsx
+ * Memoized card component for a single Homebrew package in the browse grid.
+ * Renders the package favicon, name, tap, version, OSS badge, and status.
+ * Clicking navigates to the detail page for the package.
+ */
 import { memo } from "react";
 import { type BrewItem } from "../types";
 import { NavLink } from "react-router-dom";

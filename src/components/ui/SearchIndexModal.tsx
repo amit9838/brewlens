@@ -1,3 +1,10 @@
+/**
+ * @file SearchIndexModal.tsx
+ * A-Z alphabetical index for jumping to a specific letter section
+ * in the BrewList. Generates buttons for A–Z plus '#' for
+ * non-alphabetic entries. Calls `setNewChar` on selection, which
+ * triggers page navigation in BrewList via a useEffect.
+ */
 import React from 'react';
 import { Search } from "lucide-react";
 
