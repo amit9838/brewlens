@@ -1,3 +1,12 @@
+/**
+ * @file Analytics.tsx
+ * Install analytics leaderboard page.
+ *
+ * Fetches ranked cask install counts from Homebrew's analytics API for
+ * selectable time periods (30d / 90d / 365d). Combines with cask metadata
+ * to show favicons via Google's favicon service. Each row links to the
+ * cask detail page.
+ */
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../ui/Button";

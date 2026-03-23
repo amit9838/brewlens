@@ -1,3 +1,15 @@
+/**
+ * @file Modal.tsx
+ * Global modal renderer. Reads state from `ModalContext` and renders
+ * the modal overlay when `isOpen` is true.
+ *
+ * Features:
+ * - ESC key to close
+ * - Focus trap (auto-focuses first focusable element on open)
+ * - Optional backdrop click to close
+ * - Optional close button
+ * - Calls `modalContent()` factory to render content (avoids re-render loops)
+ */
 import React, { useEffect, useRef } from 'react';
 import { useModal } from '../contexts/ModalContexts';
 import { Button } from './Button';

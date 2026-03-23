@@ -1,3 +1,9 @@
+/**
+ * @file QuickSearchModal.tsx
+ * Pre-defined search term shortcuts for common app categories.
+ * Clicking a term calls `onSelect(term)` and closes the modal,
+ * instantly populating the search field in BrewList.
+ */
 import { useModal } from "../contexts/ModalContexts";
 import { Button } from "./Button";
 

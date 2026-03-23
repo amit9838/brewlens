@@ -1,6 +1,19 @@
+/**
+ * @file BrewList.tsx
+ * Main browse and search page for Homebrew casks and formulae.
+ *
+ * Features:
+ * - Full-text search with deferred value for performance
+ * - Tag-based filters: OSS/Proprietary, Active/Inactive (persisted in sessionStorage)
+ * - Font cask exclusion toggle (persisted in sessionStorage)
+ * - A-Z alphabetical index navigation via modal
+ * - Quick search shortcuts via modal
+ * - Paginated grid with localStorage page persistence per type
+ */
 import React, { useState, useMemo, useEffect, useCallback, useDeferredValue } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { usePagination } from "../../hooks/usePagination";
+import { useStorage } from "../../hooks/useStorage";
 import { ItemCard } from "../ItemCard";
 import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
@@ -24,8 +37,15 @@ interface Props {
 export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) => {
     const [itemsPerPage, setItemsPerPage] = useState(24);
     const [newChar, setNewChar] = useState<string | null>(null);
-    const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
-    const [showFonts, setShowFonts] = useState(false);
+    const [filterArr, setFilterArr] = useStorage<string[]>('brewlist_filters', []);
+    const activeFilters = new Set(filterArr);
+    const setActiveFilters = (fn: Set<string> | ((prev: Set<string>) => Set<string>)) => {
+        setFilterArr(prev => {
+            const next = typeof fn === 'function' ? fn(new Set(prev)) : fn;
+            return [...next];
+        });
+    };
+    const [showFonts, setShowFonts] = useStorage<boolean>('brewlist_showFonts', false);
     const { openModal, closeModal } = useModal();
 
     // Queries & Derived State
@@ -45,7 +65,6 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
             if (next.has(f)) {
                 next.delete(f);
             } else {
-                // clear siblings in the same group
                 const siblings = Object.values(groups).find(g => g.includes(f)) ?? [];
                 siblings.forEach(s => next.delete(s));
                 next.add(f);
@@ -97,9 +116,11 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     }, [setSearch]);
 
 
+    const clearFilters = () => setActiveFilters(new Set());
+
     const changeType = (type: BrewType) => {
         setType(type);
-        setActiveFilters(new Set());
+        clearFilters();
     }
 
     {/* CONTROLS */ }
@@ -169,7 +190,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     </Button>
                 ))}
                 {activeFilters.size > 0 && (
-                    <Button isPill size="sm" variant="ghost" onClick={() => setActiveFilters(new Set())}
+                    <Button isPill size="sm" variant="ghost" onClick={clearFilters}
                         className="text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
                         <X size={12} /> Clear
                     </Button>

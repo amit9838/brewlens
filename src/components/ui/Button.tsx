@@ -1,3 +1,13 @@
+/**
+ * @file Button.tsx
+ * Polymorphic button component with multiple visual variants and sizes.
+ * Built on @radix-ui/react-slot to support rendering as any element via `asChild`.
+ *
+ * @example
+ * <Button variant="primary" size="md">Save</Button>
+ * <Button variant="outline" isPill size="sm">Filter</Button>
+ * <Button asChild variant="ghost"><a href="/about">About</a></Button>
+ */
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot"; // Install via: npm install @radix-ui/react-slot
 import { cn } from "../../lib/utils";
