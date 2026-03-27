@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Modal } from './components/ui/Modal';
 import { ModalProvider } from './components/contexts/ModalContexts';
+import { BookmarksProvider } from './components/contexts/BookmarksContext';
+import { RecentlyViewedProvider } from './components/contexts/RecentlyViewedContext';
 import { NavDrawer } from './components/layout/Drawer';
 import { Header } from './components/layout/Header';
 import { BrewList } from './components/page/BrewList';
@@ -13,6 +15,7 @@ import Installation from './components/page/Installation';
 import FormulaeDetail from './components/page/FormulaeDetail';
 import About from './components/page/About';
 import Analytics from './components/page/Analytics';
+import Dashboard from './components/page/Dashboard';
 
 const queryClient = new QueryClient();
 
@@ -31,7 +34,8 @@ function HomebrewExplorer() {
         <Routes>
           <Route path="/install" element={<div>Install Guide</div>} />
           {/* <BrewList search={search} setSearch={setSearch} type={type} setType={setType} /> */}
-          <Route path="/" element={<BrewList search={search} setSearch={setSearch} type={type} setType={setType} />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/all" element={<BrewList search={search} setSearch={setSearch} type={type} setType={setType} />} />
           <Route path="/installation" element={<Installation />} />
           <Route path="/cask/:token" element={<CaskDetail />} />
           <Route path="/formula/:token" element={<FormulaeDetail />} />
@@ -49,8 +53,12 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ModalProvider>
-        <HomebrewExplorer />
-        <Modal />
+        <BookmarksProvider>
+          <RecentlyViewedProvider>
+            <HomebrewExplorer />
+            <Modal />
+          </RecentlyViewedProvider>
+        </BookmarksProvider>
       </ModalProvider>
     </QueryClientProvider>
   );

@@ -20,7 +20,7 @@ export const ItemCard = memo(({ item }: { item: BrewItem }) => {
         <NavLink
             to={`/${item.type}/${item.token}`}
         >
-            <div className="flex flex-col p-4 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:shadow-lg hover:border-green-500 transition-all h-full group">
+            <div className="flex flex-col p-4 bg-white dark:bg-zinc-900/70 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:shadow-lg hover:border-green-500 transition-all h-full group">
                 <div className="flex gap-4 items-start mb-3 ">
                     <img
                         src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`}
