@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { type BrewItem, type BrewType } from "../../types";
 import { useLocation } from "react-router-dom";
@@ -6,8 +6,10 @@ import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, Wrenc
 import { Share2, ChevronLeft } from 'lucide-react';
 import { NavLink } from "react-router-dom";
 import { Button } from "../ui/Button";
+import { BookmarkButton } from "../ui/BookmarkButton";
 import SkeletonDetails from "./SkeletonDetails";
 import { getSourceCodeStatus } from "../../lib/utils";
+import { useRecentlyViewed } from "../contexts/RecentlyViewedContext";
 
 /**
  * Formats an artifact value for display.
@@ -26,8 +28,9 @@ function formatArtifactValue(value: unknown): string {
 }
 
 export function CaskDetail() {
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState({ installCmd: false, appLink: false });
   const location = useLocation();
+  const { trackView } = useRecentlyViewed();
 
   const pathSegments = location.pathname.split('/');
   const token = pathSegments[pathSegments.length - 1];
@@ -38,6 +41,10 @@ export function CaskDetail() {
 
   const item: BrewItem = data[0];
 
+  useEffect(() => {
+    if (item) trackView(item);
+  }, [item?.id]);
+
   const packageStatus = (item: BrewItem) => {
     const isNotInstallable = (item.deprecated || item.disabled);
     const reason = item.deprecated ? "Deprecated" : item.disabled ? "Disabled" : "unknown";
@@ -47,14 +54,14 @@ export function CaskDetail() {
 
   const copyCmd = (item: BrewItem) => {
     navigator.clipboard.writeText(item.installCmd);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setCopied({ installCmd: true, appLink: false });
+    setTimeout(() => setCopied({ installCmd: false, appLink: false }), 1500);
   };
 
   const copyURL = () => {
-    navigator.clipboard.writeText(url);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    navigator.clipboard.writeText(window.location.href);
+    setCopied({ installCmd: false, appLink: true });
+    setTimeout(() => setCopied({ installCmd: false, appLink: false }), 1500);
   };
 
 
@@ -118,12 +125,13 @@ export function CaskDetail() {
 
         {/* Header Action Buttons */}
         <div className="flex gap-2 text-zinc-400">
+          <BookmarkButton item={item} size="sm" />
           <Button
             onClick={() => copyURL()}
             variant="ghost"
             size="sm"
           >
-            {copied ? <Check size={18} /> : <Share2 size={18} />}
+            {copied.appLink ? <Check size={18} /> : <Share2 size={18} />}
           </Button>
           <a
             href={url}
@@ -173,7 +181,7 @@ export function CaskDetail() {
                   variant="glass"
                   size="icon"
                   className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all" >
-                  {copied ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}
+                  {copied.installCmd ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}
                 </Button>
               </div>
 
@@ -194,7 +202,7 @@ export function CaskDetail() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="glass"    >
+                <Button variant="glass" className="text-zinc-200" >
                   <Code size={20} />Source
                 </Button>
               </a>}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
-import { MenuIcon, Moon, Sun, TrendingUp } from "lucide-react";
+import { MenuIcon, Moon, Sun, Grid } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/brewlens_logo.png"
 
@@ -25,7 +25,7 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
   }
 
   return (
-    <header className="flex  gap-4 justify-between items-center">
+    <header className="flex  gap-4 flex-wrap justify-between items-center">
       <div className="flex items-center gap-3">
         <Button variant="ghost"
           onClick={() => setIsOpen(true)}
@@ -42,10 +42,10 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
           </h1>
         </NavLink>
       </div>
-      <div className="flex gap-3">
-        <NavLink to="/analytics">
-          <Button variant="ghost" className="shrink-0">
-            <TrendingUp size={20} />
+      <div className="flex gap-2">
+        <NavLink to={`/all`}>
+          <Button variant="ghost" size="md">
+            <Grid size={18} /> <span className="text-sm font-medium">All Apps</span>
           </Button>
         </NavLink>
         <Button

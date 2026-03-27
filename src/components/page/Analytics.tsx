@@ -191,3 +191,7 @@ export default function Analytics() {
         </div>
     );
 }
+
+
+// Analytics.tsx (add exports at the bottom)
+export { fetchAnalytics, formatCount, fetchCaskMeta };

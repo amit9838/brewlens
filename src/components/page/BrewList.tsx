@@ -10,7 +10,7 @@
  * - Quick search shortcuts via modal
  * - Paginated grid with localStorage page persistence per type
  */
-import React, { useState, useMemo, useEffect, useCallback, useDeferredValue } from "react";
+import React, { useState, useMemo, useEffect, useCallback, useDeferredValue, useRef } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { usePagination } from "../../hooks/usePagination";
 import { useStorage } from "../../hooks/useStorage";
@@ -25,6 +25,7 @@ import { Button } from "../ui/Button";
 import { useModal } from '../contexts/ModalContexts';
 import SearchIndexModal from "../ui/SearchIndexModal";
 import QuickSearchModal from "../ui/QuickSearchModal";
+import BookmarksModal from "../ui/BookmarksModal";
 
 
 interface Props {
@@ -35,9 +36,11 @@ interface Props {
 }
 
 export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) => {
+    const searchInputRef = useRef<HTMLInputElement>(null);
     const [itemsPerPage, setItemsPerPage] = useState(24);
     const [newChar, setNewChar] = useState<string | null>(null);
-    const [filterArr, setFilterArr] = useStorage<string[]>('brewlist_filters', []);
+    const [isFocused, setIsFocused] = useState(false);
+    const [filterArr, setFilterArr] = useStorage<string[]>('brewlist_filters', ['active']);
     const activeFilters = new Set(filterArr);
     const setActiveFilters = (fn: Set<string> | ((prev: Set<string>) => Set<string>)) => {
         setFilterArr(prev => {
@@ -76,6 +79,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         // sort the data by name
         data.sort((a, b) => a.name.localeCompare(b.name));
         let result = data;
+        console.log(filterArr);
         if (deferredSearch) result = result.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
         if (activeFilters.has('oss')) result = result.filter(i => i.package.isFoss);
         if (activeFilters.has('proprietary')) result = result.filter(i => !i.package.isFoss);
@@ -88,6 +92,39 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     const pagination = usePagination(filtered, itemsPerPage, `cp_${type}`);
     const { currentData, setCurrentPage, totalPages } = pagination
 
+    useEffect(() => {
+        let lastEscTime = 0;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // 1. Clear search on Escape
+            if (e.key === 'Escape') {
+                const currentTime = Date.now();
+                setSearch("");
+                // 2. Check for double press (within 300ms)
+                if (currentTime - lastEscTime < 300) {
+                    // Exit focus from the input
+                    if (document.activeElement instanceof HTMLElement) {
+                        document.activeElement.blur();
+                    }
+                    console.log("removed focus")
+                }
+                lastEscTime = currentTime;
+            }
+
+            // 2. Focus on '/'
+            if (e.key === '/') {
+                // Optional: Don't hijack focus if user is already typing in an input
+                if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                e.preventDefault(); // Prevents the "/" from appearing in the input
+                searchInputRef.current?.focus(); // Must use () to call the function
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [setSearch]);
 
     useEffect(() => {
         if (!newChar || newChar === '#') {
@@ -115,6 +152,12 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         openModal(() => <QuickSearchModal onSelect={setSearch} />, { closeOnBackdropClick: true });
     }, [setSearch]);
 
+    const handleBookmarkView = useCallback(() => {
+        openModal(() => <BookmarksModal />, { closeOnBackdropClick: true });
+    }, [setSearch]);
+
+
+
 
     const clearFilters = () => setActiveFilters(new Set());
 
@@ -124,18 +167,38 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     }
 
     {/* CONTROLS */ }
-   return <div className="container max-w-[1400px] mx-auto px-4">
+    return <div className="container max-w-[1400px] mx-auto px-4">
         <div className="flex w-full flex-wrap justify-between items-center gap-4 mb-8">
             <div className="flex flex-wrap gap-2 w-full sm:w-auto items-center">
                 <div className="relative w-full sm:w-auto sm:min-w-[16rem] sm:max-w-[20rem]">
                     <Search className="absolute left-3 top-3 text-gray-400" size={18} />
+
                     <input
-                        className="w-full pl-10 pr-10 py-2 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
-                        placeholder={`Search...`}
+                        ref={searchInputRef}
+                        className="w-full pl-10 pr-16 py-2 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none transition-all"
+                        placeholder="Search..."
                         value={search}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
                         onChange={(e) => setSearch(e.target.value)}
                     />
-                    {search && <X className="absolute right-3 top-3 text-gray-400 bg-zinc-300/10 hover:bg-zinc-300 p-[2px] rounded-full cursor-pointer" size={18} onClick={() => setSearch("")} />}
+
+                    <div className="absolute right-3 top-2.5 flex items-center gap-2 cursor-pointer">
+                        {/* Shortcut Badges */}
+                        {!search && !isFocused && (
+                            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-medium text-gray-400 border border-gray-300 dark:border-zinc-600 rounded bg-gray-50 dark:bg-zinc-700">
+                                /
+                            </kbd>
+                        )}
+
+                        {search && (
+                            <kbd
+                                onClick={() => setSearch("")}
+                                className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-medium text-gray-400 border border-gray-300 dark:border-zinc-600 rounded bg-gray-50 dark:bg-zinc-700">
+                                ESC
+                            </kbd>
+                        )}
+                    </div>
                 </div>
 
                 <Button variant="secondary" size="md" onClick={handleQuickSearch} title="Quick search">
@@ -155,8 +218,14 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     ))}
                 </div>
             </div>
-
             <div className="px-1 flex gap-2">
+                <Button
+                    onClick={handleBookmarkView}
+                    variant="secondary"
+                    size="sm"
+                >
+                    Bookmarks
+                </Button>
                 <Button
                     onClick={handleOpenIndexSearch}
                     variant="secondary"
@@ -198,29 +267,29 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
             </div>
 
 
-        <div className="quick-action-right">
-            {type === 'cask' && (
-                <>
-                    {/* <span className="text-gray-300 dark:text-zinc-600">|</span> */}
-                    <label className="flex items-center gap-2 mr-6 cursor-pointer select-none text-xs text-zinc-500 dark:text-zinc-400">
-                        <span>Fonts</span>
-                        <div
-                            onClick={() => setShowFonts(p => !p)}
-                            className={cn(
-                                "relative w-8 h-4 rounded-full transition-colors duration-200",
-                                showFonts ? "bg-green-500" : "bg-zinc-300 dark:bg-zinc-600"
-                            )}
-                        >
-                            <div className={cn(
-                                "absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-200",
-                                showFonts ? "translate-x-4" : "translate-x-0.5"
-                            )} />
-                        </div>
-                    </label>
-                </>
-            )}
+            <div className="quick-action-right">
+                {type === 'cask' && (
+                    <>
+                        {/* <span className="text-gray-300 dark:text-zinc-600">|</span> */}
+                        <label className="flex items-center gap-2 mr-6 cursor-pointer select-none text-xs text-zinc-500 dark:text-zinc-400">
+                            <span>Fonts</span>
+                            <div
+                                onClick={() => setShowFonts(p => !p)}
+                                className={cn(
+                                    "relative w-8 h-4 rounded-full transition-colors duration-200",
+                                    showFonts ? "bg-green-500" : "bg-zinc-300 dark:bg-zinc-600"
+                                )}
+                            >
+                                <div className={cn(
+                                    "absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-200",
+                                    showFonts ? "translate-x-4" : "translate-x-0.5"
+                                )} />
+                            </div>
+                        </label>
+                    </>
+                )}
+            </div>
         </div>
-                </div>
 
         {/* GRID */}
         {isLoading && <SkeletonGrid count={itemsPerPage} />}
