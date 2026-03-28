@@ -163,8 +163,8 @@ const Dashboard = () => {
         <div className="sections flex flex-col gap-4 transition-all duration-500 px-4">
             {/* Recently Viewed Section */}
             {recentItems && recentItems.length > 0 && (
-                <div className="section bg-gradient-to-br from-cyan-400/10 via-blue-500/5 to-transparent dark:from-cyan-500/10 dark:via-blue-600/10 dark:to-transparent border border-cyan-200/30 dark:border-cyan-700/20 shadow-md rounded-xl p-4 backdrop-blur-sm transition-all duration-500 hover:shadow-lg">
-                    <div className="header flex justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
+                <div className="section bg-gradient-to-br from-cyan-400/10 via-blue-500/5 to-transparent dark:from-cyan-500/4 dark:via-blue-600/4 dark:to-transparent border border-cyan-200/30 dark:border-cyan-700/5 shadow-md rounded-xl p-4 backdrop-blur-sm transition-all duration-500 hover:shadow-lg">
+                    <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
                         <div className="title">
                             <span className="bg-cyan-700 mr-3 text-cyan-700 rounded-xs">|</span>
                             Recently Viewed
@@ -182,9 +182,9 @@ const Dashboard = () => {
             )}
 
             {/* Random Picks Section */}
-            <div className="section bg-gradient-to-br from-purple-400/10 via-pink-500/5 to-transparent dark:from-purple-600/10 dark:via-pink-700/8 dark:to-transparent border border-purple-200/30 dark:border-purple-700/10 shadow-md rounded-xl p-4 transition-all duration-500 hover:shadow-lg">
-                <div className="header flex justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
-                    <div className="title">
+            <div className="section bg-gradient-to-br from-purple-400/10 via-pink-500/5 to-transparent dark:from-purple-600/5 dark:via-pink-700/3 dark:to-transparent border border-purple-200/30 dark:border-purple-700/10 shadow-md rounded-xl p-4 transition-all duration-500 hover:shadow-lg">
+                <div className="header flex justify-between flex-wrap gap-y-2 items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
+                    <div className="title w-50 flex items-center">
                         <span className="bg-purple-700 mr-3 text-purple-700 rounded-xs">|</span>
                         Random Picks
                     </div>
@@ -211,7 +211,7 @@ const Dashboard = () => {
                     {!isLoading && randomPicks.length > 0 && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                             {randomPicks.map((item) => (
-                                <ItemCard key={item.id} item={item} />
+                                <ItemCard key={item.id} item={item} enableBackground={true} />
                             ))}
                         </div>
                     )}
@@ -222,7 +222,7 @@ const Dashboard = () => {
             </div>
 
             {/* Analytics Section – Top 5 Casks (30 Days) */}
-            <div className="section bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent dark:from-amber-500/10 dark:via-orange-600/10 dark:to-transparent border border-amber-200/30 dark:border-amber-700/20 shadow-md rounded-xl p-4 transition-all duration-500 hover:shadow-lg">
+            <div className="section bg-gradient-to-br from-amber-400/10 via-orange-500/5 to-transparent dark:from-amber-500/5 dark:via-orange-600/5 dark:to-transparent border border-amber-200/30 dark:border-amber-700/6 shadow-md rounded-xl p-4 transition-all duration-500 hover:shadow-lg">
                 <div className="header flex justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
                     <div className="title">
                         <span className="bg-amber-700 mr-3 text-amber-700 rounded-xs">|</span>
@@ -265,7 +265,7 @@ const Dashboard = () => {
 
                                 return (
                                     <NavLink key={item.cask} to={`/cask/${item.cask}`}>
-                                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 px-4 py-3 my-1 rounded-xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 hover:border-amber-500 transition-all cursor-pointer">
+                                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 px-4 py-3 my-1 rounded-xl bg-white dark:bg-zinc-900/70 border border-gray-100 dark:border-zinc-800 hover:border-amber-500/30 transition-all cursor-pointer">
                                             {/* Rank */}
                                             <span className="w-6 text-xs text-zinc-400 text-right shrink-0">{item.number}.</span>
 
