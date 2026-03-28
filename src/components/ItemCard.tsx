@@ -1,56 +1,115 @@
-/**
- * @file ItemCard.tsx
- * Memoized card component for a single Homebrew package in the browse grid.
- * Renders the package favicon, name, tap, version, OSS badge, and status.
- * Clicking navigates to the detail page for the package.
- */
-import { memo } from "react";
+import { memo, useState, useEffect } from "react";
 import { type BrewItem } from "../types";
 import { NavLink } from "react-router-dom";
 
-export const ItemCard = memo(({ item }: { item: BrewItem }) => {
+interface ItemCardProps {
+    item: BrewItem;
+    enableBackground?: boolean;
+}
+
+export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps) => {
+    const [imageUrl, setImageUrl] = useState(
+        `https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`
+    );
+    const [imageLoaded, setImageLoaded] = useState(false);
+   // Preload background image when effect is enabled
+    
+   useEffect(() => {
+        if (!enableBackground) return;
+        const img = new Image();
+        img.onload = () => setImageLoaded(true);
+        img.onerror = () => setImageLoaded(true);
+        img.src = imageUrl;
+    }, [imageUrl, enableBackground]);
+
+    const handleImageError = () => {
+        setImageUrl("/vite.svg");
+    };
 
     const packageStatus = (item: BrewItem) => {
         const isNotInstallable = (item.deprecated || item.disabled);
         const reason = item.deprecated ? "Deprecated" : item.disabled ? "Disabled" : "unknown";
         return { isNotInstallable, reason };
-    }
+    };
 
     return (
         <NavLink
             to={`/${item.type}/${item.token}`}
+            className="relative overflow-hidden block"
+            style={
+                enableBackground
+                    ? ({ '--bg-url': `url(${imageUrl})` } as React.CSSProperties)
+                    : undefined
+            }
         >
-            <div className="flex flex-col p-4 bg-white dark:bg-zinc-900/70 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:shadow-lg hover:border-green-500 transition-all h-full group">
-                <div className="flex gap-4 items-start mb-3 ">
+            {/* Blurred background – only if enabled */}
+            {enableBackground && (
+                <div className={`
+                        before:content-['']
+                        before:absolute
+                        before:inset-3
+                        before:bg-contain
+                        before:bg-center
+                        before:bg-no-repeat
+                        before:bg-[image:var(--bg-url)]
+                        before:filter
+                        before:blur-[30px]
+                        before:saturate-300
+                        before:transition-opacity
+                        before:duration-700
+                        ${imageLoaded ? 'before:opacity-70 dark:before:opacity-60' : 'before:opacity-0'}
+                    `} />
+            )}
+
+            {/* Card content – background changes based on enableBackground */}
+            <div
+                className={`relative z-10 flex flex-col p-4 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:shadow-lg hover:border-green-500 transition-all h-full group ${enableBackground
+                    ? "bg-white/80 dark:bg-zinc-900/80"
+                    : "bg-white dark:bg-zinc-900/70"
+                    }`}
+            >
+                <div className="flex gap-4 items-start mb-3">
                     <img
-                        src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`}
-                        onError={(e) => (e.currentTarget.src = "/vite.svg")}
+                        src={imageUrl}
+                        onError={handleImageError}
                         className="w-11 h-11 rounded-full bg-gray-200 dark:bg-zinc-700 p-1 border-0 border-gray-300 dark:border-gray-600"
                         alt=""
                     />
-                    <div className="min-w-0 ">
+                    <div className="min-w-0">
                         <h3 className="font-bold text-gray-900 dark:text-gray-100 truncate">{item.name}</h3>
-                        <span className="opacity-60 pb-1 text-xs rounded-full " title={item.version}>{item.raw.tap}</span>
+                        <span className="opacity-60 pb-1 text-xs rounded-full" title={item.version}>
+                            {item.raw.tap}
+                        </span>
                     </div>
                 </div>
+
                 <div className="flex gap-2 flex-wrap mb-1">
                     <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-zinc-500 dark:text-zinc-400 rounded-full">
-                        <span className=" bg-gray-100 dark:bg-zinc-700/30 px-3 py-2 text-xs rounded-full " title={item.version}>v{item.version}</span>
+                        <span className="bg-gray-100 dark:bg-zinc-700/30 px-3 py-2 text-xs rounded-full" title={item.version}>
+                            v{item.version}
+                        </span>
                     </div>
-                    {item.package.isFoss &&
+                    {item.package.isFoss && (
                         <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-blue-500 dark:text-blue-400 rounded-full">
-                            <span className=" bg-gray-100 dark:bg-blue-700/10 px-3 py-2 text-xs rounded-full " >{"Open Source"}</span>
+                            <span className="bg-gray-100 dark:bg-blue-700/10 px-3 py-2 text-xs rounded-full">
+                                Open Source
+                            </span>
                         </div>
-                    }
+                    )}
                     <div className="mt-auto space-y-1">
                         <div className="flex items-center gap-1.5 text-xs text-zinc-400">
-                            {packageStatus(item).isNotInstallable &&
-                                <span className="bg-orange-600/20 text-orange-500 px-2 py-1 rounded-full max-w-[8rem] overflow-hidden text-ellipsis text-nowrap" >{packageStatus(item).reason}</span>
-                            }
+                            {packageStatus(item).isNotInstallable && (
+                                <span className="bg-orange-600/20 text-orange-500 px-2 py-1 rounded-full max-w-[8rem] overflow-hidden text-ellipsis text-nowrap">
+                                    {packageStatus(item).reason}
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>
-                <p className="text-sm ml-1 text-gray-600 dark:text-gray-400 line-clamp-2 flex-1">{item.desc}</p>
+
+                <p className="text-sm ml-1 text-gray-600 dark:text-gray-400 line-clamp-2 flex-1">
+                    {item.desc}
+                </p>
             </div>
         </NavLink>
     );
