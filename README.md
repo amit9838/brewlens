@@ -25,68 +25,26 @@
 
 BrewLens is a modern browser-based tool that fetches and parses **Homebrew Cask and Formula** metadata directly from official Homebrew sources. It helps developers and power users inspect application and command-line tool details with clarity and speed — **all without using a single terminal command.**
 
-You can browse both **Casks (macOS Apps)** and **Formulae (CLI Tools)** , inspecting crucial details such as:
-*   Version details (stable, etc.)
-*   Installation commands
-*   Homepages and download URLs
-*   SHA256 checksums
-*   Dependencies and build dependencies
-*   Artifacts (for casks)
-*   Full JSON representation
-*   Deprecation and disable status
+You can browse both **Casks (macOS Apps)** and **Formulae (CLI Tools)** , with a rich set of features:
+
+- **Comprehensive package details** – version info, installation commands, homepages, download URLs, SHA256 checksums, dependencies, artifacts (for casks), deprecation/disable status, and full JSON representation.
+- **Bookmarks & Recents** – save packages for quick access and revisit your recently viewed items.
+- **Dashboard** – an overview of your installed, bookmarked, and recently viewed packages.
+- **Brewfile Support** – import and export Brewfiles to manage your package setup.
+- **Analytics Page** – view aggregated usage statistics and insights.
+- **Quick Search** – instantly find casks or formulae with a keyboard-first search experience.
+- **Pagination** – navigate long lists efficiently with intuitive page controls.
+- **Jump Index** – quickly skip to a specific letter in the package list.
+- **Blurred Background Cards** – optional visual enhancement for a modern, polished look.
 
 ## 🎯 Who is it For?
 
-*   **Developers:** Inspect metadata, versions, URLs, and dependencies while building or debugging casks and formulae.
-*   **Security / Compliance Teams:** Quickly verify download URLs, SHA256 checksums, and source authenticity for any package.
-*   **SysAdmins:** Audit applications and tools before deploying to managed macOS or Linux environments.
-*   **Homebrew Contributors:** Easily investigate cask or formula structure before making pull requests.
-*   **General Users:** Discover new macOS apps and command-line tools available via Homebrew without ever opening the Terminal.
+- **Developers:** Inspect metadata, versions, URLs, and dependencies while building or debugging casks and formulae.
+- **Security / Compliance Teams:** Quickly verify download URLs, SHA256 checksums, and source authenticity for any package.
+- **SysAdmins:** Audit applications and tools before deploying to managed macOS or Linux environments.
+- **Homebrew Contributors:** Easily investigate cask or formula structure before making pull requests.
+- **General Users:** Discover new macOS apps and command-line tools available via Homebrew without ever opening the Terminal.
 
-## 🛠️ Built With
-
-*   [![React][React.js]][React-url]
-*   [![TypeScript][TypeScript]][TypeScript-url]
-*   [![Vite][Vite]][Vite-url]
-
-
-## 🚀 Getting Started
-
-To get a local copy up and running, follow these simple steps.
-
-### Prerequisites
-*   Node.js (which includes npm) - [Download here](https://nodejs.org/)
-
-### Installation
-1.  Clone the repo
-    ```sh
-    git clone https://github.com/amit9838/brewlens.git
-    ```
-2.  Navigate to the project directory
-    ```sh
-    cd brewlens
-    ```
-3.  Install NPM packages
-    ```sh
-    npm install
-    ```
-4.  Start the development server
-    ```sh
-    npm run dev
-    ```
-5.  Open `http://localhost:5173` (or the port shown in your terminal) to view it in the browser.
-
-## 🤝 Contributing
-
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
 
 ## 📝 License
 
