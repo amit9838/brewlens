@@ -119,7 +119,7 @@ export function CaskDetail() {
         >
           <Button variant="ghost" size="sm">
             <ChevronLeft size={20} />
-            <span className="text-sm font-medium">Home</span>
+            <span className="text-sm font-medium">Cask Details</span>
           </Button>
         </NavLink>
 

@@ -124,7 +124,7 @@ export const FormulaeDetail = () => {
                     >
                         <Button variant="ghost" size="sm">
                             <ChevronLeft size={20} />
-                            <span className="text-sm font-medium">Home</span>
+                            <span className="text-sm font-medium">Formula Details</span>
                         </Button>
                     </NavLink>
                     {/* Header Action Buttons */}
