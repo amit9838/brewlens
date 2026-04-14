@@ -181,6 +181,7 @@ export const FormulaeDetail = () => {
                                         onClick={copyCmd.bind(null, item)}
                                         variant="glass"
                                         size="icon"
+                                        isPill
                                         className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all" >
                                         {copied.installCmd ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}
                                     </Button>
@@ -193,7 +194,7 @@ export const FormulaeDetail = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <Button variant="glass">
+                                    <Button variant="glass" isPill>
                                         Visit Homepage <ExternalLink size={14} />
                                     </Button>
                                 </a>
@@ -203,7 +204,7 @@ export const FormulaeDetail = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                <Button variant="glass" className="text-zinc-100" >
+                                <Button variant="glass" isPill className="text-zinc-100" >
                                     <Code size={20} />Source
                                 </Button>
                             </a>}
@@ -300,7 +301,7 @@ export const FormulaeDetail = () => {
                         </div>
                         <div className="flex  gap-2">
                             {Array.from(installAnalyticsMap).map(([label, value]) => (
-                                <div key={label} className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800 p-4 border border-white/5">
+                                <div key={label} className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3">
                                     <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
                                         {label}
                                     </p>

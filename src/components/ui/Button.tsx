@@ -35,7 +35,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             white: "bg-white text-zinc-900 border border-zinc-200 hover:bg-zinc-50 active:bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-700 dark:active:bg-zinc-600",
             outline: "bg-transparent border border-zinc-300 text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white",
             ghost: "bg-transparent text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100 border border-transparent",
-            glass: "flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-full text-xs font-medium border border-white/10  backdrop-blur-xs",
+            glass: "flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 text-xs font-medium border border-white/10  backdrop-blur-xs",
             blue: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 dark:bg-blue-700 dark:hover:bg-blue-800 dark:active:bg-blue-900 shadow-sm border border-transparent",
             link: "bg-transparent text-green-600 underline-offset-4 hover:underline p-0 h-auto border-none dark:text-green-500",
         };
@@ -51,7 +51,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             <Comp
                 className={cn(
                     "cursor-pointer inline-flex items-center justify-center font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none active:scale-[0.98]",
-                    (isPill || variant === 'glass') ? "rounded-full" : "rounded-md",
+                    (isPill ? "rounded-full" : "rounded-md"),
                     variants[variant],
                     sizes[size],
                     className
