@@ -12,9 +12,8 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
         `https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`
     );
     const [imageLoaded, setImageLoaded] = useState(false);
-   // Preload background image when effect is enabled
-    
-   useEffect(() => {
+
+    useEffect(() => {
         if (!enableBackground) return;
         const img = new Image();
         img.onload = () => setImageLoaded(true);
@@ -35,37 +34,33 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
     return (
         <NavLink
             to={`/${item.type}/${item.token}`}
-            className="relative overflow-hidden block"
+            // Removed overflow-hidden here so your hover:shadow-lg works!
+            className="relative block"
             style={
                 enableBackground
                     ? ({ '--bg-url': `url(${imageUrl})` } as React.CSSProperties)
                     : undefined
             }
         >
-            {/* Blurred background – only if enabled */}
+            {/* Dedicated clipping wrapper for the background */}
             {enableBackground && (
-                <div className={`
-                        before:content-['']
-                        before:absolute
-                        before:inset-3
-                        before:bg-contain
-                        before:bg-center
-                        before:bg-no-repeat
-                        before:bg-[image:var(--bg-url)]
-                        before:filter
-                        before:blur-[30px]
-                        before:saturate-300
-                        before:transition-opacity
-                        before:duration-700
-                        ${imageLoaded ? 'before:opacity-70 dark:before:opacity-60' : 'before:opacity-0'}
+                <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none z-0">
+                    <div className={`
+                        absolute inset-3
+                        bg-contain bg-left bg-no-repeat
+                        bg-[image:var(--bg-url)]
+                        filter blur-[30px] saturate-300
+                        transition-opacity duration-700
+                        ${imageLoaded ? 'opacity-70 dark:opacity-30' : 'opacity-0'}
                     `} />
+                </div>
             )}
 
-            {/* Card content – background changes based on enableBackground */}
+            {/* Card content */}
             <div
                 className={`relative z-10 flex flex-col p-4 border border-gray-200 dark:border-zinc-800 rounded-2xl hover:shadow-lg hover:border-green-500 transition-all h-full group ${enableBackground
-                    ? "bg-white/80 dark:bg-zinc-900/80"
-                    : "bg-white dark:bg-zinc-900/70"
+                        ? "bg-white/80 dark:bg-zinc-900/80"
+                        : "bg-white dark:bg-zinc-900/70"
                     }`}
             >
                 <div className="flex gap-4 items-start mb-3">

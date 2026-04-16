@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { type BrewItem, type BrewType } from "../../types";
 import { useLocation } from "react-router-dom";
-import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, WrenchIcon, Code, Download } from "lucide-react";
+import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, WrenchIcon, Code, Download, DownloadCloud } from "lucide-react";
 import { Share2, ChevronLeft } from 'lucide-react';
 import { NavLink } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -180,6 +180,7 @@ export function CaskDetail() {
                   onClick={copyCmd.bind(null, item)}
                   variant="glass"
                   size="icon"
+                  isPill
                   className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all" >
                   {copied.installCmd ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}
                 </Button>
@@ -202,7 +203,7 @@ export function CaskDetail() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="glass" className="text-zinc-200" >
+                <Button variant="glass" isPill className="text-zinc-200" >
                   <Code size={20} />Source
                 </Button>
               </a>}
@@ -252,23 +253,22 @@ export function CaskDetail() {
                 const Icon =
                   type === "zap" ? Zap : type === "uninstall" ? Trash2 : Box;
 
-                return (
-                  <div
-                    key={index}
-                    className="rounded-2xl bg-zinc-200/50 dark:bg-zinc-800 p-5  flex items-start gap-4"
-                  >
-                    <div className="mt-1 p-2 rounded-lg bg-white/5 text-gray-800 dark:text-gray-400">
-                      <Icon size={16} />
-                    </div>
-                    <div className="overflow-hidden">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">
-                        {type}
-                      </p>
-                      <p className="text-sm font-medium  truncate whitespace-nowrap">
-                        {formatArtifactValue(value)}
-                      </p>
-                    </div>
+                return (value && <div
+                  key={index}
+                  className="rounded-2xl bg-zinc-200/50 dark:bg-zinc-800/40 p-5  flex items-start gap-4"
+                >
+                  <div className="mt-1 p-2 rounded-lg bg-white/5 text-gray-800 dark:text-gray-400">
+                    <Icon size={16} />
                   </div>
+                  <div className="overflow-hidden">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">
+                      {type}
+                    </p>
+                    <p className="text-sm font-medium  truncate whitespace-nowrap">
+                      {formatArtifactValue(value)}
+                    </p>
+                  </div>
+                </div>
                 );
               })}
             </div>
@@ -301,20 +301,8 @@ export function CaskDetail() {
               <h2 className="text-xl font-semibold ">Package Info</h2>
             </div>
             <div className="space-y-8 ">
-              <div className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800 p-3 border border-white/5">
-                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
-                  DOWNLOAD SOURCE
-                </p>
-                <a
-                  href={downloadUrl}
-                  className="text-sm  text-blue-700 dark:text-blue-400 break-all hover:underline leading-relaxed block"
-                >
-                  {downloadUrl}
-                </a>
-              </div>
-
               <div>
-                <div className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800 p-3 border border-white/5">
+                <div className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-3 border border-white/3">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
                     SHA256 HASH
                   </p>
@@ -322,6 +310,20 @@ export function CaskDetail() {
                     {sha256}
                   </code>
                 </div>
+              </div>
+              <div className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-3 border border-white/3">
+                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
+                  DOWNLOAD SOURCE
+                </p>
+                <a
+                  href={downloadUrl}
+                  className="text-sm  text-blue-700 dark:text-blue-400 break-all hover:underline leading-relaxed block"
+                >
+                  <Button size="sm" variant="black">
+                    <DownloadCloud size={16} className="inline-block ml-1" />
+                    Download
+                  </Button>
+                </a>
               </div>
             </div>
 
@@ -331,7 +333,7 @@ export function CaskDetail() {
             </div>
             <div className="flex gap-2">
               {Array.from(installAnalyticsMap).map(([label, value]) => (
-                <div key={label} className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800 p-4 border border-white/5">
+                <div key={label} className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
                     {label}
                   </p>
