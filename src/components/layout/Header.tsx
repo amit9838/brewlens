@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { MenuIcon, Moon, Sun, Grid } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/brewlens_logo.png";
 import { GlobalSearchBar } from "../ui/GlobalSearchBar";
 
@@ -10,6 +10,9 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
+  const { pathname } = useLocation();
+  const showSearch = pathname !== '/all';
+
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "light",
   );
@@ -45,12 +48,14 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
           </NavLink>
         </div>
 
-        {/* Centre: search bar — visible only on md+ */}
-        <div className="hidden md:flex flex-1 min-w-0 justify-center">
-          <div className="w-full max-w-lg">
-            <GlobalSearchBar />
+        {/* Centre: search bar — visible only on md+, hidden on /all */}
+        {showSearch && (
+          <div className="hidden md:flex flex-1 min-w-0 justify-center">
+            <div className="w-full max-w-lg">
+              <GlobalSearchBar />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Right: actions */}
         <div className="ml-auto flex items-center gap-1 shrink-0">
@@ -70,10 +75,12 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
         </div>
       </div>
 
-      {/* ── Row 2: search bar — visible only below md ── */}
-      <div className="md:hidden w-full">
-        <GlobalSearchBar />
-      </div>
+      {/* ── Row 2: search bar — visible only below md, hidden on /all ── */}
+      {showSearch && (
+        <div className="md:hidden w-full">
+          <GlobalSearchBar />
+        </div>
+      )}
     </header>
   );
 };
