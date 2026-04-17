@@ -1,197 +1,110 @@
 /**
  * @file BookmarksModal.tsx
- * Management UI for bookmark collections.
- * Allows creating, renaming, and deleting collections.
+ * Standardized Bookmarks Modal.
  */
-import { useState, useRef, useEffect } from 'react';
-import { Trash2, Pencil, Check, X, BookmarkIcon } from 'lucide-react';
+import { BookmarkIcon, Trash2, FileCode, Download } from 'lucide-react';
 import { useBookmarks } from '../contexts/BookmarksContext';
 import { useModal } from '../contexts/ModalContexts';
+import { ItemListRow } from '../page/ItemListRow';
 import { Button } from './Button';
+import { ModalHeader, ModalBody, ModalFooter } from './Modal';
 import BrewfileModal from './BrewfileModal';
-import type { Collection } from '../contexts/BookmarksContext';
-import type { BrewItem, BrewType } from '../../types';
+import ImportBookmarksModal from './ImportBookmarksModal';
 
 export default function BookmarksModal() {
-    const { collections, addCollection, removeCollection, renameCollection } = useBookmarks();
+    const { bookmarks, clearBookmarks, toggleBookmark } = useBookmarks();
     const { openModal } = useModal();
 
-    const [newName, setNewName] = useState('');
-    const [editingId, setEditingId] = useState<string | null>(null);
-    const [editingName, setEditingName] = useState('');
-    const editInputRef = useRef<HTMLInputElement>(null);
-
-    useEffect(() => {
-        if (editingId && editInputRef.current) {
-            editInputRef.current.focus();
-            editInputRef.current.select();
-        }
-    }, [editingId]);
-
-    const handleAdd = () => {
-        const trimmed = newName.trim();
-        if (!trimmed) return;
-        addCollection(trimmed);
-        setNewName('');
-    };
-
-    const handleAddKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') handleAdd();
-    };
-
-    const startEdit = (collection: Collection) => {
-        setEditingId(collection.id);
-        setEditingName(collection.name);
-    };
-
-    const commitEdit = () => {
-        if (editingId && editingName.trim()) {
-            renameCollection(editingId, editingName.trim());
-        }
-        setEditingId(null);
-        setEditingName('');
-    };
-
-    const cancelEdit = () => {
-        setEditingId(null);
-        setEditingName('');
-    };
-
-    const handleEditKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') commitEdit();
-        if (e.key === 'Escape') cancelEdit();
-    };
-
     const handleGenerateBrewfile = () => {
-        // Collect all bookmarked item IDs across all collections.
-        // TODO: store BrewType alongside itemId in Collection to avoid defaulting to 'cask'.
-        const allItems: BrewItem[] = collections
-            .flatMap(c => c.itemIds)
-            .filter((id, idx, arr) => arr.indexOf(id) === idx) // deduplicate
-            .map(id => ({ id, token: id, type: 'cask' as BrewType, name: id, desc: '', version: '', installCmd: '', package: { verified: false, isFoss: false, fossUrl: null }, raw: {}, _searchString: '' }));
+        openModal(() => <BrewfileModal items={bookmarks} />, { size: 'lg' });
+    };
 
-        openModal(() => <BrewfileModal items={allItems} />, { size: 'md' });
+    const handleImport = () => {
+        openModal(() => <ImportBookmarksModal />, { size: 'lg' });
     };
 
     return (
-        <div className="p-5 w-full max-w-md min-w-[20rem]">
-            <div className="flex items-center gap-2 mb-1">
-                <BookmarkIcon className="h-5 w-5 text-green-600 dark:text-green-500" />
-                <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Collections</h2>
-            </div>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4">
-                Manage your bookmark collections
-            </p>
-
-            {/* Collection list */}
-            <ul className="space-y-1 mb-4">
-                {collections.map((col) => (
-                    <li
-                        key={col.id}
-                        className="flex items-center gap-2 px-3 py-2 rounded-md bg-zinc-50 dark:bg-zinc-800/60 group"
+        <>
+            <ModalHeader
+                title="Bookmarks"
+                subtitle={`${bookmarks.length} ${bookmarks.length === 1 ? 'item' : 'items'} saved in your library`}
+                icon={<BookmarkIcon className="fill-current text-yellow-500" size={20} />}
+            >
+                <div className="flex items-center gap-2">
+                    <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={handleImport}
+                        title="Import bulk bookmarks"
+                        className="text-zinc-600 dark:text-zinc-400"
                     >
-                        {editingId === col.id ? (
-                            <>
-                                <input
-                                    ref={editInputRef}
-                                    value={editingName}
-                                    onChange={(e) => setEditingName(e.target.value)}
-                                    onKeyDown={handleEditKeyDown}
-                                    className="flex-1 text-sm bg-transparent border-b border-zinc-400 dark:border-zinc-500 outline-none text-zinc-900 dark:text-zinc-100"
-                                />
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={commitEdit}
-                                    aria-label="Confirm rename"
-                                    className="h-7 w-7 text-green-600 dark:text-green-500"
-                                >
-                                    <Check className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={cancelEdit}
-                                    aria-label="Cancel rename"
-                                    className="h-7 w-7"
-                                >
-                                    <X className="h-4 w-4" />
-                                </Button>
-                            </>
-                        ) : (
-                            <>
+                        <Download size={14} className="mr-2" />
+                        Import
+                    </Button>
+                </div>
+            </ModalHeader>
+
+            <ModalBody className="max-h-[60vh] overflow-y-auto p-0 bg-gray-50/30 dark:bg-zinc-950/20">
+                {bookmarks.length > 0 ? (
+                    <div className="flex flex-col p-4 gap-2">
+                        {bookmarks.map((item) => (
+                            <div key={item.id} className="relative group">
+                                <ItemListRow item={item} showDesc={false} />
+                                
+                                {/* Overlay Remove Button (Centered Vertically) */}
                                 <button
-                                    onClick={() => startEdit(col)}
-                                    className="flex-1 text-left text-sm font-medium text-zinc-800 dark:text-zinc-200 hover:text-green-600 dark:hover:text-green-400 transition-colors truncate"
-                                    title="Click to rename"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center bg-white/90 dark:bg-zinc-800/90 text-zinc-400 hover:text-red-500 rounded-full shadow-lg border border-gray-100 dark:border-zinc-700 transition-all opacity-0 group-hover:opacity-100 hover:scale-110 z-10 backdrop-blur-sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        toggleBookmark(item);
+                                    }}
+                                    title="Remove bookmark"
                                 >
-                                    {col.name}
+                                    <Trash2 size={14} />
                                 </button>
-                                <span className="text-xs text-zinc-400 dark:text-zinc-500 shrink-0">
-                                    {col.itemIds.length} {col.itemIds.length === 1 ? 'item' : 'items'}
-                                </span>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => startEdit(col)}
-                                    aria-label={`Rename ${col.name}`}
-                                    className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                    <Pencil className="h-3.5 w-3.5" />
-                                </Button>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => removeCollection(col.id)}
-                                    aria-label={`Delete ${col.name}`}
-                                    className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-600 dark:text-red-400"
-                                >
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                </Button>
-                            </>
-                        )}
-                    </li>
-                ))}
-                {collections.length === 0 && (
-                    <li className="text-sm text-zinc-400 dark:text-zinc-500 text-center py-4">
-                        No collections yet
-                    </li>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 py-20 px-10 text-center">
+                        <div className="p-4 rounded-full bg-zinc-100 dark:bg-zinc-800 mb-4">
+                            <BookmarkIcon className="h-10 w-10 opacity-20" />
+                        </div>
+                        <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100">No bookmarks yet</p>
+                        <p className="text-sm mt-2 max-w-[240px] leading-relaxed mb-6">
+                            Items you bookmark will appear here for quick access and offline reference.
+                        </p>
+                        <Button variant="secondary" size="md" onClick={handleImport}>
+                            <Download size={16} className="mr-2" />
+                            Import your library
+                        </Button>
+                    </div>
                 )}
-            </ul>
+            </ModalBody>
 
-            {/* Add new collection */}
-            <div className="flex gap-2 mb-5">
-                <input
-                    type="text"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                    onKeyDown={handleAddKeyDown}
-                    placeholder="New collection name…"
-                    maxLength={50}
-                    className="flex-1 h-9 px-3 text-sm rounded-md border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 dark:placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                />
-                <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={handleAdd}
-                    disabled={!newName.trim()}
-                >
-                    Add
-                </Button>
-            </div>
-
-            {/* Footer */}
-            <div className="border-t border-zinc-200 dark:border-zinc-700 pt-4">
-                <Button
-                    variant="secondary"
-                    size="md"
-                    className="w-full"
-                    onClick={handleGenerateBrewfile}
-                    title="Full Brewfile generation coming in a future update"
-                >
-                    View Bookmarks
-                </Button>
-            </div>
-        </div>
+            {bookmarks.length > 0 && (
+                <ModalFooter className="flex-col sm:flex-row gap-3">
+                    <Button
+                        variant="ghost"
+                        size="md"
+                        onClick={clearBookmarks}
+                        className="w-full sm:w-auto text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    >
+                        <Trash2 size={16} className="mr-2" />
+                        Clear All
+                    </Button>
+                    <div className="flex-1" />
+                    <Button
+                        variant="primary"
+                        size="md"
+                        className="w-full sm:w-auto"
+                        onClick={handleGenerateBrewfile}
+                    >
+                        <FileCode size={16} className="mr-2" />
+                        Generate Brewfile
+                    </Button>
+                </ModalFooter>
+            )}
+        </>
     );
 }

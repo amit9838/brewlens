@@ -23,6 +23,7 @@ import { Search, X, Sparkles, LayoutGrid, List } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
 import { Button } from "../ui/Button";
 import { useModal } from '../contexts/ModalContexts';
+
 import SearchIndexModal from "../ui/SearchIndexModal";
 import QuickSearchModal from "../ui/QuickSearchModal";
 import BookmarksModal from "../ui/BookmarksModal";
@@ -52,6 +53,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     const [showFonts, setShowFonts] = useStorage<boolean>('brewlist_showFonts', false);
     const [viewMode, setViewMode] = useStorage<'grid' | 'list'>('brewlist_viewMode', 'grid');
     const { openModal, closeModal } = useModal();
+
 
     // Queries & Derived State
     const { data = [], isLoading, error } = useBrewData(type);
