@@ -160,7 +160,7 @@ const Dashboard = () => {
     }, [isLoading, refreshRandomPicks]);
 
     return (
-        <div className="sections flex flex-col gap-4 transition-all duration-500 px-4">
+        <div className="sections flex flex-col gap-4 transition-all duration-500 px-0">
             {/* Recently Viewed Section */}
             {recentItems && recentItems.length > 0 && (
                 <div className="section bg-gradient-to-br from-cyan-400/5 via-blue-500/5 to-transparent dark:from-cyan-500/2 dark:via-blue-600/4 dark:to-transparent border border-cyan-200/30 dark:border-cyan-700/5 shadow-md rounded-xl p-4 backdrop-blur-sm transition-all duration-500 hover:shadow-lg">

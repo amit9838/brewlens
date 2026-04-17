@@ -26,7 +26,7 @@ function RecentlyViewedCard({ item }: { item: any }) {
         <NavLink
             to={`/${item.type}/${item.token}`}
             // Removed overflow-hidden from here to prevent clipping
-            className="shrink-0 block px-3 py-3 sm:w-57 w-full rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all relative"
+            className="shrink-0 block px-3 py-3 min-w-full sm:min-w-46 max-w-60 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all relative"
             style={
                 {
                     '--bg-url': `url(${imageUrl})`,
