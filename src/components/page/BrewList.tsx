@@ -83,7 +83,6 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         // sort the data by name
         data.sort((a, b) => a.name.localeCompare(b.name));
         let result = data;
-        console.log(filterArr);
         if (deferredSearch) result = result.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
         if (activeFilters.has('oss')) result = result.filter(i => i.package.isFoss);
         if (activeFilters.has('proprietary')) result = result.filter(i => !i.package.isFoss);
@@ -109,7 +108,6 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     if (document.activeElement instanceof HTMLElement) {
                         document.activeElement.blur();
                     }
-                    console.log("removed focus")
                 }
                 lastEscTime = currentTime;
             }
