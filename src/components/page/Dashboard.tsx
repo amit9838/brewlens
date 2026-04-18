@@ -1,5 +1,6 @@
 import { ItemCard } from "../ItemCard";
 import RecentlyViewedSection from "../ui/RecentlyViewedStrip";
+import BookmarksSection from "../ui/BookmarksSection";
 import { useState, useEffect, useCallback } from 'react';
 import { useBrewData } from "../../hooks/useBrewData";
 import { Button } from "../ui/Button";
@@ -10,6 +11,7 @@ import { RefreshCcw, Grid, BrushCleaning } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAnalytics, formatCount, fetchCaskMeta } from "../page/Analytics"; // adjust path
 import { TrendingUp } from "lucide-react";
+import { AnalyticsItemRow } from "../ui/AnalyticsItemRow";
 
 
 const STORAGE_KEY = "dashboard_random_picks";
@@ -165,8 +167,8 @@ const Dashboard = () => {
             {recentItems && recentItems.length > 0 && (
                 <div className="section bg-gradient-to-br from-cyan-400/5 via-blue-500/5 to-transparent dark:from-cyan-500/2 dark:via-blue-600/4 dark:to-transparent border border-cyan-200/30 dark:border-cyan-700/5 shadow-md rounded-xl p-4 backdrop-blur-sm transition-all duration-500 hover:shadow-lg">
                     <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
-                        <div className="title">
-                            <span className="bg-cyan-700 mr-3 text-cyan-700 rounded-xs">|</span>
+                        <div className="title flex items-center">
+                            <span className="bg-cyan-700 mr-3 w-1 h-5 rounded-xs" />
                             Recently Viewed
                         </div>
                         <div className="action">
@@ -181,11 +183,14 @@ const Dashboard = () => {
                 </div>
             )}
 
+            {/* Bookmarks Section */}
+            <BookmarksSection maxItems={4} />
+
             {/* Random Picks Section */}
             <div className="section bg-gradient-to-br from-purple-400/5 via-pink-500/3 to-transparent dark:from-purple-600/5 dark:via-pink-700/3 dark:to-transparent border border-purple-200/30 dark:border-purple-700/10 shadow-md rounded-xl p-4 transition-all duration-500 hover:shadow-lg">
                 <div className="header flex justify-between flex-wrap gap-y-2 items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
                     <div className="title w-50 flex items-center">
-                        <span className="bg-purple-700 mr-3 text-purple-700 rounded-xs">|</span>
+                        <span className="bg-purple-700 mr-3 w-1 h-5 rounded-xs" />
                         Random Picks
                     </div>
                     <div className="action flex gap-2">
@@ -224,8 +229,8 @@ const Dashboard = () => {
             {/* Analytics Section – Top 5 Casks (30 Days) */}
             <div className="section bg-gradient-to-br from-amber-400/5 via-orange-500/5 to-transparent dark:from-amber-500/5 dark:via-orange-600/5 dark:to-transparent border border-amber-200/30 dark:border-amber-700/6 shadow-md rounded-xl p-4 transition-all duration-500 hover:shadow-lg">
                 <div className="header flex justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
-                    <div className="title">
-                        <span className="bg-amber-700 mr-3 text-amber-700 rounded-xs">|</span>
+                    <div className="title flex items-center">
+                        <span className="bg-amber-700 mr-3 w-1 h-5 rounded-xs" />
                         Top Casks – Last 30 Days
                         {totalFormatted && (
                             <span className="text-xs text-zinc-500 ml-2">
@@ -260,46 +265,15 @@ const Dashboard = () => {
                         <div className="space-y-2">
                             {topItems.map((item) => {
                                 const homepage = caskMeta[item.cask];
-                                const count = parseInt(item.count.replace(/,/g, ''), 10);
-                                const barWidth = Math.max(2, (count / maxCount) * 100);
 
                                 return (
-                                    <NavLink key={item.cask} to={`/cask/${item.cask}`}>
-                                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 px-4 py-3 my-2 rounded-xl bg-white dark:bg-zinc-900/50 border border-gray-200/50 dark:border-zinc-800/50 hover:border-amber-500/30 transition-all cursor-pointer">
-                                            {/* Rank */}
-                                            <span className="w-6 text-xs text-zinc-400 text-right shrink-0">{item.number}.</span>
-
-                                            {/* Favicon */}
-                                            <img
-                                                src={`https://www.google.com/s2/favicons?domain=${homepage}&sz=32`}
-                                                onError={(e) => (e.currentTarget.src = '/vite.svg')}
-                                                className="w-6 h-6 rounded shrink-0"
-                                                alt=""
-                                            />
-
-                                            {/* Cask name – takes remaining space, truncates */}
-                                            <span className="flex-1 min-w-0 text-sm font-medium truncate">{item.cask}</span>
-
-                                            {/* Count and percentage: on mobile combine them, on large show count only */}
-                                            <span className="text-xs text-zinc-500 shrink-0 text-right">
-                                                <span className="sm:hidden">{formatCount(item.count)} ({item.percent}%)</span>
-                                                <span className="hidden sm:inline">{formatCount(item.count)}</span>
-                                            </span>
-
-                                            {/* Bar – full width on mobile, flexible on larger screens */}
-                                            <div className="w-full sm:flex-1 h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden mt-1 sm:mt-0">
-                                                <div
-                                                    className="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-amber-400/40 via-orange-500/70 to-orange-500/70"
-                                                    style={{ width: `${barWidth}%` }}
-                                                />
-                                            </div>
-
-                                            {/* Percentage column – only visible on larger screens */}
-                                            <span className="hidden sm:block w-12 text-xs font-semibold text-zinc-500 text-right shrink-0">
-                                                {item.percent}%
-                                            </span>
-                                        </div>
-                                    </NavLink>
+                                    <AnalyticsItemRow 
+                                        key={item.cask} 
+                                        item={item} 
+                                        homepage={homepage} 
+                                        maxCount={maxCount}
+                                        variant="amber"
+                                    />
                                 );
                             })}
                         </div>

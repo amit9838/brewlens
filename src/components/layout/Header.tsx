@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
   const { pathname } = useLocation();
-  const showSearch = pathname !== '/all';
+  const showSearch = pathname === '/' || pathname === '/analytics' || pathname.startsWith('/cask/') || pathname.startsWith('/formula/');
 
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "light",

@@ -26,7 +26,7 @@ export function BookmarkButton({ item, size = 'md' }: BookmarkButtonProps) {
         >
             <Bookmark
                 className={bookmarked ? 'fill-current text-yellow-500' : undefined}
-                size={size === 'sm' ? 14 : 18}
+                size={size === 'sm' ? 18 : 20}
             />
         </Button>
     );
