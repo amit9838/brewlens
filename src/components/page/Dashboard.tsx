@@ -267,10 +267,10 @@ const Dashboard = () => {
                                 const homepage = caskMeta[item.cask];
 
                                 return (
-                                    <AnalyticsItemRow 
-                                        key={item.cask} 
-                                        item={item} 
-                                        homepage={homepage} 
+                                    <AnalyticsItemRow
+                                        key={item.cask}
+                                        item={item}
+                                        homepage={homepage}
                                         maxCount={maxCount}
                                         variant="amber"
                                     />
