@@ -48,9 +48,9 @@ export const ItemListRow = memo(({ item, showDesc = true }: Props) => {
                 </span>
             </div>
 
-            {/* Description — visible on large screens, takes remaining space */}
+            {/* Description — visible on medium+ screens, takes remaining space */}
             {showDesc && (
-                <p className="flex-[2] min-w-0 text-xs text-gray-500 dark:text-zinc-400 truncate hidden lg:block">
+                <p className="flex-[2] min-w-0 text-xs text-gray-500 dark:text-zinc-400 truncate hidden md:block">
                     {item.desc}
                 </p>
             )}

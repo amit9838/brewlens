@@ -49,11 +49,11 @@ export default function BookmarksModal() {
                     <div className="flex flex-col p-4 gap-2">
                         {bookmarks.map((item) => (
                             <div key={item.id} className="relative group">
-                                <ItemListRow item={item} showDesc={false} />
+                                <ItemListRow item={item} />
                                 
                                 {/* Overlay Remove Button (Centered Vertically) */}
                                 <button
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center bg-white/90 dark:bg-zinc-800/90 text-zinc-400 hover:text-red-500 rounded-full shadow-lg border border-gray-100 dark:border-zinc-700 transition-all opacity-0 group-hover:opacity-100 hover:scale-110 z-10 backdrop-blur-sm"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center bg-white/90 dark:bg-zinc-800/90 text-zinc-400 hover:text-red-500 rounded-full shadow-lg border border-gray-100 dark:border-zinc-700 transition-all z-10 backdrop-blur-sm opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 hover:scale-110"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         toggleBookmark(item);

@@ -155,7 +155,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     }, [setSearch]);
 
     const handleBookmarkView = useCallback(() => {
-        openModal(() => <BookmarksModal />, { closeOnBackdropClick: true });
+        openModal(() => <BookmarksModal />, { closeOnBackdropClick: true, size: 'lg' });
     }, [setSearch]);
 
 
