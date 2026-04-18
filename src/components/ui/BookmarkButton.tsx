@@ -21,11 +21,12 @@ export function BookmarkButton({ item, size = 'md' }: BookmarkButtonProps) {
         <Button
             variant="ghost"
             size={size}
-            onClick={() => toggleBookmark('favourites', item)}
+            onClick={() => toggleBookmark(item)}
             aria-label={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
         >
             <Bookmark
-                className={bookmarked ? 'fill-current' : undefined}
+                className={bookmarked ? 'fill-current text-yellow-500' : undefined}
+                size={size === 'sm' ? 18 : 20}
             />
         </Button>
     );

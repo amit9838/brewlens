@@ -1,18 +1,12 @@
 /**
  * @file Analytics.tsx
  * Install analytics leaderboard page.
- *
- * Fetches ranked cask install counts from Homebrew's analytics API for
- * selectable time periods (30d / 90d / 365d). Combines with cask metadata
- * to show favicons via Google's favicon service. Each row links to the
- * cask detail page.
  */
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../ui/Button";
-import { cn } from "../../lib/utils";
 import { TrendingUp } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { AnalyticsItemRow } from "../ui/AnalyticsItemRow";
 
 type Period = '30d' | '90d' | '365d';
 
@@ -132,50 +126,14 @@ export default function Analytics() {
                 <div className="space-y-2">
                     {displayed.map((item) => {
                         const homepage = caskMeta[item.cask];
-                        const count = parseInt(item.count.replace(/,/g, ''), 10);
-                        const barWidth = Math.max(2, (count / maxCount) * 100);
 
                         return (
-                            <NavLink key={item.cask} to={`/cask/${item.cask}`}>
-                                <div
-                                    className="flex items-center gap-3 my-2 px-4 py-4 rounded-xl bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 hover:border-green-500 transition-all cursor-pointer">
-                                    {/* Rank */}
-                                    <span className="w-6 text-xs text-zinc-400 text-right shrink-0">{item.number}.</span>
-
-                                    {/* Favicon */}
-                                    <img
-                                        src={`https://www.google.com/s2/favicons?domain=${homepage}&sz=32`}
-                                        onError={(e) => (e.currentTarget.src = '/vite.svg')}
-                                        className="w-6 h-6 rounded shrink-0"
-                                        alt=""
-                                    />
-
-                                    {/* Name */}
-                                    <span className="w-44 text-sm font-medium truncate shrink-0">{item.cask}</span>
-
-                                    {/* Count */}
-                                    <span className="w-14 text-xs text-zinc-500 shrink-0 text-right">
-                                        {formatCount(item.count)}
-                                    </span>
-
-                                    {/* Bar */}
-                                    <div className="flex-1 h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
-                                        <div
-                                            className={cn("h-full rounded-full transition-all duration-500",
-                                                item.number === 1 ? "bg-gradient-to-r from-cyan-400 to-green-400"
-                                                    : item.number <= 3 ? "bg-green-500"
-                                                        : "bg-green-600/70"
-                                            )}
-                                            style={{ width: `${barWidth}%` }}
-                                        />
-                                    </div>
-
-                                    {/* Percent */}
-                                    <span className="w-12 text-xs font-semibold text-zinc-500 text-right shrink-0">
-                                        {item.percent}%
-                                    </span>
-                                </div>
-                            </NavLink>
+                            <AnalyticsItemRow 
+                                key={item.cask} 
+                                item={item} 
+                                homepage={homepage} 
+                                maxCount={maxCount} 
+                            />
                         );
                     })}
 
@@ -192,6 +150,4 @@ export default function Analytics() {
     );
 }
 
-
-// Analytics.tsx (add exports at the bottom)
 export { fetchAnalytics, formatCount, fetchCaskMeta };

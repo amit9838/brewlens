@@ -1,6 +1,7 @@
 import { memo, useState, useEffect } from "react";
 import { type BrewItem } from "../types";
 import { NavLink } from "react-router-dom";
+import { FaviconImage } from "./ui/FaviconImage";
 
 interface ItemCardProps {
     item: BrewItem;
@@ -8,9 +9,7 @@ interface ItemCardProps {
 }
 
 export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps) => {
-    const [imageUrl, setImageUrl] = useState(
-        `https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`
-    );
+    const imageUrl = `https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`;
     const [imageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
@@ -20,10 +19,6 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
         img.onerror = () => setImageLoaded(true);
         img.src = imageUrl;
     }, [imageUrl, enableBackground]);
-
-    const handleImageError = () => {
-        setImageUrl("/vite.svg");
-    };
 
     const packageStatus = (item: BrewItem) => {
         const isNotInstallable = (item.deprecated || item.disabled);
@@ -64,11 +59,11 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
                     }`}
             >
                 <div className="flex gap-4 items-start mb-3">
-                    <img
-                        src={imageUrl}
-                        onError={handleImageError}
-                        className="w-11 h-11 rounded-full bg-gray-200 dark:bg-zinc-700 p-1 border-0 border-gray-300 dark:border-gray-600"
-                        alt=""
+                    <FaviconImage
+                        homepage={item.homepage}
+                        name={item.name}
+                        size={44}
+                        className="p-1 border border-gray-200 dark:border-zinc-700"
                     />
                     <div className="min-w-0">
                         <h3 className="font-bold text-gray-900 dark:text-gray-100 truncate">{item.name}</h3>

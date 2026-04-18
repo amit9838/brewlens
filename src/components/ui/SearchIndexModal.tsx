@@ -1,12 +1,10 @@
 /**
  * @file SearchIndexModal.tsx
- * A-Z alphabetical index for jumping to a specific letter section
- * in the BrewList. Generates buttons for A–Z plus '#' for
- * non-alphabetic entries. Calls `setNewChar` on selection, which
- * triggers page navigation in BrewList via a useEffect.
+ * Standardized A-Z alphabetical index modal.
  */
 import React from 'react';
 import { Search } from "lucide-react";
+import { ModalHeader, ModalBody } from './Modal';
 
 interface SearchIndexModalProps {
     setNewChar: (search: string) => void;
@@ -16,31 +14,27 @@ const SearchIndexModal: React.FC<SearchIndexModalProps> = ({ setNewChar }) => {
     const characters = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i)).concat(['#']);
 
     return (
-        <div className="relative  max-w-2xl md:min-w-[30rem]  min-w-[20rem] p-2 md:p-4 overflow-hidden">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-6 bg-red">
-                <div className="flex items-center gap-2 text-green-600">
-                    {/* Search Icon */}
-                    <Search size={24} />
-                    <h2 className="text-2xl font-bold tracking-tight">Search Index</h2>
-                </div>
-            </div>
-
-            {/* A-Z Grid */}
-            <div className="grid grid-cols-7 gap-1 md:gap-3">
-                {characters.map((char) => {
-                    return (
+        <>
+            <ModalHeader 
+                title="Search Index" 
+                subtitle="Jump to apps starting with a specific letter"
+                icon={<Search size={20} />}
+            />
+            
+            <ModalBody>
+                <div className="grid grid-cols-7 sm:grid-cols-9 gap-2">
+                    {characters.map((char) => (
                         <button
                             key={char}
                             onClick={() => setNewChar(char)}
-                            className="h-14 flex items-center justify-center rounded-xl text-xl font-bold transition-all duration-200 bg-white border border-slate-200/40 text-slate-500 dark:bg-zinc-800 dark:border-gray-700/30 dark:text-slate-300  hover:bg-green-500 hover:shadow-md  hover:text-white cursor-pointer"
+                            className="aspect-square flex items-center justify-center rounded-2xl text-lg font-bold transition-all duration-200 bg-gray-50 dark:bg-zinc-800 border border-transparent text-zinc-500 dark:text-zinc-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-500 dark:hover:text-white hover:shadow-lg hover:shadow-green-500/20 cursor-pointer active:scale-95"
                         >
                             {char}
                         </button>
-                    );
-                })}
-            </div>
-        </div>
+                    ))}
+                </div>
+            </ModalBody>
+        </>
     );
 };
 

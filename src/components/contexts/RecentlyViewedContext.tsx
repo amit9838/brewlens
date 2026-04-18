@@ -13,6 +13,7 @@ export interface RecentEntry {
     name: string;
     desc: string;
     homepage?: string;
+    version: string;
 }
 
 interface RecentlyViewedContextType {
@@ -21,7 +22,7 @@ interface RecentlyViewedContextType {
     clearRecent(): void;
 }
 
-const MAX_RECENT = 10;
+const MAX_RECENT = 12;
 const TTL_MS = 60 * 60 * 1000 * 24 * 3; // 3 day
 const STORAGE_KEY_ITEMS = 'brewlens_recent';
 const STORAGE_KEY_TIMESTAMP = 'brewlens_recent_ts';
@@ -73,6 +74,7 @@ export function RecentlyViewedProvider({ children }: { children: ReactNode }) {
             name: item.name,
             desc: item.desc,
             homepage: item.homepage,
+            version: item.version,
         };
         setRecentItems(prev => {
             const deduped = prev.filter(e => e.id !== entry.id);

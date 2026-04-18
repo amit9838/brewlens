@@ -1,12 +1,12 @@
 /**
  * @file BrewfileModal.tsx
- * Displays generated Brewfile content for a list of BrewItems.
- * Provides a copy-to-clipboard button with transient feedback.
+ * Standardized Brewfile generation modal.
  */
 import { useState } from 'react';
-import { FileText } from 'lucide-react';
+import { FileText, Copy, Check } from 'lucide-react';
 import { buildBrewfile } from '../../lib/brewfile';
 import { Button } from './Button';
+import { ModalHeader, ModalBody, ModalFooter } from './Modal';
 import type { BrewItem } from '../../types';
 
 interface BrewfileModalProps {
@@ -20,37 +20,49 @@ export default function BrewfileModal({ items }: BrewfileModalProps) {
     const handleCopy = async () => {
         await navigator.clipboard.writeText(content);
         setCopied(true);
-        setTimeout(() => setCopied(false), 1500);
+        setTimeout(() => setCopied(false), 2000);
     };
 
     return (
-        <div className="p-5 w-full max-w-lg min-w-[20rem]">
-            <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-2">
-                    <FileText className="h-5 w-5 text-green-600 dark:text-green-500" />
-                    <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">Bookmarks</h2>
+        <>
+            <ModalHeader 
+                title="Generated Brewfile" 
+                subtitle={`Ready to use with "brew bundle"`}
+                icon={<FileText size={20} />}
+            />
+            
+            <ModalBody>
+                <div className="relative group">
+                    <pre className="font-mono text-[13px] bg-zinc-950 text-emerald-400 rounded-2xl p-6 overflow-auto max-h-[40vh] whitespace-pre-wrap leading-relaxed border border-zinc-800 shadow-inner">
+                        {content || '# No items selected'}
+                    </pre>
                 </div>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                    {items.length} {items.length === 1 ? 'item' : 'items'}
-                </span>
-            </div>
-            {/* <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4">
-                Copy and save as <code className="font-mono">Bookmarks</code> to restore with <code className="font-mono">brew bundle</code>
-            </p> */}
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-500 mt-3 px-1">
+                    Save this content as a file named <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded text-zinc-700 dark:text-zinc-300">Brewfile</code> then run <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded text-zinc-700 dark:text-zinc-300">brew bundle</code> in that directory to install everything at once.
+                </p>
+            </ModalBody>
 
-            <pre className="font-mono text-sm bg-zinc-950 text-green-400 rounded-md p-4 overflow-auto max-h-72 mb-4 whitespace-pre">
-                {content || '# No items bookmarked'}
-            </pre>
-
-            <Button
-                variant="primary"
-                size="md"
-                className="w-full"
-                onClick={handleCopy}
-                disabled={items.length === 0}
-            >
-                {copied ? 'Copied ✓' : 'Copy to Clipboard'}
-            </Button>
-        </div>
+            <ModalFooter>
+                <Button
+                    variant="primary"
+                    size="md"
+                    className="w-full sm:w-auto min-w-[160px]"
+                    onClick={handleCopy}
+                    disabled={items.length === 0}
+                >
+                    {copied ? (
+                        <>
+                            <Check size={16} className="mr-2" />
+                            Copied
+                        </>
+                    ) : (
+                        <>
+                            <Copy size={16} className="mr-2" />
+                            Copy to Clipboard
+                        </>
+                    )}
+                </Button>
+            </ModalFooter>
+        </>
     );
 }

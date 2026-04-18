@@ -19,13 +19,15 @@ import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
 import ErrorState from "./Error";
-import { Search, X, Sparkles } from "lucide-react";
+import { Search, X, Sparkles, LayoutGrid, List } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
 import { Button } from "../ui/Button";
 import { useModal } from '../contexts/ModalContexts';
+
 import SearchIndexModal from "../ui/SearchIndexModal";
 import QuickSearchModal from "../ui/QuickSearchModal";
 import BookmarksModal from "../ui/BookmarksModal";
+import { ItemListRow } from "./ItemListRow";
 
 
 interface Props {
@@ -49,7 +51,9 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         });
     };
     const [showFonts, setShowFonts] = useStorage<boolean>('brewlist_showFonts', false);
+    const [viewMode, setViewMode] = useStorage<'grid' | 'list'>('brewlist_viewMode', 'grid');
     const { openModal, closeModal } = useModal();
+
 
     // Queries & Derived State
     const { data = [], isLoading, error } = useBrewData(type);
@@ -79,7 +83,6 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         // sort the data by name
         data.sort((a, b) => a.name.localeCompare(b.name));
         let result = data;
-        console.log(filterArr);
         if (deferredSearch) result = result.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
         if (activeFilters.has('oss')) result = result.filter(i => i.package.isFoss);
         if (activeFilters.has('proprietary')) result = result.filter(i => !i.package.isFoss);
@@ -105,7 +108,6 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                     if (document.activeElement instanceof HTMLElement) {
                         document.activeElement.blur();
                     }
-                    console.log("removed focus")
                 }
                 lastEscTime = currentTime;
             }
@@ -153,7 +155,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     }, [setSearch]);
 
     const handleBookmarkView = useCallback(() => {
-        openModal(() => <BookmarksModal />, { closeOnBackdropClick: true });
+        openModal(() => <BookmarksModal />, { closeOnBackdropClick: true, size: 'lg' });
     }, [setSearch]);
 
 
@@ -267,39 +269,72 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
             </div>
 
 
-            <div className="quick-action-right">
+            <div className="quick-action-right flex items-center gap-3">
                 {type === 'cask' && (
-                    <>
-                        {/* <span className="text-gray-300 dark:text-zinc-600">|</span> */}
-                        <label className="flex items-center gap-2 mr-6 cursor-pointer select-none text-xs text-zinc-500 dark:text-zinc-400">
-                            <span>Fonts</span>
-                            <div
-                                onClick={() => setShowFonts(p => !p)}
-                                className={cn(
-                                    "relative w-8 h-4 rounded-full transition-colors duration-200",
-                                    showFonts ? "bg-green-500" : "bg-zinc-300 dark:bg-zinc-600"
-                                )}
-                            >
-                                <div className={cn(
-                                    "absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-200",
-                                    showFonts ? "translate-x-4" : "translate-x-0.5"
-                                )} />
-                            </div>
-                        </label>
-                    </>
+                    <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-zinc-500 dark:text-zinc-400">
+                        <span>Fonts</span>
+                        <div
+                            onClick={() => setShowFonts(p => !p)}
+                            className={cn(
+                                "relative w-8 h-4 rounded-full transition-colors duration-200",
+                                showFonts ? "bg-green-500" : "bg-zinc-300 dark:bg-zinc-600"
+                            )}
+                        >
+                            <div className={cn(
+                                "absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-200",
+                                showFonts ? "translate-x-4" : "translate-x-0.5"
+                            )} />
+                        </div>
+                    </label>
                 )}
+
+                {/* View mode toggle */}
+                <div className="flex items-center bg-gray-100 dark:bg-zinc-800 rounded-lg p-0.5">
+                    <button
+                        onClick={() => setViewMode('grid')}
+                        title="Grid view"
+                        className={cn(
+                            "p-1.5 rounded-md transition-all",
+                            viewMode === 'grid'
+                                ? "bg-white dark:bg-zinc-600 shadow text-green-600 dark:text-green-400"
+                                : "text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300"
+                        )}
+                    >
+                        <LayoutGrid size={15} />
+                    </button>
+                    <button
+                        onClick={() => setViewMode('list')}
+                        title="List view"
+                        className={cn(
+                            "p-1.5 rounded-md transition-all",
+                            viewMode === 'list'
+                                ? "bg-white dark:bg-zinc-600 shadow text-green-600 dark:text-green-400"
+                                : "text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300"
+                        )}
+                    >
+                        <List size={15} />
+                    </button>
+                </div>
             </div>
         </div>
 
-        {/* GRID */}
+        {/* GRID / LIST */}
         {isLoading && <SkeletonGrid count={itemsPerPage} />}
         {error && <ErrorState error={error} />}
         {currentData && <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {currentData.map(item => (
-                    <ItemCard key={item.id} item={item}/>
-                ))}
-            </div>
+            {viewMode === 'grid' ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    {currentData.map(item => (
+                        <ItemCard key={item.id} item={item} enableBackground />
+                    ))}
+                </div>
+            ) : (
+                <div className="flex flex-col gap-1.5">
+                    {currentData.map(item => (
+                        <ItemListRow key={item.id} item={item} />
+                    ))}
+                </div>
+            )}
 
             {/* PAGINATION */}
             {totalPages > 1 && <Pagination pagination={pagination} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />}
