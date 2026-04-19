@@ -280,6 +280,15 @@ const Dashboard = () => {
                     )}
                 </div>
             </div>
+
+            {/* Hit Counter Badge */}
+            <div className="hidden flex justify-center py-6 opacity-80 hover:opacity-100 transition-opacity">
+                <img
+                    src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Famit9838.github.io%2Fbrewlens%2F&label=Visits&icon=person-walking&color=%23198754&message=&style=flat&tz=UTC"
+                    alt="Hit Counter"
+                    className="h-6"
+                />
+            </div>
         </div>
     );
 };
