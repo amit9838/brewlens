@@ -10,7 +10,9 @@ export const GlobalSearchBar: React.FC = () => {
     const [search, setSearch] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const deferredSearch = useDeferredValue(search);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
     const inputRef = useRef<HTMLInputElement>(null);
+    const dropdownRef = useRef<HTMLUListElement>(null);
     const blurTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const navigate = useNavigate();
 
@@ -40,7 +42,20 @@ export const GlobalSearchBar: React.FC = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isMac, isOpen]);
 
+    // Scroll active item into view
+    useEffect(() => {
+        if (selectedIndex >= 0 && dropdownRef.current) {
+            const activeItem = dropdownRef.current.children[selectedIndex] as HTMLElement;
+            if (activeItem) {
+                activeItem.scrollIntoView({
+                    block: 'nearest',
+                });
+            }
+        }
+    }, [selectedIndex]);
+
     const filteredResults = useMemo(() => {
+        setSelectedIndex(-1); // Reset selection when search changes
         if (!deferredSearch) return [];
         const allData = [...casks, ...formulae];
         const term = deferredSearch.toLowerCase();
@@ -67,8 +82,29 @@ export const GlobalSearchBar: React.FC = () => {
         if (blurTimerRef.current) clearTimeout(blurTimerRef.current);
         setSearch('');
         setIsOpen(false);
+        setSelectedIndex(-1);
         inputRef.current?.blur();
         navigate(`/${item.type}/${item.token}`);
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (!showDropdown || filteredResults.length === 0) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setSelectedIndex(prev => (prev + 1) % filteredResults.length);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setSelectedIndex(prev => (prev - 1 + filteredResults.length) % filteredResults.length);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (selectedIndex >= 0) {
+                handleSelect(filteredResults[selectedIndex]);
+            } else if (filteredResults.length > 0) {
+                // Default to first result if none selected
+                handleSelect(filteredResults[0]);
+            }
+        }
     };
 
     const showDropdown = isOpen && search.length > 0;
@@ -91,6 +127,7 @@ export const GlobalSearchBar: React.FC = () => {
                     onChange={(e) => setSearch(e.target.value)}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
+                    onKeyDown={handleKeyDown}
                 />
 
                 {/* Right-side adornment: shortcut hint OR spinner */}
@@ -109,19 +146,28 @@ export const GlobalSearchBar: React.FC = () => {
             {showDropdown && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-xl overflow-hidden z-50">
                     {filteredResults.length > 0 ? (
-                        <ul className="max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-zinc-800">
-                            {filteredResults.map((item) => (
+                        <ul 
+                            ref={dropdownRef}
+                            className="max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-zinc-800"
+                        >
+                            {filteredResults.map((item, idx) => (
                                 <li key={`${item.type}-${item.id}`}>
                                     <button
                                         // No e.preventDefault() needed — blur timer handles the race
                                         onClick={() => handleSelect(item)}
-                                        className="w-full text-left px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors flex items-center gap-3"
+                                        onMouseEnter={() => setSelectedIndex(idx)}
+                                        className={cn(
+                                            "w-full text-left px-4 py-2.5 transition-colors flex items-center gap-3",
+                                            selectedIndex === idx 
+                                                ? "bg-gray-100 dark:bg-zinc-800" 
+                                                : "hover:bg-gray-50 dark:hover:bg-zinc-800"
+                                        )}
                                     >
                                         <FaviconImage
                                             homepage={item.homepage}
                                             name={item.name}
                                             size={28}
-                                            className="p-0.5 border border-gray-200 dark:border-zinc-700"
+                                            className="rounded-full p-0.5"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
@@ -150,6 +196,20 @@ export const GlobalSearchBar: React.FC = () => {
                     ) : (
                         <div className="px-4 py-6 text-center text-sm text-gray-500 dark:text-zinc-400">
                             No results for <span className="font-medium">"{search}"</span>
+                        </div>
+                    )}
+
+                    {filteredResults.length > 0 && (
+                        <div className="hidden sm:flex px-4 py-2 border-t border-gray-100 dark:border-zinc-800 bg-gray-50/30 dark:bg-zinc-800/30 items-center gap-3 text-[10px] text-gray-400 dark:text-zinc-500">
+                            <span className="flex items-center gap-1">
+                                <span className="font-bold text-gray-300 dark:text-zinc-600">↑↓</span>
+                                Use arrows to navigate
+                            </span>
+                            <span className="opacity-30">|</span>
+                            <span className="flex items-center gap-1">
+                                <span className="font-bold text-gray-300 dark:text-zinc-600">↵</span>
+                                Enter to select
+                            </span>
                         </div>
                     )}
                 </div>

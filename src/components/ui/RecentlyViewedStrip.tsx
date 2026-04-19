@@ -2,46 +2,37 @@ import { NavLink } from 'react-router-dom';
 import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
 import { useState, useEffect } from 'react';
 import { cn } from '../../lib/utils';
+import { FaviconImage } from './FaviconImage';
 
 interface RecentlyViewedStripProps {
     maxVisible?: number;
 }
 
 function RecentlyViewedCard({ item }: { item: any }) {
-    // state to hold the final image URL (handles fallback)
-    const [imageUrl, setImageUrl] = useState(
-        `https://unavatar.io/google/${item.homepage}`
-    );
+    // URL for the background blur effect (same as FaviconImage uses internally)
+    const imageUrl = item.homepage
+        ? `https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`
+        : null;
     const [imageLoaded, setImageLoaded] = useState(false);
 
     useEffect(() => {
+        if (!imageUrl) return;
         const img = new Image();
         img.onload = () => setImageLoaded(true);
-        img.onerror = () => {
-            const fallbackUrl = `https://www.google.com/s2/favicons?domain=${item.homepage}&sz=64`;
-            setImageUrl(fallbackUrl);
-            setImageLoaded(true);
-        };
+        img.onerror = () => setImageLoaded(true); // Still show something if it fails
         img.src = imageUrl;
     }, [imageUrl]);
-
-    const handleImageError = (
-        e: React.SyntheticEvent<HTMLImageElement, Event>
-    ) => {
-        const fallbackUrl = `https://www.google.com/s2/favicons?domain=${item.homepage}&sz=32`;
-        e.currentTarget.src = fallbackUrl;
-        e.currentTarget.removeAttribute('crossOrigin');
-        setImageUrl(fallbackUrl);
-    };
 
     return (
         <NavLink
             to={`/${item.type}/${item.token}`}
-            className="group block px-4 py-4 rounded-xl border border-zinc-200/50 dark:border-zinc-800/50 bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md hover:border-green-500/50 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-all relative overflow-hidden"
+            className="group flex flex-col h-full px-4 py-4 rounded-xl border border-zinc-200/50 dark:border-zinc-800/50 bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md hover:border-green-500/50 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-all relative overflow-hidden"
             style={
-                {
-                    '--bg-url': `url(${imageUrl})`,
-                } as React.CSSProperties
+                imageUrl
+                    ? ({
+                          '--bg-url': `url(${imageUrl})`,
+                      } as React.CSSProperties)
+                    : undefined
             }
         >
             {/* Shuttle Gradient: Dedicated clipping wrapper for the background blur */}
@@ -57,12 +48,11 @@ function RecentlyViewedCard({ item }: { item: any }) {
 
             {/* Content – keep on top with relative positioning */}
             <div className="upper flex items-center gap-3 relative z-10">
-                <div className="p-1 rounded-lg bg-white/80 dark:bg-zinc-800/80 shadow-sm ring-1 ring-zinc-200/20 dark:ring-zinc-700/50 group-hover:bg-white dark:group-hover:bg-zinc-700 transition-colors">
-                    <img
-                        src={imageUrl}
-                        onError={handleImageError}
-                        className="w-8 h-8 rounded-sm shrink-0"
-                        alt=""
+                <div className="w-9 h-9 rounded-md overflow-hidden flex items-center justify-center">
+                    <FaviconImage
+                        homepage={item.homepage}
+                        name={item.name}
+                        size={36}
                     />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -104,8 +94,8 @@ export default function RecentlyViewedSection({ maxVisible = 12 }: RecentlyViewe
                 <div
                     key={item.id}
                     className={cn(
-                        "transition-all duration-300",
-                        idx >= 6 && "hidden sm:block" // Hide items > 6 on mobile
+                        "flex flex-col transition-all duration-300",
+                        idx >= 6 && "hidden sm:flex" // Updated from sm:block to sm:flex
                     )}
                 >
                     <RecentlyViewedCard item={item} />

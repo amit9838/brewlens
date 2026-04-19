@@ -4,6 +4,7 @@
  */
 import { NavLink } from "react-router-dom";
 import { cn } from "../../lib/utils";
+import { FaviconImage } from "./FaviconImage";
 
 interface AnalyticsItem {
     number: number;
@@ -30,11 +31,11 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
     const count = parseInt(item.count.replace(/,/g, ''), 10);
     const barWidth = Math.max(2, (count / maxCount) * 100);
 
-    const barColor = variant === 'amber' 
+    const barColor = variant === 'amber'
         ? "bg-gradient-to-r from-amber-400/40 via-orange-500/70 to-orange-500/70"
-        : item.number === 1 
+        : item.number === 1
             ? "bg-gradient-to-r from-cyan-400 to-green-400"
-            : item.number <= 3 
+            : item.number <= 3
                 ? "bg-green-500"
                 : "bg-green-600/70";
 
@@ -53,14 +54,12 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
                 <span className="w-6 text-xs text-zinc-400 text-right shrink-0">{item.number}.</span>
 
                 {/* Favicon */}
-                <div className="h-6 w-6 rounded bg-gray-50 dark:bg-zinc-800 flex items-center justify-center shrink-0">
-                    <img
-                        src={`https://www.google.com/s2/favicons?domain=${homepage}&sz=32`}
-                        onError={(e) => (e.currentTarget.src = '/vite.svg')}
-                        className="w-4 h-4 rounded-xs"
-                        alt=""
-                    />
-                </div>
+                <FaviconImage
+                    homepage={homepage}
+                    name={item.cask}
+                    size={24}
+                    className="rounded-md"
+                />
 
                 {/* Cask name – takes remaining space, truncates */}
                 <span className="flex-1 min-w-0 text-sm font-semibold truncate text-gray-900 dark:text-zinc-100">{item.cask}</span>

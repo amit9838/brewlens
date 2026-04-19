@@ -7,6 +7,7 @@ import { X, Github, BookOpen, Terminal, Info, Home, LayoutGrid, BarChart2 } from
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
 import { NavLink, Link } from "react-router-dom";
+import logo from "../../assets/brewlens_logo.png";
 
 interface NavDrawerProps {
     isOpen: boolean;
@@ -32,17 +33,17 @@ const NavItem = ({
     isExternal?: boolean;
 }) => {
     const className = cn(
-        "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-200 group",
+        "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-200 group",
         "text-gray-600 dark:text-zinc-400 hover:text-green-600 dark:hover:text-green-400",
         "hover:bg-green-50 dark:hover:bg-green-500/10 active:scale-[0.98]"
     );
 
     const content = (
         <>
-            <div className="p-2 rounded-xl bg-gray-100 dark:bg-zinc-800 group-hover:bg-green-100 dark:group-hover:bg-green-500/20 transition-colors">
+            <div className="p-2 rounded-lg bg-gray-100/80 dark:bg-zinc-800/50 group-hover:bg-green-100 dark:group-hover:bg-green-500/20 transition-colors">
                 <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
             </div>
-            <span className="font-semibold text-sm tracking-tight">{label}</span>
+            <span className="font-bold text-sm tracking-tight">{label}</span>
         </>
     );
 
@@ -89,9 +90,9 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
                 isOpen ? "opacity-100 visible" : "opacity-0 invisible pointer-events-none"
             )}
         >
-            {/* Premium Backdrop with Blur */}
+            {/* Dark Overlay (No Blur) */}
             <div
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm cursor-pointer"
+                className="absolute inset-0 bg-black/60 cursor-pointer"
                 onClick={onClose}
             />
 
@@ -106,13 +107,11 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
                 )}
             >
                 {/* Header / Logo */}
-                <div className="flex justify-between items-center mb-8 pl-2">
+                <div className="flex justify-between items-center mb-8 pl-1">
                     <Link to="/" onClick={onClose} className="flex items-center gap-2">
-                        <div className="h-10 w-10 bg-green-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-green-500/20">
-                            <Terminal size={24} strokeWidth={2.5} />
-                        </div>
+                        <img src={logo} alt="BrewLens logo" className="w-9 h-9" />
                         <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                            Brew<span className="text-green-600 font-black">Lens</span>
+                            Brew<span className="font-light opacity-70 ml-0.5">Lens</span>
                         </h2>
                     </Link>
                     <Button 
