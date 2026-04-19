@@ -31,7 +31,7 @@ export const FaviconImage: React.FC<FaviconImageProps> = ({
     if (errored || !faviconUrl) {
         return (
             <div
-                className={`flex items-center justify-center rounded-full bg-gray-200 dark:bg-zinc-700 text-gray-500 dark:text-zinc-300 font-semibold select-none shrink-0 ${className}`}
+                className={`flex items-center justify-center font-semibold select-none shrink-0 ${className}`}
                 style={{ width: size, height: size, fontSize: size * 0.45 }}
                 aria-hidden="true"
             >
@@ -47,7 +47,7 @@ export const FaviconImage: React.FC<FaviconImageProps> = ({
             onError={() => setErrored(true)}
             alt=""
             aria-hidden="true"
-            className={`rounded-full bg-gray-100 dark:bg-zinc-700 object-contain shrink-0 ${className}`}
+            className={`object-cover shrink-0 ${className}`}
             style={{ width: size, height: size }}
         />
     );

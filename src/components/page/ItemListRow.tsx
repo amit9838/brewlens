@@ -34,7 +34,7 @@ export const ItemListRow = memo(({ item, showDesc = true }: Props) => {
                     homepage={item.homepage}
                     name={item.name}
                     size={28}
-                    className="p-0.5 border border-gray-100 dark:border-zinc-700"
+                    className="rounded-full"
                 />
             </div>
 
