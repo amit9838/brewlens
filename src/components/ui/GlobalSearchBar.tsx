@@ -55,7 +55,6 @@ export const GlobalSearchBar: React.FC = () => {
     }, [selectedIndex]);
 
     const filteredResults = useMemo(() => {
-        setSelectedIndex(-1); // Reset selection when search changes
         if (!deferredSearch) return [];
         const allData = [...casks, ...formulae];
         const term = deferredSearch.toLowerCase();
@@ -63,6 +62,11 @@ export const GlobalSearchBar: React.FC = () => {
             .filter(item => item._searchString.includes(term))
             .slice(0, 10);
     }, [deferredSearch, casks, formulae]);
+
+    // Reset selection when search term changes
+    useEffect(() => {
+        setSelectedIndex(-1);
+    }, [deferredSearch]);
 
     // ── Focus / Blur handlers ────────────────────────────────────────────────
     // Use a delayed blur so that clicking a result (which briefly blurs the
@@ -124,7 +128,9 @@ export const GlobalSearchBar: React.FC = () => {
                     className="w-full pl-9 pr-16 py-2 rounded-lg bg-gray-100 dark:bg-zinc-800 border border-transparent focus:border-green-500 dark:focus:border-green-500 focus:bg-white dark:focus:bg-zinc-900 focus:ring-1 focus:ring-green-500 outline-none transition-all text-sm placeholder-gray-400 dark:placeholder-zinc-500"
                     placeholder="Search casks and formulae…"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                    }}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
