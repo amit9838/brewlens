@@ -11,6 +11,7 @@
     ·
     <a href="https://github.com/amit9838/brewlens/issues">Request Feature</a>
   </p>
+  <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Famit9838.github.io%2Fbrewlens%2F&label=Visits&icon=person-walking&color=%23198754&message=&style=flat&tz=UTC">
 
   <!-- You can add badges here later, e.g., for GitHub stars, license, etc. -->
   <img src="https://img.shields.io/github/stars/amit9838/brewlens?style=social" alt="GitHub stars">
@@ -67,3 +68,4 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [Vite-url]: https://vitejs.dev/
 [MUI]: https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=mui&logoColor=white
 [MUI-url]: https://mui.com/
+
