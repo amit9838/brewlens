@@ -11,13 +11,14 @@
     ·
     <a href="https://github.com/amit9838/brewlens/issues">Request Feature</a>
   </p>
-<img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fgithub.com%2Famit9838%2Fbrewlens&label=Visits&icon=github&color=%230a58ca&message=&style=flat&tz=UTC">
 
   <!-- You can add badges here later, e.g., for GitHub stars, license, etc. -->
   <img src="https://img.shields.io/github/stars/amit9838/brewlens?style=social" alt="GitHub stars">
   <img src="https://img.shields.io/github/languages/top/amit9838/brewlens" alt="Top language">
+<br>
+  <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Fgithub.com%2Famit9838%2Fbrewlens&label=Github Visits&icon=github&color=%230a58ca&message=&style=flat&tz=UTC">
+  <img src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Famit9838.github.io%2Fbrewlens%2F&label=Web Visits&icon=person-walking&color=%23198754&message=&style=flat&tz=UTC">
 </div>
-
 <br>
 
 <img style = "border-radius:1rem" src="demo/banner.png">
