@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import { useBrewData } from "../../hooks/useBrewData";
-import { ExternalLink, Info, Share2, ChevronLeft, Check, Clipboard, Box, Download, Code } from 'lucide-react';
+import { ExternalLink, Info, Share2, ChevronLeft, Check, Clipboard, Box, Download, Code, Disc3 } from 'lucide-react';
 import type { BrewItem, BrewType } from '../../types';
 import { NavLink } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -72,6 +72,7 @@ export const FormulaeDetail = () => {
     const hasBottle = raw.bottle ? 'Yes' : 'No';
     const revision = raw.revision ?? '0';
     const kegOnly = raw.keg_only ? 'Yes' : 'No';
+    const downloadUrl = item.raw.urls?.stable?.url || "Not available";
 
     const runtimeDeps = raw.dependencies || [];
     const buildDeps = raw.build_dependencies || [];
@@ -278,7 +279,7 @@ export const FormulaeDetail = () => {
                             <Info size={18} className="text-zinc-500 mb-1 opacity-50" />
                             <h2 className="text-xl font-semibold  text-zinc-700 dark:text-zinc-300">Technical Details</h2>
                         </div>
-                        <div className="space-y-3 px-1">
+                        <div className="space-y-6 px-1">
                             <table className="w-full">
                                 <tbody>
                                     {Object.entries({
@@ -294,20 +295,35 @@ export const FormulaeDetail = () => {
                                     ))}
                                 </tbody>
                             </table>
+
+                            <div className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-3 border border-white/3">
+                                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
+                                    DOWNLOAD INSTALLER
+                                </p>
+                                <a
+                                    href={downloadUrl}
+                                    className="text-sm text-blue-700 dark:text-blue-400 break-all hover:underline leading-relaxed block"
+                                >
+                                    <Button size="sm" variant="black">
+                                        <Disc3 size={16} className="inline-block ml-1" />
+                                        Download
+                                    </Button>
+                                </a>
+                            </div>
                         </div>
                         <div className="flex items-center gap-2 mb-4 mt-10 pr-2">
                             <Download size={18} className="text-zinc-500 mb-1 opacity-70" />
                             <h2 className="text-xl font-semibold ">Installs</h2>
                         </div>
-                        <div className="flex  gap-2">
+                        <div className="flex flex-wrap gap-2">
                             {Array.from(installAnalyticsMap).map(([label, value]) => (
-                                <div key={label} className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3">
+                                <div key={label} className="min-w-[100px] w-fit rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3">
                                     <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
                                         {label}
                                     </p>
                                     <p
                                         title={value.original}
-                                        className=" text-gray-700 dark:text-gray-300 break-all text-2xl leading-tight">
+                                        className=" text-gray-700 dark:text-gray-300 whitespace-nowrap text-2xl leading-tight">
                                         {value.diaplay}
                                     </p>
                                 </div>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { type BrewItem, type BrewType } from "../../types";
 import { useLocation } from "react-router-dom";
-import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, WrenchIcon, Code, Download, DownloadCloud } from "lucide-react";
+import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, WrenchIcon, Code, Download, Disc3, } from "lucide-react";
 import { Share2, ChevronLeft } from 'lucide-react';
 import { NavLink } from "react-router-dom";
 import { Button } from "../ui/Button";
@@ -295,7 +295,7 @@ export function CaskDetail() {
 
         {/* Right Column: Package Info */}
         <aside className="space-y-6">
-          <section className="rounded-3xl bg-zinc-100/60 dark:bg-zinc-900 p-8 border border-black/3 dark:border-white/5 h-full">
+          <section className="rounded-3xl bg-zinc-100/60 dark:bg-zinc-900 p-8 border border-black/3 dark:border-white/5 h-fit">
             <div className="flex items-center gap-2 mb-4 pr-2">
               <Box size={18} className="text-zinc-500 mb-1 opacity-70" />
               <h2 className="text-xl font-semibold ">Package Info</h2>
@@ -313,14 +313,14 @@ export function CaskDetail() {
               </div>
               <div className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-3 border border-white/3">
                 <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
-                  DOWNLOAD SOURCE
+                  DOWNLOAD INSTALLER
                 </p>
                 <a
                   href={downloadUrl}
                   className="text-sm  text-blue-700 dark:text-blue-400 break-all hover:underline leading-relaxed block"
                 >
                   <Button size="sm" variant="black">
-                    <DownloadCloud size={16} className="inline-block ml-1" />
+                    <Disc3 size={16} className="inline-block ml-1" />
                     Download
                   </Button>
                 </a>
@@ -331,15 +331,15 @@ export function CaskDetail() {
               <Download size={18} className="text-zinc-500 mb-1 opacity-70" />
               <h2 className="text-xl font-semibold ">Installs</h2>
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               {Array.from(installAnalyticsMap).map(([label, value]) => (
-                <div key={label} className="rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3">
+                <div key={label} className="min-w-[100px] w-fit rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3">
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
                     {label}
                   </p>
                   <p
                     title={value.original}
-                    className=" text-gray-700 dark:text-gray-300 break-all text-2xl leading-tight">
+                    className=" text-gray-700 dark:text-gray-300 whitespace-nowrap text-2xl leading-tight">
                     {value.diaplay}
                   </p>
                 </div>
