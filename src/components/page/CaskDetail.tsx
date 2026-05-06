@@ -2,14 +2,27 @@ import { useState, useEffect } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { type BrewItem, type BrewType } from "../../types";
 import { useLocation } from "react-router-dom";
-import { ExternalLink, Box, Zap, Trash2, Info, Check, Clipboard, InfoIcon, WrenchIcon, Code, Download, Disc3, } from "lucide-react";
-import { Share2, ChevronLeft } from 'lucide-react';
+import { Share2, ChevronLeft } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { BookmarkButton } from "../ui/BookmarkButton";
 import SkeletonDetails from "./SkeletonDetails";
 import { getSourceCodeStatus } from "../../lib/utils";
 import { useRecentlyViewed } from "../contexts/RecentlyViewedContext";
+import {
+  ExternalLink,
+  Box,
+  Zap,
+  Trash2,
+  Info,
+  Check,
+  Clipboard,
+  InfoIcon,
+  WrenchIcon,
+  Code,
+  Download,
+  HardDriveDownload,
+} from "lucide-react";
 
 /**
  * Formats an artifact value for display.
@@ -32,11 +45,11 @@ export function CaskDetail() {
   const location = useLocation();
   const { trackView } = useRecentlyViewed();
 
-  const pathSegments = location.pathname.split('/');
+  const pathSegments = location.pathname.split("/");
   const token = pathSegments[pathSegments.length - 1];
   const type = pathSegments[pathSegments.length - 2] as BrewType;
 
-  const url = `https://formulae.brew.sh/api/${type}/${token}.json`
+  const url = `https://formulae.brew.sh/api/${type}/${token}.json`;
   const { data = [], isLoading, error } = useBrewData(type, url);
 
   const item: BrewItem = data[0];
@@ -46,11 +59,14 @@ export function CaskDetail() {
   }, [item?.id]);
 
   const packageStatus = (item: BrewItem) => {
-    const isNotInstallable = (item.deprecated || item.disabled);
-    const reason = item.deprecated ? "Deprecated" : item.disabled ? "Disabled" : "unknown";
+    const isNotInstallable = item.deprecated || item.disabled;
+    const reason = item.deprecated
+      ? "Deprecated"
+      : item.disabled
+        ? "Disabled"
+        : "unknown";
     return { isNotInstallable, reason };
-  }
-
+  };
 
   const copyCmd = (item: BrewItem) => {
     navigator.clipboard.writeText(item.installCmd);
@@ -64,19 +80,19 @@ export function CaskDetail() {
     setTimeout(() => setCopied({ installCmd: false, appLink: false }), 1500);
   };
 
-
   if (!item) {
     return (
       <>
         {isLoading && <SkeletonDetails />}
-        {error && <div className="flex flex-col items-center justify-center p-20 text-gray-500">
-          <Info className="mb-4 h-12 w-12 opacity-20" />
-          <p className="text-lg">No data found. Try refreshing?</p>
-        </div>}
+        {error && (
+          <div className="flex flex-col items-center justify-center p-20 text-gray-500">
+            <Info className="mb-4 h-12 w-12 opacity-20" />
+            <p className="text-lg">No data found. Try refreshing?</p>
+          </div>
+        )}
       </>
     );
   }
-
 
   const displayName = item.name;
   const description = item.desc || "No description available.";
@@ -89,34 +105,36 @@ export function CaskDetail() {
   const downloadUrl = raw.url || "Not available";
   const sha256 = raw.sha256 || "Not available";
 
+  const monthly = item.raw.analytics.install["30d"][item.token];
+  const threeMonthly = item.raw.analytics.install["90d"][item.token];
+  const yearly = item.raw.analytics.install["365d"][item.token];
 
-  let monthly = item.raw.analytics.install["30d"][item.token];
-  let threeMonthly = item.raw.analytics.install["90d"][item.token];
-  let yearly = item.raw.analytics.install["365d"][item.token];
-
-  const getDisplayInstallValue = (value: Number) => {
+  const getDisplayInstallValue = (value: number) => {
     if (Number(value) > 1000) {
       return (Number(value) / 1000).toFixed(1).toString() + "K";
     }
     return value.toString();
-  }
+  };
 
-  const { verified, isFoss, fossUrl } = getSourceCodeStatus(item.raw, type)
+  const { verified, isFoss, fossUrl } = getSourceCodeStatus(item.raw, type);
 
   const installAnalyticsMap = new Map([
-    ["1 month", { "original": monthly, "diaplay": getDisplayInstallValue(monthly) }],
-    ["3 months", { "original": threeMonthly, "diaplay": getDisplayInstallValue(threeMonthly) }],
-    ["1 year", { "original": yearly, "diaplay": getDisplayInstallValue(yearly) }],
+    [
+      "1 month",
+      { original: monthly, diaplay: getDisplayInstallValue(monthly) },
+    ],
+    [
+      "3 months",
+      { original: threeMonthly, diaplay: getDisplayInstallValue(threeMonthly) },
+    ],
+    ["1 year", { original: yearly, diaplay: getDisplayInstallValue(yearly) }],
   ]);
-
 
   return (
     <div className="min-h-screen p-2  text-gray-800 dark:text-gray-200 font-sans max-[1400px] mx-auto">
       {/* Top Navigation Bar */}
       <div className="flex items-center justify-between  mb-4">
-        <NavLink
-          to={`/`}
-        >
+        <NavLink to={`/`}>
           <Button variant="ghost" size="sm">
             <ChevronLeft size={20} />
             <span className="text-sm font-medium">Dashboard</span>
@@ -126,19 +144,11 @@ export function CaskDetail() {
         {/* Header Action Buttons */}
         <div className="flex gap-2 text-zinc-400">
           <BookmarkButton item={item} size="sm" />
-          <Button
-            onClick={() => copyURL()}
-            variant="ghost"
-            size="sm"
-          >
+          <Button onClick={() => copyURL()} variant="ghost" size="sm">
             {copied.appLink ? <Check size={18} /> : <Share2 size={18} />}
           </Button>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Button variant="ghost" size="sm" >
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            <Button variant="ghost" size="sm">
               <Info size={20} />
             </Button>
           </a>
@@ -153,15 +163,18 @@ export function CaskDetail() {
             <img
               src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=256`}
               alt={item.name[0]}
-              className="w-24 h-24 rounded-md" />
+              className="w-24 h-24 rounded-md"
+            />
           </div>
 
           <div className="flex-1 text-center md:text-left">
             <p className="text-xs font-bold tracking-widest text-emerald-500/80 uppercase mb-2">
               HOMEBREW CASK: {token}
-              {packageStatus(item).isNotInstallable &&
-                <span className="float-end rounded-full bg-orange-400/50 text-orange-700 dark:text-orange-100 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10" >{packageStatus(item).reason}</span>
-              }
+              {packageStatus(item).isNotInstallable && (
+                <span className="float-end rounded-full bg-orange-400/50 text-orange-700 dark:text-orange-100 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
+                  {packageStatus(item).reason}
+                </span>
+              )}
             </p>
 
             <h1 className="text-5xl font-bold tracking-tight text-white mb-4">
@@ -181,33 +194,40 @@ export function CaskDetail() {
                   variant="glass"
                   size="icon"
                   isPill
-                  className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all" >
-                  {copied.installCmd ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}
+                  className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
+                >
+                  {copied.installCmd ? (
+                    <Check className="w-4 h-4" />
+                  ) : (
+                    <Clipboard className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
 
               {homepage && (
-                <a
-                  href={homepage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button isPill={true} variant="glass" className=" text-zinc-200 hover:text-zinc-100" >
+                <a href={homepage} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    isPill={true}
+                    variant="glass"
+                    className=" text-zinc-200 hover:text-zinc-100"
+                  >
                     View Website <ExternalLink size={14} />
                   </Button>
                 </a>
               )}
 
-              {verified && <a
-                href={fossUrl || ""}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="glass" isPill className="text-zinc-200" >
-                  <Code size={20} />Source
-                </Button>
-              </a>}
-
+              {verified && (
+                <a
+                  href={fossUrl || ""}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="glass" isPill className="text-zinc-200">
+                    <Code size={20} />
+                    Source
+                  </Button>
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -232,13 +252,12 @@ export function CaskDetail() {
               <span className="rounded-full bg-black/5 dark:bg-white/5 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
                 Type: GUI Application
               </span>
-              {isFoss &&
+              {isFoss && (
                 <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs font-bold border border-white/10">
                   Open Source
                 </span>
-              }
+              )}
             </div>
-
           </section>
 
           {/* Included Artifacts Section */}
@@ -248,27 +267,30 @@ export function CaskDetail() {
               <h2 className="text-xl font-semibold ">Included Artifacts</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-              {artifacts.map((artifact: any, index: number) => {
+              {artifacts.map((artifact: JSON, index: number) => {
                 const [type, value] = Object.entries(artifact)[0];
                 const Icon =
                   type === "zap" ? Zap : type === "uninstall" ? Trash2 : Box;
 
-                return (value && <div
-                  key={index}
-                  className="rounded-2xl bg-zinc-200/50 dark:bg-zinc-800/40 p-5  flex items-start gap-4"
-                >
-                  <div className="mt-1 p-2 rounded-lg bg-white/5 text-gray-800 dark:text-gray-400">
-                    <Icon size={16} />
-                  </div>
-                  <div className="overflow-hidden">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">
-                      {type}
-                    </p>
-                    <p className="text-sm font-medium  truncate whitespace-nowrap">
-                      {formatArtifactValue(value)}
-                    </p>
-                  </div>
-                </div>
+                return (
+                  value && (
+                    <div
+                      key={index}
+                      className="rounded-2xl bg-zinc-200/50 dark:bg-zinc-800/40 p-5  flex items-start gap-4"
+                    >
+                      <div className="mt-1 p-2 rounded-lg bg-white/5 text-gray-800 dark:text-gray-400">
+                        <Icon size={16} />
+                      </div>
+                      <div className="overflow-hidden">
+                        <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 mb-1">
+                          {type}
+                        </p>
+                        <p className="text-sm font-medium  truncate whitespace-nowrap">
+                          {formatArtifactValue(value)}
+                        </p>
+                      </div>
+                    </div>
+                  )
                 );
               })}
             </div>
@@ -320,7 +342,10 @@ export function CaskDetail() {
                   className="text-sm  text-blue-700 dark:text-blue-400 break-all hover:underline leading-relaxed block"
                 >
                   <Button size="sm" variant="black">
-                    <Disc3 size={16} className="inline-block ml-1" />
+                    <HardDriveDownload
+                      size={16}
+                      className="inline-block ml-1"
+                    />
                     Download
                   </Button>
                 </a>
@@ -333,22 +358,25 @@ export function CaskDetail() {
             </div>
             <div className="flex flex-wrap gap-2">
               {Array.from(installAnalyticsMap).map(([label, value]) => (
-                <div key={label} className="min-w-[100px] w-fit rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3">
+                <div
+                  key={label}
+                  className="min-w-[100px] w-fit rounded-xl bg-zinc-200/50 dark:bg-zinc-800/40 p-4 border border-white/3"
+                >
                   <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500 mb-2">
                     {label}
                   </p>
                   <p
                     title={value.original}
-                    className=" text-gray-700 dark:text-gray-300 whitespace-nowrap text-2xl leading-tight">
+                    className=" text-gray-700 dark:text-gray-300 whitespace-nowrap text-2xl leading-tight"
+                  >
                     {value.diaplay}
                   </p>
                 </div>
               ))}
             </div>
-
           </section>
         </aside>
       </div>
-    </div >
+    </div>
   );
 }

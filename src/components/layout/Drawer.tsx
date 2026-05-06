@@ -3,7 +3,7 @@
  * Standardized Navigation Sidebar/Drawer.
  * Implements modern UI patterns with backdrop blurs and premium styling.
  */
-import { X, Github, BookOpen, Terminal, Info, Home, LayoutGrid, BarChart2 } from 'lucide-react';
+import { X, Terminal, Info, Home, LayoutGrid, BarChart2 } from 'lucide-react';
 import { Button } from "../ui/Button";
 import { cn } from "../../lib/utils";
 import { NavLink, Link } from "react-router-dom";
@@ -17,18 +17,18 @@ interface NavDrawerProps {
 /**
  * Standardized link component for both internal and external navigation.
  */
-const NavItem = ({ 
-    to, 
-    href, 
-    icon: Icon, 
-    label, 
+const NavItem = ({
+    to,
+    href,
+    icon: Icon,
+    label,
     onClose,
-    isExternal = false 
-}: { 
-    to?: string; 
-    href?: string; 
-    icon: any; 
-    label: string; 
+    isExternal = false
+}: {
+    to?: string;
+    href?: string;
+    icon: any;
+    label: string;
     onClose: () => void;
     isExternal?: boolean;
 }) => {
@@ -56,8 +56,8 @@ const NavItem = ({
     }
 
     return (
-        <NavLink 
-            to={to || "/"} 
+        <NavLink
+            to={to || "/"}
             onClick={onClose}
             className={({ isActive }) => cn(
                 className,
@@ -75,12 +75,6 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
         { label: "Explorer", to: "/all", icon: LayoutGrid },
         { label: "Analytics", to: "/analytics", icon: BarChart2 },
         { label: "About", to: "/about", icon: Info },
-    ];
-
-    const externalLinks = [
-        { label: "Homebrew Docs", href: "https://docs.brew.sh/", icon: BookOpen },
-        { label: "Homebrew GitHub", href: "https://github.com/Homebrew", icon: Github },
-        { label: "BrewLens GitHub", href: "https://github.com/amit9838/brewlens/", icon: Github },
     ];
 
     return (
@@ -114,10 +108,10 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
                             Brew<span className="font-light opacity-70 ml-0.5">Lens</span>
                         </h2>
                     </Link>
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={onClose} 
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onClose}
                         className="rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800"
                     >
                         <X className="w-5 h-5 text-gray-400" />
@@ -126,7 +120,7 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
 
                 {/* Primary Navigation */}
                 <nav className="flex-1 space-y-1.5 overflow-y-auto pr-2 custom-scrollbar">
-                    <div className="mb-8">
+                    <div className="mb-8 bg-gray-100/80 dark:bg-zinc-800/50 rounded-xl">
                         <NavItem to="/installation" label="Installation Guide" icon={Terminal} onClose={onClose} />
                     </div>
 
@@ -139,31 +133,7 @@ export const NavDrawer = ({ isOpen, onClose }: NavDrawerProps) => {
                         ))}
                     </div>
 
-                    <div className="pt-6 space-y-1.5">
-                        <p className="px-4 text-[10px] font-bold uppercase tracking-[0.1em] text-gray-400 dark:text-zinc-500 mb-3">
-                            Community & Help
-                        </p>
-                        {externalLinks.map(link => (
-                            <NavItem key={link.label} {...link} isExternal onClose={onClose} />
-                        ))}
-                    </div>
                 </nav>
-
-                {/* Footer / Version Info */}
-                <div className="pt-6 border-t border-gray-100 dark:border-zinc-800">
-                    <div className="bg-gray-50 dark:bg-zinc-950 p-4 rounded-2xl border border-gray-100 dark:border-zinc-800/50">
-                        <p className="text-xs text-gray-500 dark:text-zinc-400 leading-relaxed">
-                            BrewLens helps you explore and manage your Homebrew ecosystem with ease.
-                        </p>
-                        <div className="mt-3 flex items-center justify-between text-[10px] font-mono text-gray-400">
-                            <span>v0.4.0</span>
-                            <span className="flex items-center gap-1">
-                                <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                                Stable
-                            </span>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );

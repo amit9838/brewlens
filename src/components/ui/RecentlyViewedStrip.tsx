@@ -26,7 +26,7 @@ function RecentlyViewedCard({ item }: { item: any }) {
     return (
         <NavLink
             to={`/${item.type}/${item.token}`}
-            className="group flex flex-col h-full px-4 py-4 rounded-xl border border-zinc-200/50 dark:border-zinc-800/50 bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md hover:border-green-500/50 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-all relative overflow-hidden"
+            className="group flex flex-col h-full px-4 py-4 rounded-xl border border-zinc-100 dark:border-zinc-800/50 bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md hover:border-green-500/50 hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-all relative overflow-hidden"
             style={
                 imageUrl
                     ? ({
