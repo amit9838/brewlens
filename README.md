@@ -1,9 +1,9 @@
 <div align="center">
-<img style = "border-radius:1rem" src="demo/brewlens_logo.png" width="80px">
+<!-- <img style = "border-radius:1rem" src="demo/brewlens_logo.png" width="80px"> -->
+  <img style = "border-radius:1rem" src="demo/banner.png">
   <h1>
     <strong>Brew</strong>Lens
   </h1>
-  <img style = "border-radius:1rem" src="demo/banner.png">
   <p><strong>A modern, web-based explorer for Homebrew Casks and Formulae.</strong></p>
   
   <p>
