@@ -1,9 +1,11 @@
 <div align="center">
 <img style = "border-radius:1rem" src="demo/brewlens_logo.png" width="80px">
   <h1>
-  <strong>Brew</strong>Lens</h1>
+    <strong>Brew</strong>Lens
+  </h1>
+  <img style = "border-radius:1rem" src="demo/banner.png">
   <p><strong>A modern, web-based explorer for Homebrew Casks and Formulae.</strong></p>
-
+  
   <p>
     <a href="https://amit9838.github.io/brewlens/">Website</a>
     ·
@@ -22,9 +24,9 @@
 
 <br>
 
-<img style = "border-radius:1rem" src="demo/banner.png">
+<!-- <img style = "border-radius:1rem" src="demo/banner.png"> -->
 
-## ✨ What is BrewLens?
+## What is BrewLens?
 
 BrewLens is a modern browser-based tool that fetches and parses **Homebrew Cask and Formula** metadata directly from official Homebrew sources. It helps developers and power users inspect application and command-line tool details with clarity and speed — **all without using a single terminal command.**
 
@@ -40,7 +42,7 @@ You can browse both **Casks (macOS Apps)** and **Formulae (CLI Tools)** , with a
 - **Jump Index** – quickly skip to a specific letter in the package list.
 - **Blurred Background Cards** – optional visual enhancement for a modern, polished look.
 
-## 🎯 Who is it For?
+## Who is it For?
 
 - **Developers:** Inspect metadata, versions, URLs, and dependencies while building or debugging casks and formulae.
 - **Security / Compliance Teams:** Quickly verify download URLs, SHA256 checksums, and source authenticity for any package.
@@ -48,12 +50,11 @@ You can browse both **Casks (macOS Apps)** and **Formulae (CLI Tools)** , with a
 - **Homebrew Contributors:** Easily investigate cask or formula structure before making pull requests.
 - **General Users:** Discover new macOS apps and command-line tools available via Homebrew without ever opening the Terminal.
 
-
-## 📝 License
+## License
 
 Distributed under the MIT License. See `LICENSE` file for more information.
 
-## 📬 Thanks to
+## Thanks to
 
 [Homebrew](https://docs.brew.sh/)
 
@@ -62,6 +63,7 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 <p align="center">Made with ❤️ for the Homebrew community</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
+
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [TypeScript]: https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
@@ -70,4 +72,3 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 [Vite-url]: https://vitejs.dev/
 [MUI]: https://img.shields.io/badge/Material--UI-0081CB?style=for-the-badge&logo=mui&logoColor=white
 [MUI-url]: https://mui.com/
-
