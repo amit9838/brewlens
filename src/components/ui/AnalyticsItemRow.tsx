@@ -47,7 +47,7 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
         <NavLink to={`/cask/${item.cask}`}>
             <div className={cn(
                 "flex flex-wrap items-center gap-2 sm:gap-4 px-4 py-3 my-2 rounded-xl transition-all cursor-pointer",
-                "bg-white dark:bg-zinc-900/50 border border-gray-200/50 dark:border-zinc-800/50 shadow-sm",
+                "bg-white dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800/50",
                 hoverColor
             )}>
                 {/* Rank */}
@@ -73,7 +73,7 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
                 {/* Bar – full width on mobile, flexible on larger screens */}
                 <div className="w-full sm:flex-1 h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden mt-1 sm:mt-0 shadow-inner">
                     <div
-                        className={cn("h-full rounded-full transition-all duration-500 shadow-sm", barColor)}
+                        className={cn("h-full rounded-full transition-all duration-500", barColor)}
                         style={{ width: `${barWidth}%` }}
                     />
                 </div>

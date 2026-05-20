@@ -27,7 +27,7 @@ const SearchIndexModal: React.FC<SearchIndexModalProps> = ({ setNewChar }) => {
                         <button
                             key={char}
                             onClick={() => setNewChar(char)}
-                            className="aspect-square flex items-center justify-center rounded-2xl text-lg font-bold transition-all duration-200 bg-gray-50 dark:bg-zinc-800 border border-transparent text-zinc-500 dark:text-zinc-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-500 dark:hover:text-white hover:shadow-lg hover:shadow-green-500/20 cursor-pointer active:scale-95"
+                            className="aspect-square flex items-center justify-center rounded-2xl text-lg font-bold transition-all duration-200 bg-gray-50 dark:bg-zinc-800 border border-transparent text-zinc-500 dark:text-zinc-400 hover:bg-green-500 hover:text-white dark:hover:bg-green-500 dark:hover:text-white cursor-pointer active:scale-95"
                         >
                             {char}
                         </button>

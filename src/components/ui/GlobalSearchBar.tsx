@@ -60,7 +60,7 @@ export const GlobalSearchBar: React.FC = () => {
         const term = deferredSearch.toLowerCase();
         return allData
             .filter(item => item._searchString.includes(term))
-            .slice(0, 10);
+            .slice(0, 120);
     }, [deferredSearch, casks, formulae]);
 
     // Reset selection when search term changes
@@ -152,9 +152,9 @@ export const GlobalSearchBar: React.FC = () => {
             {showDropdown && (
                 <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg shadow-xl overflow-hidden z-50">
                     {filteredResults.length > 0 ? (
-                        <ul 
+                        <ul
                             ref={dropdownRef}
-                            className="max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-zinc-800"
+                            className="max-h-[60vh] overflow-y-auto divide-y divide-gray-100 dark:divide-zinc-800"
                         >
                             {filteredResults.map((item, idx) => (
                                 <li key={`${item.type}-${item.id}`}>
@@ -164,8 +164,8 @@ export const GlobalSearchBar: React.FC = () => {
                                         onMouseEnter={() => setSelectedIndex(idx)}
                                         className={cn(
                                             "w-full text-left px-4 py-2.5 transition-colors flex items-center gap-3",
-                                            selectedIndex === idx 
-                                                ? "bg-gray-100 dark:bg-zinc-800" 
+                                            selectedIndex === idx
+                                                ? "bg-gray-100 dark:bg-zinc-800"
                                                 : "hover:bg-gray-50 dark:hover:bg-zinc-800"
                                         )}
                                     >
@@ -206,16 +206,21 @@ export const GlobalSearchBar: React.FC = () => {
                     )}
 
                     {filteredResults.length > 0 && (
-                        <div className="hidden sm:flex px-4 py-2 border-t border-gray-100 dark:border-zinc-800 bg-gray-50/30 dark:bg-zinc-800/30 items-center gap-3 text-[10px] text-gray-400 dark:text-zinc-500">
-                            <span className="flex items-center gap-1">
-                                <span className="font-bold text-gray-300 dark:text-zinc-600">↑↓</span>
-                                Use arrows to navigate
-                            </span>
-                            <span className="opacity-30">|</span>
-                            <span className="flex items-center gap-1">
-                                <span className="font-bold text-gray-300 dark:text-zinc-600">↵</span>
-                                Enter to select
-                            </span>
+                        <div className="hidden sm:flex px-4 py-2 border-t border-gray-100 dark:border-zinc-800 bg-gray-50/30 dark:bg-zinc-800/30 items-center justify-between text-[10px] text-gray-400 dark:text-zinc-500">
+                            <div className="flex items-center gap-3">
+                                <span className="flex items-center gap-1">
+                                    <span className="font-bold text-gray-300 dark:text-zinc-600">↑↓</span>
+                                    Use arrows to navigate
+                                </span>
+                                <span className="opacity-30">|</span>
+                                <span className="flex items-center gap-1">
+                                    <span className="font-bold text-gray-300 dark:text-zinc-600">↵</span>
+                                    Enter to select
+                                </span>
+                            </div>
+                            <div className="font-medium">
+                                {filteredResults.length} {filteredResults.length === 1 ? 'match' : 'matches'}
+                            </div>
                         </div>
                     )}
                 </div>
@@ -223,3 +228,5 @@ export const GlobalSearchBar: React.FC = () => {
         </div>
     );
 };
+
+export default GlobalSearchBar;

@@ -24,7 +24,7 @@ export default function BookmarksSection({ maxItems = 4 }: BookmarksSectionProps
     };
 
     return (
-        <div className="section bg-gradient-to-br from-yellow-400/5 via-amber-500/5 to-transparent dark:from-yellow-500/2 dark:via-amber-600/4 dark:to-transparent border border-yellow-200/30 dark:border-yellow-700/5 shadow-md rounded-xl p-4 backdrop-blur-sm transition-all duration-500 hover:shadow-lg">
+        <div className="section bg-gradient-to-br from-yellow-400/5 via-amber-500/5 to-transparent dark:from-yellow-500/2 dark:via-amber-600/4 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-xl p-4 backdrop-blur-sm transition-all duration-500">
             <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
                 <div className="title flex items-center">
                     <span className="bg-yellow-600 mr-3 w-1 h-5 rounded-xs" />

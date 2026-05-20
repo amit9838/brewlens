@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
-
-
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/Button";
 import {
   Terminal,
   Apple,
@@ -12,10 +12,8 @@ import {
   Cpu,
   Server,
   Check,
-  Clipboard
+  Clipboard,
 } from "lucide-react";
-import { cn } from "../../lib/utils";
-import { Button } from "../ui/Button";
 
 // --- Types ---
 interface CardProps {
@@ -32,7 +30,6 @@ interface CodeBlockProps {
 }
 
 // --- Helper Components ---
-
 
 const CodeBlock: React.FC<CodeBlockProps> = ({ command, label }) => {
   const [copied, setCopied] = useState(false);
@@ -61,8 +58,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ command, label }) => {
           aria-label="Copy command"
           variant="glass"
           size="sm"
-          className="absolute right-1 top-1 z-10 rounded-md px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
-          {copied ? <Check className="h-4 w-4 text-green-600 dark:text-green-400" /> : <Clipboard className="h-4 w-4" />}
+          className="absolute right-1 top-1 z-10 rounded-md px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
+        >
+          {copied ? (
+            <Check className="h-4 w-4 text-green-600 dark:text-green-400" />
+          ) : (
+            <Clipboard className="h-4 w-4" />
+          )}
         </Button>
 
         {/* </button> */}
@@ -74,17 +76,32 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ command, label }) => {
   );
 };
 
-const BentoCard: React.FC<CardProps> = ({ title, icon, children, className, headerClassName }) => {
+const BentoCard: React.FC<CardProps> = ({
+  title,
+  icon,
+  children,
+  className,
+  headerClassName,
+}) => {
   return (
-    <div className={cn(
-      "flex flex-col overflow-hidden rounded-3xl border transition-all duration-200",
-      "bg-white dark:bg-zinc-900 dark:border-zinc-800",
-      "shadow-sm hover:shadow-md",
-      className
-    )}>
-      <div className={cn("flex items-center gap-3 px-4 sm:px-6 pt-4 sm:pt-6 pb-2", headerClassName)}>
+    <div
+      className={cn(
+        "flex flex-col overflow-hidden rounded-3xl border transition-all duration-200",
+        "bg-white dark:bg-zinc-900 dark:border-zinc-800",
+        "shadow-sm",
+        className,
+      )}
+    >
+      <div
+        className={cn(
+          "flex items-center gap-3 px-4 sm:px-6 pt-4 sm:pt-6 pb-2",
+          headerClassName,
+        )}
+      >
         {icon && <div className="text-zinc-700 dark:text-zinc-200">{icon}</div>}
-        <h3 className="text-base sm:text-lg font-bold text-zinc-800 dark:text-zinc-100">{title}</h3>
+        <h3 className="text-base sm:text-lg font-bold text-zinc-800 dark:text-zinc-100">
+          {title}
+        </h3>
       </div>
       <div className="flex-1 px-4 sm:px-6 pb-4 sm:pb-6 text-sm text-zinc-600 dark:text-zinc-300">
         {children}
@@ -93,18 +110,29 @@ const BentoCard: React.FC<CardProps> = ({ title, icon, children, className, head
   );
 };
 
-const Pill = ({ children, color = "zinc" }: { children: React.ReactNode, color?: string }) => (
-  <span className={cn(
-    "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-    color === "blue" && "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
-    color === "green" && "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
-    color === "orange" && "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
-    color === "zinc" && "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300",
-  )}>
+const Pill = ({
+  children,
+  color = "zinc",
+}: {
+  children: React.ReactNode;
+  color?: string;
+}) => (
+  <span
+    className={cn(
+      "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
+      color === "blue" &&
+        "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+      color === "green" &&
+        "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
+      color === "orange" &&
+        "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
+      color === "zinc" &&
+        "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300",
+    )}
+  >
     {children}
   </span>
 );
-
 
 const COMMON_COMMANDS = {
   // install
@@ -120,7 +148,8 @@ const COMMON_COMMANDS = {
   "brew info <package_name>": "Get info on a package",
   "brew info --json=v2 <package_name>": "Get info on a package in JSON format",
   "brew list --versions": "List installed packages with versions",
-  "brew list <package>": "Lists every single file and folder created by the package.",
+  "brew list <package>":
+    "Lists every single file and folder created by the package.",
   "brew tap [tap]": "Add a tap (e.g., homebrew/cask)",
   "brew untap [tap]": "Remove a tap",
 
@@ -128,21 +157,20 @@ const COMMON_COMMANDS = {
   "brew uninstall [pkg]": "Uninstall a package",
   "brew uninstall --cask [app]": "Uninstall GUI app (macOS only)",
   "brew cleanup": "Remove outdated versions of installed packages",
-
 };
 
 const links = [
   {
-    "href": "https://docs.brew.sh",
-    "icon": <BookOpen size={20} />,
-    "title": "Documentation",
-    "subtitle": "docs.brew.sh",
+    href: "https://docs.brew.sh",
+    icon: <BookOpen size={20} />,
+    title: "Documentation",
+    subtitle: "docs.brew.sh",
   },
   {
-    "href": "https://github.com/Homebrew/brew",
-    "icon": <Server size={20} />,
-    "title": "GitHub Repo",
-    "subtitle": "github.com/Homebrew",
+    href: "https://github.com/Homebrew/brew",
+    icon: <Server size={20} />,
+    title: "GitHub Repo",
+    subtitle: "github.com/Homebrew",
   },
 ];
 
@@ -152,7 +180,7 @@ export default function HomebrewGuide() {
     <div className="min-h-screen p-3 sm:p-4 md:p-8 font-sans">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
         {/* --- Header Section (Full Width) --- */}
-        <div className="col-span-1 overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-700 p-4 sm:p-6 md:p-8 shadow-lg md:col-span-2 xl:col-span-3">
+        <div className="col-span-1 overflow-hidden rounded-2xl sm:rounded-3xl bg-linear-to-br from-indigo-600 to-violet-700 p-4 sm:p-6 md:p-8 shadow-lg md:col-span-2 xl:col-span-3">
           <div className="flex flex-col items-start gap-4 sm:gap-6 md:flex-row md:items-center">
             <div className="flex h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-4xl sm:text-5xl md:text-6xl shadow-inner backdrop-blur-sm">
               🍺
@@ -162,8 +190,8 @@ export default function HomebrewGuide() {
                 Homebrew Installation Guide
               </h1>
               <p className="text-sm sm:text-base md:text-lg font-medium text-indigo-100 opacity-90">
-                The "missing package manager" for macOS (or Linux).
-                A free and open-source tool that simplifies installing software.
+                The "missing package manager" for macOS (or Linux). A free and
+                open-source tool that simplifies installing software.
               </p>
             </div>
           </div>
@@ -178,7 +206,9 @@ export default function HomebrewGuide() {
         >
           <div className="space-y-3 sm:space-y-4 text-sm">
             <div className="space-y-2">
-              <h4 className="font-semibold text-zinc-900 dark:text-white">Prerequisites:</h4>
+              <h4 className="font-semibold text-zinc-900 dark:text-white">
+                Prerequisites:
+              </h4>
               <div className="flex flex-wrap gap-2">
                 {[
                   "macOS Monterey 12+",
@@ -205,8 +235,12 @@ export default function HomebrewGuide() {
                 <Cpu className="h-4 w-4 text-orange-500" />
                 <span>Apple Silicon Post-Install</span>
               </div>
-              <p className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">Add to PATH (~/.zprofile):</p>
-              <CodeBlock command={`echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile\neval "$(/opt/homebrew/bin/brew shellenv)"`} />
+              <p className="mb-2 text-xs text-zinc-500 dark:text-zinc-400">
+                Add to PATH (~/.zprofile):
+              </p>
+              <CodeBlock
+                command={`echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile\neval "$(/opt/homebrew/bin/brew shellenv)"`}
+              />
             </div>
           </div>
         </BentoCard>
@@ -220,21 +254,29 @@ export default function HomebrewGuide() {
         >
           <div className="space-y-3 sm:space-y-4 text-sm">
             <div className="space-y-2">
-              <h4 className="font-semibold text-zinc-900 dark:text-white">1. Install Dependencies (Debian/Ubuntu):</h4>
-              <CodeBlock
-                command="sudo apt update && sudo apt install build-essential procps curl file git"
-              />
+              <h4 className="font-semibold text-zinc-900 dark:text-white">
+                1. Install Dependencies (Debian/Ubuntu):
+              </h4>
+              <CodeBlock command="sudo apt update && sudo apt install build-essential procps curl file git" />
             </div>
 
             <div>
-              <h4 className="font-semibold text-zinc-900 dark:text-white">2. Run Script:</h4>
-              <CodeBlock
-                command='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-              />
+              <h4 className="font-semibold text-zinc-900 dark:text-white">
+                2. Run Script:
+              </h4>
+              <CodeBlock command='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"' />
             </div>
 
             <div className="rounded-xl bg-emerald-100/50 p-3 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200 text-xs sm:text-sm">
-              <strong>Tip:</strong> Don't forget to add Homebrew to your <code className="rounded bg-emerald-200 px-1 py-0.5 text-xs dark:bg-emerald-800">~/.bashrc</code> or <code className="rounded bg-emerald-200 px-1 py-0.5 text-xs dark:bg-emerald-800">~/.zshrc</code> as prompted by the script!
+              <strong>Tip:</strong> Don't forget to add Homebrew to your{" "}
+              <code className="rounded bg-emerald-200 px-1 py-0.5 text-xs dark:bg-emerald-800">
+                ~/.bashrc
+              </code>{" "}
+              or{" "}
+              <code className="rounded bg-emerald-200 px-1 py-0.5 text-xs dark:bg-emerald-800">
+                ~/.zshrc
+              </code>{" "}
+              as prompted by the script!
             </div>
           </div>
         </BentoCard>
@@ -248,12 +290,18 @@ export default function HomebrewGuide() {
         >
           <div className="flex h-full flex-col justify-between">
             <div className="space-y-3 text-sm">
-              <p>Homebrew does <strong>not</strong> run natively on Windows.</p>
-              <p>You must use <strong>Windows Subsystem for Linux (WSL)</strong>.</p>
+              <p>
+                Homebrew does <strong>not</strong> run natively on Windows.
+              </p>
+              <p>
+                You must use <strong>Windows Subsystem for Linux (WSL)</strong>.
+              </p>
               <ul className="list-inside list-disc space-y-1 text-zinc-600 dark:text-zinc-400 text-xs sm:text-sm">
                 <li>Install WSL2 (Ubuntu recommended).</li>
                 <li>Open your WSL terminal.</li>
-                <li>Follow the <strong>Linux</strong> installation instructions.</li>
+                <li>
+                  Follow the <strong>Linux</strong> installation instructions.
+                </li>
               </ul>
             </div>
           </div>
@@ -272,17 +320,32 @@ export default function HomebrewGuide() {
                 <table className="w-full text-left text-xs sm:text-sm">
                   <thead className="bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
                     <tr>
-                      <th className="px-3 sm:px-4 py-2 sm:py-3 font-semibold">Command</th>
-                      <th className="px-3 sm:px-4 py-2 sm:py-3 font-semibold">Action</th>
+                      <th className="px-3 sm:px-4 py-2 sm:py-3 font-semibold">
+                        Command
+                      </th>
+                      <th className="px-3 sm:px-4 py-2 sm:py-3 font-semibold">
+                        Action
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
-                    {Object.entries(COMMON_COMMANDS).map(([key, value], idx) => (
-                      <tr key={idx} className={idx % 2 === 0 ? "bg-white dark:bg-zinc-900" : "bg-zinc-50 dark:bg-zinc-800/50"}>
-                        <td className="px-3 sm:px-4 py-2 font-mono text-purple-600 dark:text-purple-400 break-words">{key}</td>
-                        <td className="px-3 sm:px-4 py-2">{value}</td>
-                      </tr>
-                    ))}
+                    {Object.entries(COMMON_COMMANDS).map(
+                      ([key, value], idx) => (
+                        <tr
+                          key={idx}
+                          className={
+                            idx % 2 === 0
+                              ? "bg-white dark:bg-zinc-900"
+                              : "bg-zinc-50 dark:bg-zinc-800/50"
+                          }
+                        >
+                          <td className="px-3 sm:px-4 py-2 font-mono text-purple-600 dark:text-purple-400 wrap-break-word">
+                            {key}
+                          </td>
+                          <td className="px-3 sm:px-4 py-2">{value}</td>
+                        </tr>
+                      ),
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -312,18 +375,23 @@ export default function HomebrewGuide() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  className="group flex items-center justify-between rounded-xl bg-white p-3 sm:p-4 shadow-sm transition-all hover:bg-indigo-50 hover:shadow-md dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                  className="group flex items-center justify-between rounded-xl bg-white p-3 sm:p-4 shadow-sm transition-all hover:bg-indigo-50 dark:bg-zinc-800 dark:hover:bg-zinc-700"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900 dark:text-indigo-300">
                       {icon}
                     </div>
                     <div>
-                      <div className="font-semibold text-zinc-900 dark:text-white text-sm sm:text-base">{title}</div>
+                      <div className="font-semibold text-zinc-900 dark:text-white text-sm sm:text-base">
+                        {title}
+                      </div>
                       <div className="text-xs text-zinc-500">{subtitle}</div>
                     </div>
                   </div>
-                  <ExternalLink size={16} className="text-zinc-400 group-hover:text-indigo-500" />
+                  <ExternalLink
+                    size={16}
+                    className="text-zinc-400 group-hover:text-indigo-500"
+                  />
                 </a>
               ))}
             </div>
@@ -335,9 +403,13 @@ export default function HomebrewGuide() {
             headerClassName="text-indigo-900 dark:text-indigo-100"
           >
             <p className="text-sm mt-2 px-4 sm:text-base md:text-md  text-zinc-700 dark:text-zinc-300 opacity-90">
-              <strong>- Formulae</strong>  are for open-source, command-line tools and libraries (like Python or Git),
-              <br /> <strong> - Casks</strong> are for installing macOS GUI applications and binaries (like Chrome, Slack, or Discord).
-              <br />- A <strong> Tap</strong> is simply an extra repository (a "plug-in" source) you add to Homebrew to access packages not included in the default collection.
+              <strong>- Formulae</strong> are for open-source, command-line
+              tools and libraries (like Python or Git),
+              <br /> <strong> - Casks</strong> are for installing macOS GUI
+              applications and binaries (like Chrome, Slack, or Discord).
+              <br />- A <strong> Tap</strong> is simply an extra repository (a
+              "plug-in" source) you add to Homebrew to access packages not
+              included in the default collection.
             </p>
           </BentoCard>
         </div>
