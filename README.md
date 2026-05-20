@@ -1,6 +1,6 @@
 <div align="center">
 <!-- <img style = "border-radius:1rem" src="demo/brewlens_logo.png" width="80px"> -->
-  <a href="https://amit9838.github.io/brewlens/">
+  <a href="https://amit9838.github.io/brewlens/" title="Visit Website">
   <img style = "border-radius:1rem" src="demo/banner.png">
   </a>
   <h1>
