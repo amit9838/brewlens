@@ -8,7 +8,8 @@ import { FaviconImage } from "./FaviconImage";
 
 interface AnalyticsItem {
     number: number;
-    cask: string;
+    cask?: string;
+    formula?: string;
     count: string;
     percent: string;
 }
@@ -28,6 +29,8 @@ const formatCount = (count: string) => {
 };
 
 export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default' }: AnalyticsItemRowProps) => {
+    const name = item.cask || item.formula || '';
+    const type = item.cask ? 'cask' : 'formula';
     const count = parseInt(item.count.replace(/,/g, ''), 10);
     const barWidth = Math.max(2, (count / maxCount) * 100);
 
@@ -44,7 +47,7 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
         : "hover:border-green-500/30";
 
     return (
-        <NavLink to={`/cask/${item.cask}`}>
+        <NavLink to={`/${type}/${name}`} className="block">
             <div className={cn(
                 "flex flex-wrap items-center gap-2 sm:gap-4 px-4 py-3 my-2 rounded-xl transition-all cursor-pointer",
                 "bg-white dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800/50",
@@ -56,13 +59,13 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
                 {/* Favicon */}
                 <FaviconImage
                     homepage={homepage}
-                    name={item.cask}
+                    name={name}
                     size={24}
                     className="rounded-md"
                 />
 
-                {/* Cask name – takes remaining space, truncates */}
-                <span className="flex-1 min-w-0 text-sm font-semibold truncate text-gray-900 dark:text-zinc-100">{item.cask}</span>
+                {/* Name – takes remaining space, truncates */}
+                <span className="flex-1 min-w-0 text-sm font-semibold truncate text-gray-900 dark:text-zinc-100">{name}</span>
 
                 {/* Count and percentage: on mobile combine them, on large show count only */}
                 <span className="text-xs text-zinc-500 shrink-0 text-right font-mono">

@@ -1,20 +1,34 @@
 import React, { useState, useMemo, useRef, useEffect, useDeferredValue } from 'react';
 import { Search, Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useBrewData } from '../../hooks/useBrewData';
 import { cn } from '../../lib/utils';
 import type { BrewItem } from '../../types';
 import { FaviconImage } from './FaviconImage';
 
 export const GlobalSearchBar: React.FC = () => {
-    const [search, setSearch] = useState('');
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const isOnAllPage = pathname === '/all';
+
+    // Get search term from URL on /all page, otherwise use local state
+    const urlQuery = searchParams.get('q') || '';
+    const [search, setSearch] = useState(isOnAllPage ? urlQuery : '');
+
+    // Keep search input in sync if URL query parameter changes externally
+    useEffect(() => {
+        if (isOnAllPage) {
+            setSearch(urlQuery);
+        }
+    }, [urlQuery, isOnAllPage]);
+
     const [isOpen, setIsOpen] = useState(false);
     const deferredSearch = useDeferredValue(search);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const inputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLUListElement>(null);
     const blurTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const navigate = useNavigate();
 
     const { data: casks = [], isLoading: isLoadingCasks } = useBrewData('cask');
     const { data: formulae = [], isLoading: isLoadingFormulae } = useBrewData('formula');
@@ -32,8 +46,13 @@ export const GlobalSearchBar: React.FC = () => {
                 e.preventDefault();
                 inputRef.current?.focus();
             }
-            if (e.key === 'Escape' && isOpen) {
+            if (e.key === 'Escape') {
                 setSearch('');
+                if (isOnAllPage) {
+                    const newParams = new URLSearchParams(searchParams);
+                    newParams.delete('q');
+                    setSearchParams(newParams);
+                }
                 setIsOpen(false);
                 inputRef.current?.blur();
             }
@@ -92,6 +111,20 @@ export const GlobalSearchBar: React.FC = () => {
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (!isOnAllPage) {
+                if (selectedIndex >= 0 && filteredResults[selectedIndex]) {
+                    handleSelect(filteredResults[selectedIndex]);
+                } else if (search.trim()) {
+                    setIsOpen(false);
+                    inputRef.current?.blur();
+                    navigate(`/all?q=${encodeURIComponent(search.trim())}`);
+                }
+            }
+            return;
+        }
+
         if (!showDropdown || filteredResults.length === 0) return;
 
         if (e.key === 'ArrowDown') {
@@ -100,18 +133,10 @@ export const GlobalSearchBar: React.FC = () => {
         } else if (e.key === 'ArrowUp') {
             e.preventDefault();
             setSelectedIndex(prev => (prev - 1 + filteredResults.length) % filteredResults.length);
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (selectedIndex >= 0) {
-                handleSelect(filteredResults[selectedIndex]);
-            } else if (filteredResults.length > 0) {
-                // Default to first result if none selected
-                handleSelect(filteredResults[0]);
-            }
         }
     };
 
-    const showDropdown = isOpen && search.length > 0;
+    const showDropdown = isOpen && search.length > 0 && !isOnAllPage;
     const showHint = !isOpen && !search;
 
     return (
@@ -129,7 +154,17 @@ export const GlobalSearchBar: React.FC = () => {
                     placeholder="Search casks and formulae…"
                     value={search}
                     onChange={(e) => {
-                        setSearch(e.target.value);
+                        const val = e.target.value;
+                        setSearch(val);
+                        if (isOnAllPage) {
+                            if (val) {
+                                setSearchParams({ q: val });
+                            } else {
+                                const newParams = new URLSearchParams(searchParams);
+                                newParams.delete('q');
+                                setSearchParams(newParams);
+                            }
+                        }
                     }}
                     onFocus={handleFocus}
                     onBlur={handleBlur}

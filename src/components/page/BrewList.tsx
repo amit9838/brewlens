@@ -10,7 +10,7 @@
  * - Quick search shortcuts via modal
  * - Paginated grid with localStorage page persistence per type
  */
-import React, { useState, useMemo, useEffect, useCallback, useDeferredValue, useRef } from "react";
+import React, { useState, useMemo, useEffect, useCallback, useDeferredValue } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { usePagination } from "../../hooks/usePagination";
 import { useStorage } from "../../hooks/useStorage";
@@ -19,13 +19,13 @@ import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
 import ErrorState from "./Error";
-import { Search, X, Sparkles, LayoutGrid, List } from "lucide-react";
+import { Search, X, LayoutGrid, List, Bookmark, Keyboard } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
 import { Button } from "../ui/Button";
 import { useModal } from '../contexts/ModalContexts';
+import { useSearchParams } from "react-router-dom";
 
 import SearchIndexModal from "../ui/SearchIndexModal";
-import QuickSearchModal from "../ui/QuickSearchModal";
 import BookmarksModal from "../ui/BookmarksModal";
 import { ItemListRow } from "./ItemListRow";
 
@@ -33,15 +33,23 @@ import { ItemListRow } from "./ItemListRow";
 interface Props {
     type: BrewType;
     setType: (type: BrewType) => void;
-    search: string;
-    setSearch: (search: string) => void;
 }
 
-export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) => {
-    const searchInputRef = useRef<HTMLInputElement>(null);
+export const BrewList: React.FC<Props> = ({ type, setType }) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const search = searchParams.get('q') || '';
+    const setSearch = useCallback((val: string) => {
+        if (val) {
+            setSearchParams({ q: val });
+        } else {
+            const newParams = new URLSearchParams(searchParams);
+            newParams.delete('q');
+            setSearchParams(newParams);
+        }
+    }, [searchParams, setSearchParams]);
+
     const [itemsPerPage, setItemsPerPage] = useState(24);
     const [newChar, setNewChar] = useState<string | null>(null);
-    const [isFocused, setIsFocused] = useState(false);
     const [filterArr, setFilterArr] = useStorage<string[]>('brewlist_filters', ['active']);
     const activeFilters = new Set(filterArr);
     const setActiveFilters = (fn: Set<string> | ((prev: Set<string>) => Set<string>)) => {
@@ -96,31 +104,9 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
     const { currentData, setCurrentPage, totalPages } = pagination
 
     useEffect(() => {
-        let lastEscTime = 0;
         const handleKeyDown = (e: KeyboardEvent) => {
-            // 1. Clear search on Escape
             if (e.key === 'Escape') {
-                const currentTime = Date.now();
                 setSearch("");
-                // 2. Check for double press (within 300ms)
-                if (currentTime - lastEscTime < 300) {
-                    // Exit focus from the input
-                    if (document.activeElement instanceof HTMLElement) {
-                        document.activeElement.blur();
-                    }
-                }
-                lastEscTime = currentTime;
-            }
-
-            // 2. Focus on '/'
-            if (e.key === '/') {
-                // Optional: Don't hijack focus if user is already typing in an input
-                if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
-                    return;
-                }
-
-                e.preventDefault(); // Prevents the "/" from appearing in the input
-                searchInputRef.current?.focus(); // Must use () to call the function
             }
         };
 
@@ -150,9 +136,7 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         openModal(() => <SearchIndexModal setNewChar={setNewChar} />, { size: 'lg', closeOnBackdropClick: true });
     };
 
-    const handleQuickSearch = useCallback(() => {
-        openModal(() => <QuickSearchModal onSelect={setSearch} />, { closeOnBackdropClick: true });
-    }, [setSearch]);
+
 
     const handleBookmarkView = useCallback(() => {
         openModal(() => <BookmarksModal />, { closeOnBackdropClick: true, size: 'lg' });
@@ -168,155 +152,158 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
         clearFilters();
     }
 
-    {/* CONTROLS */ }
-    return <div className="container max-w-[1400px] mx-auto px-4">
-        <div className="flex w-full flex-wrap justify-between items-center gap-4 mb-8">
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto items-center">
-                <div className="relative w-full sm:w-auto sm:min-w-[16rem] sm:max-w-[20rem]">
-                    <Search className="absolute left-3 top-3 text-gray-400" size={18} />
-
-                    <input
-                        ref={searchInputRef}
-                        className="w-full pl-10 pr-16 py-2 rounded-lg bg-white dark:bg-zinc-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none transition-all"
-                        placeholder="Search..."
-                        value={search}
-                        onFocus={() => setIsFocused(true)}
-                        onBlur={() => setIsFocused(false)}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-
-                    <div className="absolute right-3 top-2.5 flex items-center gap-2 cursor-pointer">
-                        {/* Shortcut Badges */}
-                        {!search && !isFocused && (
-                            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-medium text-gray-400 border border-gray-300 dark:border-zinc-600 rounded bg-gray-50 dark:bg-zinc-700">
-                                /
-                            </kbd>
-                        )}
-
-                        {search && (
-                            <kbd
-                                onClick={() => setSearch("")}
-                                className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-medium text-gray-400 border border-gray-300 dark:border-zinc-600 rounded bg-gray-50 dark:bg-zinc-700">
-                                ESC
-                            </kbd>
-                        )}
-                    </div>
-                </div>
-
-                <Button variant="secondary" size="md" onClick={handleQuickSearch} title="Quick search">
-                    <Sparkles size={15} />
-                </Button>
-                <div className="bg-gray-200 dark:bg-zinc-800 p-1 rounded-lg flex">
+    {/* Combined Compact Controls & Toolbar */}
+    return <div className="container max-w-[1400px] mx-auto px-0 py-2 space-y-4">
+        <div className="flex w-full flex-wrap justify-between items-center gap-3 px-1 py-1">
+            {/* Cask/Formula Switcher and live counts */}
+            <div className="flex items-center gap-3">
+                <div className="bg-gray-100 dark:bg-zinc-800/80 p-0.5 rounded-xl flex shadow-inner border border-zinc-200/30 dark:border-zinc-700/30">
                     {(['cask', 'formula'] as const).map(t => (
                         <button
                             key={t}
                             onClick={() => { changeType(t); setSearch(''); }}
-                            className={cn("px-4 py-1.5 rounded-md text-sm font-medium capitalize transition-all",
-                                type === t ? "bg-white dark:bg-zinc-600 shadow text-green-600 dark:text-green-400" : "text-gray-500"
+                            className={cn("px-3.5 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all duration-300 cursor-pointer",
+                                type === t 
+                                    ? "bg-white dark:bg-zinc-700 shadow-sm text-green-600 dark:text-green-400 font-bold scale-[1.01]" 
+                                    : "text-gray-500 hover:text-gray-700 dark:hover:text-zinc-300"
                             )}
                         >
                             {t}s
                         </button>
                     ))}
                 </div>
+                <span className="text-xs text-zinc-400 dark:text-zinc-550 font-medium hidden sm:inline">
+                    Showing <span className="text-green-600 dark:text-green-400 font-semibold">{filtered.length}</span> of {data.length}
+                </span>
             </div>
-            <div className="px-1 flex gap-2">
-                <Button
-                    onClick={handleBookmarkView}
-                    variant="secondary"
+
+
+            {/* Quick Actions (Bookmarks, A-Z Index) and view toggler */}
+            <div className="flex items-center gap-2 ml-auto">
+                <Button 
+                    onClick={handleBookmarkView} 
+                    variant="secondary" 
                     size="sm"
+                    className="flex items-center gap-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 cursor-pointer h-7 text-[11px] font-semibold px-2 rounded-lg shrink-0 shadow-xs"
                 >
-                    Bookmarks
+                    <Bookmark size={12} />
+                    <span className="hidden sm:inline">Bookmarks</span>
                 </Button>
-                <Button
-                    onClick={handleOpenIndexSearch}
-                    variant="secondary"
+                
+                <Button 
+                    onClick={handleOpenIndexSearch} 
+                    variant="secondary" 
                     size="sm"
-                    className="w-14">
-                    <span className="text-sm font-semibold opacity-90 hover:opacity-100">
-                        A-Z
-                    </span>
+                    className="font-bold border border-zinc-200 dark:border-zinc-700 cursor-pointer h-7 text-[11px] px-2.5 rounded-lg shrink-0 shadow-xs"
+                >
+                    <span>A-Z</span>
                 </Button>
-            </div>
-        </div>
 
-        <div className=" flex items-center justify-between gap-2 flex-wrap mb-5">
-            {/* FILTER TAGS */}
-            <div className="quick-action-left flex items-center gap-2 flex-wrap">
-                <Button isPill size="sm" variant={!activeFilters.has('oss') && !activeFilters.has('proprietary') ? 'glass' : 'outline'}
-                    onClick={() => setActiveFilters(prev => { const next = new Set(prev); next.delete('oss'); next.delete('proprietary'); return next; })}>
-                    All
-                </Button>
-                {(['oss', 'proprietary'] as const).map(f => (
-                    <Button key={f} isPill size="sm" variant={activeFilters.has(f) ? (f === 'oss' ? 'blue' : 'primary') : 'outline'} onClick={() => toggleFilter(f)}>
-                        {f === 'oss' ? 'Open Source' : 'Proprietary'}
-                    </Button>
-                ))}
-                <span className="text-gray-300 dark:text-zinc-600">|</span>
-                {(['active', 'inactive'] as const).map(s => (
-                    <Button key={s} isPill size="sm"
-                        variant={activeFilters.has(s) ? (s === 'active' ? 'primary' : 'destructive') : 'outline'}
-                        onClick={() => toggleFilter(s)}>
-                        {s === 'inactive' ? 'Inactive' : 'Active'}
-                    </Button>
-                ))}
-                {activeFilters.size > 0 && (
-                    <Button isPill size="sm" variant="ghost" onClick={clearFilters}
-                        className="text-red-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
-                        <X size={12} /> Clear
-                    </Button>
-                )}
-            </div>
-
-
-            <div className="quick-action-right flex items-center gap-3">
-                {type === 'cask' && (
-                    <label className="flex items-center gap-2 cursor-pointer select-none text-xs text-zinc-500 dark:text-zinc-400">
-                        <span>Fonts</span>
-                        <div
-                            onClick={() => setShowFonts(p => !p)}
-                            className={cn(
-                                "relative w-8 h-4 rounded-full transition-colors duration-200",
-                                showFonts ? "bg-green-500" : "bg-zinc-300 dark:bg-zinc-600"
-                            )}
-                        >
-                            <div className={cn(
-                                "absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform duration-200",
-                                showFonts ? "translate-x-4" : "translate-x-0.5"
-                            )} />
-                        </div>
-                    </label>
-                )}
+                <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800 mx-0.5" />
 
                 {/* View mode toggle */}
-                <div className="flex items-center bg-gray-100 dark:bg-zinc-800 rounded-lg p-0.5">
+                <div className="flex items-center bg-gray-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200/50 dark:border-zinc-700/50">
                     <button
                         onClick={() => setViewMode('grid')}
                         title="Grid view"
                         className={cn(
-                            "p-1.5 rounded-md transition-all",
+                            "p-1 rounded transition-all cursor-pointer",
                             viewMode === 'grid'
-                                ? "bg-white dark:bg-zinc-600 shadow text-green-600 dark:text-green-400"
+                                ? "bg-white dark:bg-zinc-700 shadow-xs text-green-600 dark:text-green-400"
                                 : "text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300"
                         )}
                     >
-                        <LayoutGrid size={15} />
+                        <LayoutGrid size={13} />
                     </button>
                     <button
                         onClick={() => setViewMode('list')}
                         title="List view"
                         className={cn(
-                            "p-1.5 rounded-md transition-all",
+                            "p-1 rounded transition-all cursor-pointer",
                             viewMode === 'list'
-                                ? "bg-white dark:bg-zinc-600 shadow text-green-600 dark:text-green-400"
+                                ? "bg-white dark:bg-zinc-700 shadow-xs text-green-600 dark:text-green-400"
                                 : "text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300"
                         )}
                     >
-                        <List size={15} />
+                        <List size={13} />
                     </button>
                 </div>
             </div>
         </div>
+
+        {/* Quick Filter Pills Row */}
+        <div className="flex items-center gap-1.5 flex-wrap px-1">
+            {(['oss', 'proprietary'] as const).map(f => (
+                <button
+                    key={f}
+                    onClick={() => toggleFilter(f)}
+                    className={cn("px-2.5 py-1 rounded-full border text-[11px] font-semibold transition-all duration-200 cursor-pointer",
+                        activeFilters.has(f)
+                            ? (f === 'oss' ? "bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-400" : "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-400")
+                            : "bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                    )}
+                >
+                    {f === 'oss' ? 'OSS Only' : 'Proprietary'}
+                </button>
+            ))}
+
+            {(['active', 'inactive'] as const).map(s => (
+                <button
+                    key={s}
+                    onClick={() => toggleFilter(s)}
+                    className={cn("px-2.5 py-1 rounded-full border text-[11px] font-semibold transition-all duration-200 cursor-pointer",
+                        activeFilters.has(s)
+                            ? (s === 'active' ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-400" : "bg-red-50 border-red-200 text-red-600 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400")
+                            : "bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                    )}
+                >
+                    {s === 'inactive' ? 'Inactive' : 'Active'}
+                </button>
+            ))}
+
+            {type === 'cask' && (
+                <button
+                    onClick={() => setShowFonts(p => !p)}
+                    className={cn("px-2.5 py-1 rounded-full border text-[11px] font-semibold transition-all duration-200 cursor-pointer",
+                        showFonts
+                            ? "bg-emerald-50 border-emerald-200 text-emerald-600 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-400"
+                            : "bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-50 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                    )}
+                >
+                    Fonts
+                </button>
+            )}
+
+            {activeFilters.size > 0 && (
+                <button
+                    onClick={clearFilters}
+                    className="text-[11px] font-bold text-red-500 hover:text-red-600 transition-colors ml-1 cursor-pointer flex items-center gap-0.5"
+                >
+                    <X size={12} /> Clear
+                </button>
+            )}
+        </div>
+
+        {/* Active Search Feedback Banner */}
+        {search && (
+            <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-emerald-500/5 via-green-500/5 to-transparent border border-emerald-500/15 rounded-2xl">
+                <div className="flex items-center gap-2 text-sm text-emerald-800 dark:text-emerald-400">
+                    <Search size={16} />
+                    <span>
+                        Showing results for <span className="font-bold">"{search}"</span> 
+                        <span className="text-xs text-zinc-500 dark:text-zinc-400 ml-1">
+                            ({filtered.length} {filtered.length === 1 ? 'match' : 'matches'} found)
+                        </span>
+                    </span>
+                </div>
+                <button 
+                    onClick={() => setSearch("")}
+                    className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 underline underline-offset-2 flex items-center gap-1 cursor-pointer"
+                >
+                    Clear Search
+                </button>
+            </div>
+        )}
 
         {/* GRID / LIST */}
         {isLoading && <SkeletonGrid count={itemsPerPage} />}
@@ -346,6 +333,12 @@ export const BrewList: React.FC<Props> = ({ type, setType, search, setSearch }) 
                 <p className="text-lg">No data found. Try something else?</p>
             </div>
         </>}
+
+        {/* Keyboard shortcut tip */}
+        <div className="flex items-center justify-center gap-2 pt-8 pb-2 text-xs text-zinc-400 dark:text-zinc-550 select-none">
+            <Keyboard size={14} className="opacity-70" />
+            <span>Tip: Press <kbd className="px-1.5 py-0.5 text-[10px] font-mono border border-zinc-200 dark:border-zinc-700 rounded bg-zinc-50 dark:bg-zinc-800">⌘K</kbd> to search, and <kbd className="px-1.5 py-0.5 text-[10px] font-mono border border-zinc-200 dark:border-zinc-700 rounded bg-zinc-50 dark:bg-zinc-800">ESC</kbd> to clear filters.</span>
+        </div>
     </div>
 
 };

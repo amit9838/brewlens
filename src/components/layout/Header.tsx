@@ -10,8 +10,9 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
-  const { pathname } = useLocation();
-  const showSearch = pathname === '/' || pathname === '/analytics' || pathname.startsWith('/cask/') || pathname.startsWith('/formula/');
+  const location = useLocation();
+  const onAllPage = location.pathname === '/all';
+  const showSearch = true;
 
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "light",
@@ -59,10 +60,12 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
 
         {/* Right: actions */}
         <div className="ml-auto flex items-center gap-1 shrink-0">
-          <NavLink to="/all">
+          <NavLink to={onAllPage ? '/' : '/all'}>
             <Button variant="ghost" size="md">
               <Grid size={18} />
-              <span className="hidden sm:inline ml-1 text-sm font-medium">All Apps</span>
+              <span className="hidden sm:inline ml-1 text-sm font-medium">
+                {onAllPage ? 'Discover' : 'All Apps'}
+              </span>
             </Button>
           </NavLink>
           <Button

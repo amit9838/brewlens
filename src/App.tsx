@@ -21,7 +21,6 @@ const queryClient = new QueryClient();
 
 function HomebrewExplorer() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [search, setSearch] = useState('');
   const [type, setType] = useState<BrewType>('cask');
 
   return (
@@ -33,9 +32,9 @@ function HomebrewExplorer() {
         <Header setIsOpen={setIsOpen} />
         <Routes>
           <Route path="/install" element={<div>Install Guide</div>} />
-          {/* <BrewList search={search} setSearch={setSearch} type={type} setType={setType} /> */}
+          {/* <BrewList type={type} setType={setType} /> */}
           <Route path="/" element={<Dashboard />} />
-          <Route path="/all" element={<BrewList search={search} setSearch={setSearch} type={type} setType={setType} />} />
+          <Route path="/all" element={<BrewList type={type} setType={setType} />} />
           <Route path="/installation" element={<Installation />} />
           <Route path="/cask/:token" element={<CaskDetail />} />
           <Route path="/formula/:token" element={<FormulaeDetail />} />
