@@ -6,7 +6,7 @@
  */
 import { useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Flame, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame } from 'lucide-react';
 import { FaviconImage } from './FaviconImage';
 
 interface AppLaneProps {

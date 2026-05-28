@@ -8,9 +8,7 @@ import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
 import { useBookmarks } from '../contexts/BookmarksContext';
 import {
     Clock,
-    Layers,
     Cpu,
-    ShieldCheck,
     Flame,
     Sparkles,
     Terminal,
