@@ -29,6 +29,7 @@ import { cn } from "../../lib/utils";
 import { FeaturedBanner } from "../ui/FeaturedBanner";
 import { AppLane } from "../ui/AppLane";
 import { SectionHeader } from "../ui/SectionHeader";
+import { EDITORS_PICKS_TOKENS } from "../../data/categories";
 
 const fetchCaskAnalytics = async (period: string = '30d') => {
     const res = await fetch(`https://formulae.brew.sh/api/analytics/cask-install/${period}.json`);
@@ -106,8 +107,7 @@ const DISCOVER_CATEGORIES = [
 ];
 
 const Dashboard = () => {
-    const { data: caskData = [], isLoading: isLoadingCasks } = useBrewData("cask");
-    const { data: formulaData = [], isLoading: isLoadingFormulae } = useBrewData("formula");
+    const { data: caskData = [] } = useBrewData("cask");
 
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { bookmarks } = useBookmarks();
@@ -148,18 +148,9 @@ const Dashboard = () => {
 
     const editorPickItems = useMemo(() => {
         if (!caskData.length) return [];
-        return caskData.filter(i => ['raycast', 'warp', 'tableplus', 'zed', 'proxyman', 'cleanshot', 'rectangle', 'orbstack'].includes(i.token)).slice(0, 12);
+        return caskData.filter(i => EDITORS_PICKS_TOKENS.includes(i.token));
     }, [caskData]);
 
-    // Metric aggregates
-    const totalCasks = caskData.length;
-    const totalFormulae = formulaData.length;
-    const totalApps = totalCasks + totalFormulae;
-
-    const fossCasks = caskData.filter(i => i.package.isFoss).length;
-    const fossFormulae = formulaData.filter(i => i.package.isFoss).length;
-    const totalFoss = fossCasks + fossFormulae;
-    const fossPercentage = totalApps > 0 ? Math.round((totalFoss / totalApps) * 100) : 0;
 
     const hasShelfItems = bookmarks.length > 0 || recentItems.length > 0;
 
@@ -173,58 +164,15 @@ const Dashboard = () => {
                 </div>
             )}
 
-            {/* 2. Command Center Stats Grid — Highly compact horizontal strip */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-zinc-50/50 dark:bg-zinc-900/20 border border-zinc-200/50 dark:border-zinc-800/40 rounded-2xl p-2.5 shadow-2xs">
-                <div className="flex items-center gap-3 px-3 py-1.5 border-r border-zinc-200/30 dark:border-zinc-800/30">
-                    <Layers size={18} className="text-emerald-500 shrink-0" />
-                    <div>
-                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Total Packages</p>
-                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
-                            {isLoadingCasks || isLoadingFormulae ? "..." : totalApps.toLocaleString()}
-                        </h4>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3 px-3 py-1.5 lg:border-r border-zinc-200/30 dark:border-zinc-800/30">
-                    <Cpu size={18} className="text-blue-500 shrink-0" />
-                    <div>
-                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">CLI Formulae</p>
-                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
-                            {isLoadingFormulae ? "..." : totalFormulae.toLocaleString()}
-                        </h4>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3 px-3 py-1.5 border-r border-zinc-200/30 dark:border-zinc-800/30">
-                    <Layers size={18} className="text-cyan-500 shrink-0" />
-                    <div>
-                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Desktop Casks</p>
-                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
-                            {isLoadingCasks ? "..." : totalCasks.toLocaleString()}
-                        </h4>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-3 px-3 py-1.5">
-                    <ShieldCheck size={18} className="text-purple-500 shrink-0" />
-                    <div>
-                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Open Source Ratio</p>
-                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
-                            {isLoadingCasks || isLoadingFormulae ? "..." : `${fossPercentage}%`}
-                        </h4>
-                    </div>
-                </div>
-            </div>
-
             {/* 3. Curated App Lanes */}
             {trendingItems.length > 0 && (
-                <div className="space-y-3">
+                <div className="space-y-3 mt-6">
                     <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
                         <div className="flex items-center justify-center p-2 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 shadow-xs">
                             <Flame size={16} />
                         </div>
                         <SectionHeader
-                            title="Trending Casks"
+                            title="Trending Apps"
                             subtitle="Most installed cask packages in the last 30 days"
                             action={<NavLink to="/analytics">View Trending →</NavLink>}
                             className="flex-1"
@@ -311,7 +259,7 @@ const Dashboard = () => {
                                 >
                                     <Bookmark size={13} />
                                     <span>Bookmarks</span>
-                                    <span className="text-[10px] opacity-70">({bookmarks.length})</span>
+                                    {/* <span className="text-[10px] opacity-70">({bookmarks.length})</span> */}
                                 </button>
                             )}
                             {recentItems.length > 0 && (
@@ -325,7 +273,7 @@ const Dashboard = () => {
                                 >
                                     <Clock size={13} />
                                     <span>Recently Viewed</span>
-                                    <span className="text-[10px] opacity-70">({recentItems.length})</span>
+                                    {/* <span className="text-[10px] opacity-70">({recentItems.length})</span> */}
                                 </button>
                             )}
                         </div>
