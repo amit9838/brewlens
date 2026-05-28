@@ -158,7 +158,7 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                             to={`/cask/${s.token}`}
                             className="absolute inset-0 z-10 flex items-center justify-between gap-6 px-8 sm:px-12 border border-white/10 rounded-3xl group"
                         >
-                            <div className="flex items-center gap-6 min-w-0 flex-1">
+                            <div className="flex items-center gap-6 min-w-0 flex-1 ml-4">
                                 {/* App icon */}
                                 <div className="shrink-0 p-1 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 shadow-xl flex items-center justify-center overflow-hidden">
                                     <img
