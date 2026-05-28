@@ -1,8 +1,8 @@
 /**
  * @file AppLane.tsx
- * Horizontal scroll lane component for the Discover page.
- * Renders curated rows of modern, compact horizontal app cards with left/right scroll arrows,
- * styled like standard App Store list-row lanes with minimal redundant items.
+ * Horizontal scroll lane for the Discover page.
+ * Renders curated rows of modern, compact horizontal app cards with left/right scroll arrows.
+ * Card design is consistent with the ItemCard design language used across the site.
  */
 import { useRef } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -20,44 +20,65 @@ interface LaneCardProps {
     badge?: React.ReactNode;
 }
 
-/** 
- * Standard, modern, space-efficient horizontal app card.
- * Removes redundant blurred background images and layout weight.
+/** Format raw download count to compact {x.y}k notation */
+function formatDownloads(raw: string | number | undefined): string | null {
+    if (!raw) return null;
+    const n = typeof raw === 'string' ? Number(raw.replace(/,/g, '')) : raw;
+    if (isNaN(n)) return null;
+    if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
+    return String(n);
+}
+
+/**
+ * Standard lane card — matches ItemCard design system:
+ * - Rounded icon with light border (matches ItemCard's favicon style)
+ * - Green hover accent on name
+ * - Consistent zinc border → green on hover
+ * - Compact version pill
  */
 const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
     <NavLink
         to={`/${item.type}/${item.token}`}
-        className="group flex items-center justify-between gap-3 w-64 sm:w-72 bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 p-3 rounded-2xl hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-200"
+        className="group flex items-center gap-3 w-64 h-24 bg-white dark:bg-zinc-900/70 border border-zinc-100 dark:border-zinc-800/50 px-3 rounded-2xl hover:border-green-500 dark:hover:border-green-500 hover:shadow-md transition-all duration-200 shrink-0"
     >
-        {/* Left: Rounded Icon */}
+        {/* Icon — iOS-style rounded square */}
         <FaviconImage
             homepage={item.homepage}
             name={item.name}
-            size={36}
-            className="rounded-md"
+            size={44}
+            className="rounded-xl border border-gray-100 dark:border-zinc-800 shrink-0 p-1"
         />
 
-        {/* Middle: Content */}
+        {/* Content */}
         <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 truncate leading-snug group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+            {/* Name */}
+            <p className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate leading-snug group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                 {item.name}
             </p>
-            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 line-clamp-1 leading-snug mt-0.5">
-                {item.desc || "No description available."}
+
+            {/* Description */}
+            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-1 leading-snug mt-0.5">
+                {item.desc || 'No description available.'}
             </p>
-            {badge && (
-                <div className="mt-1">
-                    {badge}
-                </div>
-            )}
+
+            {/* Bottom row: version pill + badge */}
+            <div className="flex items-center gap-1.5 mt-1.5">
+                {item.version && (
+                    <span className="bg-gray-100 dark:bg-zinc-700/30 px-2 py-0.5 text-[10px] rounded-full text-zinc-500 dark:text-zinc-400 shrink-0">
+                        v{item.version}
+                    </span>
+                )}
+                {badge}
+            </div>
         </div>
 
-        {/* Right: GET CTA */}
-        <span className="text-[9px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 px-3.5 py-1 rounded-full transition-all duration-200 group-hover:bg-emerald-600 group-hover:text-white dark:group-hover:bg-emerald-500 shadow-3xs shrink-0 select-none">
+        {/* GET pill */}
+        <span className="text-[9px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 px-3 py-1 rounded-full transition-all duration-200 group-hover:bg-emerald-600 group-hover:text-white dark:group-hover:bg-emerald-500 shrink-0 select-none">
             GET
         </span>
     </NavLink>
 );
+
 
 export const AppLane: React.FC<AppLaneProps> = ({ items, variant, onSeeAll }) => {
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -91,28 +112,17 @@ export const AppLane: React.FC<AppLaneProps> = ({ items, variant, onSeeAll }) =>
                     let badge: React.ReactNode = null;
 
                     if (variant === 'trending') {
-                        const formatted = item.downloads
-                            ? (isNaN(Number(item.downloads.replace(/,/g, '')))
-                                ? item.downloads
-                                : Number(item.downloads.replace(/,/g, '')).toLocaleString())
-                            : null;
-
-                        if (formatted) {
+                        const count = formatDownloads(item.downloads);
+                        if (count) {
                             badge = (
-                                <span className="inline-flex items-center gap-0.5 text-[8px] font-bold text-orange-600 dark:text-orange-400">
-                                    <Flame size={8} />
-                                    {formatted} installs
+                                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/30 px-2 py-0.5 rounded-full border border-orange-100 dark:border-orange-900/30">
+                                    <Flame size={9} strokeWidth={2} />
+                                    {count}
                                 </span>
                             );
                         }
-                    } else if (variant === 'editor') {
-                        badge = (
-                            <span className="inline-flex items-center gap-0.5 text-[8px] font-bold text-amber-600 dark:text-amber-400">
-                                <Sparkles size={8} />
-                                Editor's Choice
-                            </span>
-                        );
                     }
+
 
                     return (
                         <div key={item.id} className="snap-start">

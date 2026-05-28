@@ -279,7 +279,14 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
     const baseFiltered = useMemo(() => {
         data.sort((a, b) => a.name.localeCompare(b.name));
         let result = data;
-        if (deferredSearch) result = result.filter(i => i._searchString.includes(deferredSearch.toLowerCase()));
+        if (deferredSearch) {
+            const keywords = deferredSearch.toLowerCase().split(/[\s,]+/).filter(Boolean);
+            if (keywords.length > 0) {
+                result = result.filter(item => 
+                    keywords.some(kw => item._searchString.includes(kw))
+                );
+            }
+        }
         if (activeFilters.has('oss')) result = result.filter(i => i.package.isFoss);
         if (activeFilters.has('proprietary')) result = result.filter(i => !i.package.isFoss);
         if (activeFilters.has('active')) result = result.filter(i => !i.deprecated && !i.disabled);
@@ -293,7 +300,7 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
         if (activeCategoryId === 'all') return baseFiltered;
         const cat = categories.find(c => c.id === activeCategoryId);
         if (!cat) return baseFiltered;
-        return baseFiltered.filter(i => getCategoryForToken(i.token, categories) === activeCategoryId);
+        return baseFiltered.filter(i => getCategoryForToken(i, categories) === activeCategoryId);
     }, [baseFiltered, activeCategoryId, categories]);
 
     const pagination = usePagination(filtered, itemsPerPage, `cp_${type}`);
