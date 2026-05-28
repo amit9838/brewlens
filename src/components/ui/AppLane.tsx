@@ -30,13 +30,12 @@ const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
         className="group flex items-center justify-between gap-3 w-64 sm:w-72 bg-white dark:bg-zinc-900/60 border border-zinc-200/60 dark:border-zinc-800/80 p-3 rounded-2xl hover:border-zinc-300 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-200"
     >
         {/* Left: Rounded Icon */}
-        <div className="shrink-0 w-11 h-11 rounded-xl bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-100 dark:border-zinc-750 shadow-3xs overflow-hidden flex items-center justify-center">
-            <FaviconImage
-                homepage={item.homepage}
-                name={item.name}
-                size={36}
-            />
-        </div>
+        <FaviconImage
+            homepage={item.homepage}
+            name={item.name}
+            size={36}
+            className="rounded-md"
+        />
 
         {/* Middle: Content */}
         <div className="flex-1 min-w-0">
@@ -90,14 +89,14 @@ export const AppLane: React.FC<AppLaneProps> = ({ items, variant, onSeeAll }) =>
             >
                 {items.map(item => {
                     let badge: React.ReactNode = null;
-                    
+
                     if (variant === 'trending') {
-                        const formatted = item.downloads 
-                            ? (isNaN(Number(item.downloads.replace(/,/g, ''))) 
-                                ? item.downloads 
+                        const formatted = item.downloads
+                            ? (isNaN(Number(item.downloads.replace(/,/g, '')))
+                                ? item.downloads
                                 : Number(item.downloads.replace(/,/g, '')).toLocaleString())
                             : null;
-                            
+
                         if (formatted) {
                             badge = (
                                 <span className="inline-flex items-center gap-0.5 text-[8px] font-bold text-orange-600 dark:text-orange-400">

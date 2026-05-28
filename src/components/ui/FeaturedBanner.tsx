@@ -61,22 +61,23 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                                 src={sUrl}
                                 alt=""
                                 aria-hidden
-                                className="absolute top-1/2 left-16 -translate-y-1/2 w-48 h-48 object-contain filter blur-[60px] saturate-200 opacity-80 dark:opacity-40 pointer-events-none"
+                                className="absolute top-1/2 left-16 -translate-y-1/2 w-48 h-48 object-contain filter blur-[60px] saturate-200 opacity-80 dark:opacity-90 pointer-events-none"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-r from-zinc-900/95 via-zinc-900/75 to-zinc-900/30 dark:from-zinc-950/98 dark:via-zinc-950/80 dark:to-zinc-950/40" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-zinc-700/95 via-zinc-600/75 to-zinc-700/50 dark:from-zinc-950/50 dark:via-zinc-950/80 dark:to-zinc-950/70" />
                         </div>
 
                         {/* Content */}
                         <NavLink
                             to={`/cask/${s.token}`}
-                            className="absolute inset-0 z-10 flex items-center gap-6 px-8 sm:px-12"
+                            className="absolute inset-0 z-10 flex items-center gap-6 px-8 sm:px-12 border border-white/10 rounded-3xl"
                         >
                             {/* App icon */}
-                            <div className="shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 shadow-xl flex items-center justify-center overflow-hidden">
+                            <div className="shrink-0 p-1 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/10 shadow-xl flex items-center justify-center overflow-hidden">
+
                                 <img
                                     src={sUrl}
                                     alt={si.name}
-                                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain"
+                                    className="w-16 h-16 sm:w-20 sm:h-20 object-contain shrink-0 rounded-md"
                                     onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }}
                                 />
                             </div>
@@ -123,11 +124,10 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                     <button
                         key={i}
                         onClick={() => setActive(i)}
-                        className={`transition-all duration-300 rounded-full cursor-pointer ${
-                            i === active
-                                ? 'w-5 h-1.5 bg-white'
-                                : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
-                        }`}
+                        className={`transition-all duration-300 rounded-full cursor-pointer ${i === active
+                            ? 'w-5 h-1.5 bg-white'
+                            : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
+                            }`}
                         aria-label={`Slide ${i + 1}`}
                     />
                 ))}

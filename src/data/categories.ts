@@ -42,7 +42,7 @@ export const CASK_CATEGORIES: Category[] = [
         label: 'Browsers',
         emoji: '🌐',
         tokens: ['google-chrome', 'firefox', 'arc', 'safari', 'brave-browser', 'opera', 'microsoft-edge', 'vivaldi', 'min', 'orion', 'tor-browser', 'waterfox', 'librewolf'],
-        keywords: ['browser', 'chrome', 'firefox'],
+        keywords: ['browser', 'chrome', 'firefox', 'browser'],
     },
     {
         id: 'design',
@@ -165,11 +165,11 @@ export function getCategoryForToken(token: string, categories: Category[]): stri
 
 /** Hard-coded curated list of featured cask tokens for the hero banner */
 export const FEATURED_CASKS = [
-    { token: 'arc',            tagline: 'The browser that thinks like you', tag: 'Browser' },
+    { token: 'arc', tagline: 'The browser that thinks like you', tag: 'Browser' },
     { token: 'visual-studio-code', tagline: 'The most popular code editor on earth', tag: 'Dev Tools' },
-    { token: 'figma',          tagline: 'Design, prototype and collaborate in real time', tag: 'Design' },
-    { token: 'obsidian',       tagline: 'Your second brain, locally stored forever', tag: 'Productivity' },
-    { token: 'iterm2',         tagline: 'The terminal emulator macOS deserves', tag: 'Dev Tools' },
+    { token: 'figma', tagline: 'Design, prototype and collaborate in real time', tag: 'Design' },
+    { token: 'obsidian', tagline: 'Your second brain, locally stored forever', tag: 'Productivity' },
+    { token: 'iterm2', tagline: 'The terminal emulator macOS deserves', tag: 'Dev Tools' },
 ];
 
 /** Hard-coded curated Editor's Picks (cask tokens) */

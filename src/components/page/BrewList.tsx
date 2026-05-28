@@ -13,13 +13,13 @@ import { cn } from '../../lib/utils';
 import { type BrewType } from "../../types";
 import SkeletonGrid from "./SkeletonGrid";
 import ErrorState from "./Error";
-import { 
-    Search, 
-    X, 
-    LayoutGrid, 
-    List, 
-    Bookmark, 
-    Keyboard, 
+import {
+    Search,
+    X,
+    LayoutGrid,
+    List,
+    Bookmark,
+    Keyboard,
     SlidersHorizontal,
     Home,
     Zap,
@@ -72,7 +72,7 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<any>> = {
     communication: MessageSquare,
     security: Shield,
     fonts: Type,
-    
+
     // Formulae categories
     languages: Code,
     databases: Database,
@@ -219,7 +219,7 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
     };
     const [showFonts, setShowFonts] = useStorage<boolean>('brewlist_showFonts', false);
     const [viewMode, setViewMode] = useStorage<'grid' | 'list'>('brewlist_viewMode', 'grid');
-    
+
     // Sync category from URL search params
     const categoryParam = searchParams.get('category') || 'all';
     const [activeCategoryId, setActiveCategoryId] = useState(categoryParam);
@@ -417,7 +417,7 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                     <CategoryTabs
                         categories={categories}
                         activeId={activeCategoryId}
-                        onChange={id => { 
+                        onChange={id => {
                             const newParams = new URLSearchParams(searchParams);
                             if (id === 'all') {
                                 newParams.delete('category');

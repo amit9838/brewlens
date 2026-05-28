@@ -6,12 +6,11 @@ import { Button } from "../ui/Button";
 import { NavLink } from "react-router-dom";
 import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
 import { useBookmarks } from '../contexts/BookmarksContext';
-import { 
-    Clock, 
-    TrendingUp, 
-    Layers, 
-    Cpu, 
-    ShieldCheck, 
+import {
+    Clock,
+    Layers,
+    Cpu,
+    ShieldCheck,
     Flame,
     Sparkles,
     Terminal,
@@ -26,8 +25,6 @@ import {
     LayoutGrid
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { formatCount, fetchCaskMeta } from "../page/Analytics"; 
-import { AnalyticsItemRow } from "../ui/AnalyticsItemRow";
 import { cn } from "../../lib/utils";
 import { FeaturedBanner } from "../ui/FeaturedBanner";
 import { AppLane } from "../ui/AppLane";
@@ -39,11 +36,6 @@ const fetchCaskAnalytics = async (period: string = '30d') => {
     return res.json();
 };
 
-const fetchFormulaAnalytics = async (period: string = '30d') => {
-    const res = await fetch(`https://formulae.brew.sh/api/analytics/install-on-request/${period}.json`);
-    if (!res.ok) throw new Error('Failed to fetch formula analytics');
-    return res.json();
-};
 
 // Curated grid categories definitions
 const DISCOVER_CATEGORIES = [
@@ -116,10 +108,9 @@ const DISCOVER_CATEGORIES = [
 const Dashboard = () => {
     const { data: caskData = [], isLoading: isLoadingCasks } = useBrewData("cask");
     const { data: formulaData = [], isLoading: isLoadingFormulae } = useBrewData("formula");
-    
+
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { bookmarks } = useBookmarks();
-    const [analyticsTab, setAnalyticsTab] = useState<'cask' | 'formula'>('cask');
     const [shelfTab, setShelfTab] = useState<'bookmarks' | 'recents'>('bookmarks');
 
     // Auto-choose the active personalized shelf tab based on what contains data
@@ -132,39 +123,12 @@ const Dashboard = () => {
     }, [bookmarks.length, recentItems.length]);
 
     // Analytics queries
-    const { data: caskAnalytics30d, isLoading: isLoadingCaskAnalytics, error: caskAnalyticsError } = useQuery({
+    const { data: caskAnalytics30d } = useQuery({
         queryKey: ['analytics-cask', '30d'],
         queryFn: () => fetchCaskAnalytics('30d'),
         staleTime: 1000 * 60 * 10,
     });
 
-    const { data: formulaAnalytics30d, isLoading: isLoadingFormulaAnalytics, error: formulaAnalyticsError } = useQuery({
-        queryKey: ['analytics-formula', '30d'],
-        queryFn: () => fetchFormulaAnalytics('30d'),
-        staleTime: 1000 * 60 * 10,
-    });
-
-    const { data: caskMeta = {} } = useQuery({
-        queryKey: ['cask-meta'],
-        queryFn: fetchCaskMeta,
-        staleTime: 1000 * 60 * 60,
-    });
-
-    // Map homepages to dynamic lookups
-    const homepages = useMemo(() => {
-        const map: Record<string, string> = { ...caskMeta };
-        caskData.forEach(c => { if (c.token && c.homepage) map[c.token] = c.homepage; });
-        formulaData.forEach(f => { if (f.token && f.homepage) map[f.token] = f.homepage; });
-        return map;
-    }, [caskMeta, caskData, formulaData]);
-
-    const activeAnalytics = analyticsTab === 'cask' ? caskAnalytics30d : formulaAnalytics30d;
-    const isLoadingAnalytics = analyticsTab === 'cask' ? isLoadingCaskAnalytics : isLoadingFormulaAnalytics;
-    const analyticsError = analyticsTab === 'cask' ? caskAnalyticsError : formulaAnalyticsError;
-
-    const topItems = activeAnalytics?.items?.slice(0, 5) ?? [];
-    const maxCount = topItems[0] ? parseInt(topItems[0].count.replace(/,/g, ''), 10) : 1;
-    const totalFormatted = activeAnalytics ? formatCount(String(activeAnalytics.total_count)) : null;
 
     // Derived editorial items from caskData
     const trendingItems = useMemo(() => {
@@ -201,7 +165,7 @@ const Dashboard = () => {
 
     return (
         <div className="sections flex flex-col gap-8 transition-all duration-500 px-0">
-            
+
             {/* 1. Curated Editorial Hero Carousel */}
             {caskData.length > 0 && (
                 <div className="w-full">
@@ -220,7 +184,7 @@ const Dashboard = () => {
                         </h4>
                     </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3 px-3 py-1.5 lg:border-r border-zinc-200/30 dark:border-zinc-800/30">
                     <Cpu size={18} className="text-blue-500 shrink-0" />
                     <div>
@@ -340,8 +304,8 @@ const Dashboard = () => {
                                 <button
                                     onClick={() => setShelfTab('bookmarks')}
                                     className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                                        shelfTab === 'bookmarks' 
-                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]" 
+                                        shelfTab === 'bookmarks'
+                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]"
                                             : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                                     )}
                                 >
@@ -354,8 +318,8 @@ const Dashboard = () => {
                                 <button
                                     onClick={() => setShelfTab('recents')}
                                     className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                                        shelfTab === 'recents' 
-                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]" 
+                                        shelfTab === 'recents'
+                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]"
                                             : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                                     )}
                                 >
@@ -367,13 +331,13 @@ const Dashboard = () => {
                         </div>
 
                         {shelfTab === 'recents' && recentItems.length > 0 && (
-                            <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={clearRecent} 
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={clearRecent}
                                 className="text-zinc-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 text-xs shrink-0 cursor-pointer h-7"
                             >
-                                <Trash2 size={13} className="mr-1.5" /> 
+                                <Trash2 size={13} className="mr-1.5" />
                                 <span>Clear History</span>
                             </Button>
                         )}
@@ -392,82 +356,6 @@ const Dashboard = () => {
                     </div>
                 </div>
             )}
-
-            {/* 6. Analytics installations tabbed section */}
-            <div className="section bg-gradient-to-br from-amber-400/5 via-orange-500/3 to-transparent dark:from-amber-500/5 dark:via-orange-600/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4 transition-all duration-300 hover:border-amber-500/20 hover:shadow-lg">
-                <div className="header flex flex-col sm:flex-row sm:justify-between sm:items-center text-md text-zinc-900 dark:text-zinc-300 mb-3 gap-y-3">
-                    <div className="title flex items-center font-bold text-zinc-900 dark:text-zinc-200 text-lg flex-wrap gap-x-2">
-                        <span className="flex items-center justify-center bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 p-2 rounded-xl mr-1 shadow-sm shrink-0">
-                            <TrendingUp size={16} />
-                        </span>
-                        <span>Popular Installations</span>
-                        {totalFormatted && (
-                            <span className="text-xs font-normal text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 rounded-full mt-1 sm:mt-0">
-                                {totalFormatted} total installs (30d)
-                            </span>
-                        )}
-                    </div>
-                    
-                    {/* Tab Toggles */}
-                    <div className="flex items-center bg-gray-100 dark:bg-zinc-800/80 p-0.5 rounded-xl border border-zinc-200/50 dark:border-zinc-700/50 self-start sm:self-auto shrink-0 shadow-inner">
-                        {(['cask', 'formula'] as const).map(t => (
-                            <button
-                                key={t}
-                                onClick={() => setAnalyticsTab(t)}
-                                className={cn("px-3.5 py-1.5 rounded-lg text-xs font-bold capitalize transition-all duration-300 cursor-pointer",
-                                    analyticsTab === t 
-                                        ? "bg-white dark:bg-zinc-700 shadow-md text-amber-600 dark:text-amber-400 scale-[1.02]" 
-                                        : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-                                )}
-                            >
-                                {t}s
-                            </button>
-                        ))}
-                    </div>
-                </div>
-                
-                <div className="contents">
-                    {isLoadingAnalytics && (
-                        <div className="space-y-3">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                                <div key={i} className="h-14 rounded-xl bg-zinc-100 dark:bg-zinc-800 animate-pulse" />
-                            ))}
-                        </div>
-                    )}
-                    {analyticsError && (
-                        <p className="text-red-500 text-sm">Failed to load analytics data.</p>
-                    )}
-                    {!isLoadingAnalytics && !analyticsError && topItems.length === 0 && (
-                        <p className="text-zinc-500 text-sm">No data available.</p>
-                    )}
-                    {!isLoadingAnalytics && !analyticsError && topItems.length > 0 && (
-                        <div className="space-y-1">
-                            {topItems.map((item: any) => {
-                                const name = item.cask || item.formula;
-                                const homepage = homepages[name];
-
-                                return (
-                                    <AnalyticsItemRow
-                                        key={name}
-                                        item={item}
-                                        homepage={homepage}
-                                        maxCount={maxCount}
-                                        variant="amber"
-                                    />
-                                );
-                            })}
-                        </div>
-                    )}
-                    <div className="flex justify-end mt-4 pt-2 border-t border-zinc-100/50 dark:border-zinc-800/50">
-                        <NavLink to="/analytics">
-                            <Button variant="ghost" size="sm" className="hover:bg-amber-500/10 hover:text-amber-600 cursor-pointer">
-                                <TrendingUp size={16} className="mr-2" />
-                                <span className="text-sm font-medium">View Full Leaderboard</span>
-                            </Button>
-                        </NavLink>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 };
