@@ -24,17 +24,19 @@ export default function BookmarksSection({ maxItems = 4 }: BookmarksSectionProps
     };
 
     return (
-        <div className="section bg-gradient-to-br from-yellow-400/5 via-amber-500/5 to-transparent dark:from-yellow-500/2 dark:via-amber-600/4 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-xl p-4 backdrop-blur-sm transition-all duration-500">
+        <div className="section bg-gradient-to-br from-amber-400/5 via-yellow-500/3 to-transparent dark:from-amber-600/5 dark:via-yellow-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4 transition-all duration-300 hover:border-amber-500/20 hover:shadow-lg">
             <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
-                <div className="title flex items-center">
-                    <span className="bg-yellow-600 mr-3 w-1 h-5 rounded-xs" />
-                    <span className="font-semibold">Bookmarks</span>
-                    <span className="ml-2 text-xs font-normal text-zinc-500">
-                        ({bookmarks.length})
+                <div className="title flex items-center font-bold text-zinc-900 dark:text-zinc-200 text-lg">
+                    <span className="flex items-center justify-center bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 p-2 rounded-xl mr-3 shadow-sm">
+                        <BookmarkIcon size={16} />
+                    </span>
+                    <span>Bookmarks</span>
+                    <span className="ml-2 text-xs font-normal text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">
+                        {bookmarks.length} saved
                     </span>
                 </div>
                 <div className="action">
-                    <Button variant="ghost" size="sm" onClick={handleViewAllBookmarks} className="hover:bg-yellow-500/10 hover:text-yellow-600">
+                    <Button variant="ghost" size="sm" onClick={handleViewAllBookmarks} className="hover:bg-yellow-500/10 hover:text-yellow-600 cursor-pointer">
                         <BookmarkIcon size={16} className="mr-2" />
                         <span className="text-sm font-medium">View All</span>
                     </Button>

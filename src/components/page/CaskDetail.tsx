@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
 import { type BrewItem, type BrewType } from "../../types";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Share2, ChevronLeft } from "lucide-react";
-import { NavLink } from "react-router-dom";
+
 import { Button } from "../ui/Button";
 import { BookmarkButton } from "../ui/BookmarkButton";
 import SkeletonDetails from "./SkeletonDetails";
@@ -42,6 +42,7 @@ function formatArtifactValue(value: unknown): string {
 
 export function CaskDetail() {
   const [copied, setCopied] = useState({ installCmd: false, appLink: false });
+  const navigate = useNavigate();
   const location = useLocation();
   const { trackView } = useRecentlyViewed();
 
@@ -134,12 +135,11 @@ export function CaskDetail() {
     <div className="min-h-screen p-2  text-gray-800 dark:text-gray-200 font-sans max-[1400px] mx-auto">
       {/* Top Navigation Bar */}
       <div className="flex items-center justify-between  mb-4">
-        <NavLink to={`/`}>
-          <Button variant="ghost" size="sm">
-            <ChevronLeft size={20} />
-            <span className="text-sm font-medium">Dashboard</span>
-          </Button>
-        </NavLink>
+        {/* Back button */}
+        <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+          <ChevronLeft size={20} />
+          <span className="text-sm font-medium">Back</span>
+        </Button>
 
         {/* Header Action Buttons */}
         <div className="flex gap-2 text-zinc-400">
@@ -147,11 +147,9 @@ export function CaskDetail() {
           <Button onClick={() => copyURL()} variant="ghost" size="sm">
             {copied.appLink ? <Check size={18} /> : <Share2 size={18} />}
           </Button>
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            <Button variant="ghost" size="sm">
-              <Info size={20} />
-            </Button>
-          </a>
+          <Button variant="ghost" size="sm" onClick={() => window.open(url, "_blank")}>
+            <Info size={20} />
+          </Button>
         </div>
       </div>
 
@@ -253,7 +251,7 @@ export function CaskDetail() {
                 Type: GUI Application
               </span>
               {isFoss && (
-                <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs font-bold border border-white/10">
+                <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs font-bold border border-blue-500/20">
                   Open Source
                 </span>
               )}

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useBrewData } from "../../hooks/useBrewData";
 import type { BrewItem, BrewType } from "../../types";
-import { NavLink } from "react-router-dom";
+
 import { Button } from "../ui/Button";
 import { BookmarkButton } from "../ui/BookmarkButton";
 import { cn } from "../../lib/utils";
@@ -40,6 +40,7 @@ export const Tag = ({ label }: { label: string | null }) => {
 
 export const FormulaeDetail = () => {
   const [copied, setCopied] = useState({ installCmd: false, appLink: false });
+  const navigate = useNavigate();
   const location = useLocation();
   const { trackView } = useRecentlyViewed();
 
@@ -138,12 +139,10 @@ export const FormulaeDetail = () => {
       <div className="max-[1400px] mx-auto space-y-6">
         {/* Top Navigation Bar */}
         <div className="flex items-center justify-between mb-4">
-          <NavLink to={`/`}>
-            <Button variant="ghost" size="sm">
-              <ChevronLeft size={20} />
-              <span className="text-sm font-medium">Dashboard</span>
-            </Button>
-          </NavLink>
+          <Button variant="ghost" size="sm" onClick={() => navigate(-1)}>
+            <ChevronLeft size={20} />
+            <span className="text-sm font-medium">Back</span>
+          </Button>
           {/* Header Action Buttons */}
           <div className="flex gap-2 text-zinc-400">
             <BookmarkButton item={item} size="sm" />

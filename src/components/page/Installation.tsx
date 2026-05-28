@@ -121,13 +121,13 @@ const Pill = ({
     className={cn(
       "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
       color === "blue" &&
-        "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
+      "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
       color === "green" &&
-        "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
+      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
       color === "orange" &&
-        "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
+      "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300",
       color === "zinc" &&
-        "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300",
+      "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-300",
     )}
   >
     {children}
