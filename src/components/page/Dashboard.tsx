@@ -1,17 +1,38 @@
 import { ItemCard } from "../ItemCard";
 import RecentlyViewedSection from "../ui/RecentlyViewedStrip";
-import BookmarksSection from "../ui/BookmarksSection";
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useBrewData } from "../../hooks/useBrewData";
 import { Button } from "../ui/Button";
 import { NavLink } from "react-router-dom";
 import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
+import { useBookmarks } from '../contexts/BookmarksContext';
 import { type BrewItem } from '../../types';
-import { RefreshCcw, Grid, BrushCleaning, Clock, Shuffle, TrendingUp, Layers, Cpu, ShieldCheck, ArrowRight } from "lucide-react";
+import { 
+    Clock, 
+    TrendingUp, 
+    Layers, 
+    Cpu, 
+    ShieldCheck, 
+    Flame,
+    Sparkles,
+    Terminal,
+    Zap,
+    Palette,
+    Globe,
+    Code,
+    Database,
+    Rocket,
+    Bookmark,
+    Trash2,
+    LayoutGrid
+} from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { formatCount, fetchCaskMeta } from "../page/Analytics"; // adjust path
+import { formatCount, fetchCaskMeta } from "../page/Analytics"; 
 import { AnalyticsItemRow } from "../ui/AnalyticsItemRow";
 import { cn } from "../../lib/utils";
+import { FeaturedBanner } from "../ui/FeaturedBanner";
+import { AppLane } from "../ui/AppLane";
+import { SectionHeader } from "../ui/SectionHeader";
 
 const fetchCaskAnalytics = async (period: string = '30d') => {
     const res = await fetch(`https://formulae.brew.sh/api/analytics/cask-install/${period}.json`);
@@ -25,36 +46,91 @@ const fetchFormulaAnalytics = async (period: string = '30d') => {
     return res.json();
 };
 
-
-const STORAGE_KEY = "dashboard_random_picks";
-const TTL_MS = 60 * 60 * 1000; // 1 hour
-
-interface StoredPicks {
-    indices: number[];
-    timestamp: number;
-}
+// Curated grid categories definitions
+const DISCOVER_CATEGORIES = [
+    {
+        id: 'dev-tools',
+        label: 'Developer Tools',
+        desc: 'Terminals, IDEs, compilers & databases',
+        icon: Terminal,
+        color: 'from-indigo-500/10 to-blue-500/10 hover:from-indigo-500/15 hover:to-blue-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/20 hover:border-indigo-500/40 dark:hover:border-indigo-400/40',
+        type: 'cask',
+    },
+    {
+        id: 'productivity',
+        label: 'Productivity',
+        desc: 'Notes, task organizers & calendar apps',
+        icon: Zap,
+        color: 'from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/15 hover:to-teal-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:border-emerald-500/40 dark:hover:border-emerald-400/40',
+        type: 'cask',
+    },
+    {
+        id: 'design',
+        label: 'Design & Creative',
+        desc: 'Photo editors, vector tools & 3D art',
+        icon: Palette,
+        color: 'from-pink-500/10 to-rose-500/10 hover:from-pink-500/15 hover:to-rose-500/15 text-pink-600 dark:text-pink-400 border-pink-500/20 hover:border-pink-500/40 dark:hover:border-pink-400/40',
+        type: 'cask',
+    },
+    {
+        id: 'browsers',
+        label: 'Web Browsers',
+        desc: 'Fast, secure & modern browser options',
+        icon: Globe,
+        color: 'from-blue-500/10 to-cyan-500/10 hover:from-blue-500/15 hover:to-cyan-500/15 text-blue-600 dark:text-blue-400 border-blue-500/20 hover:border-blue-500/40 dark:hover:border-blue-400/40',
+        type: 'cask',
+    },
+    {
+        id: 'languages',
+        label: 'Programming Languages',
+        desc: 'Compilers, package managers & runtimes',
+        icon: Code,
+        color: 'from-cyan-500/10 to-teal-500/10 hover:from-cyan-500/15 hover:to-teal-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/20 hover:border-cyan-500/40 dark:hover:border-cyan-400/40',
+        type: 'formula',
+    },
+    {
+        id: 'databases',
+        label: 'Databases & Servers',
+        desc: 'SQL, Document caches & messaging queues',
+        icon: Database,
+        color: 'from-amber-500/10 to-orange-500/10 hover:from-amber-500/15 hover:to-orange-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:border-amber-500/40 dark:hover:border-amber-400/40',
+        type: 'formula',
+    },
+    {
+        id: 'devops',
+        label: 'DevOps & Containers',
+        desc: 'Docker, Kubernetes, AWS & cloud engines',
+        icon: Rocket,
+        color: 'from-rose-500/10 to-orange-500/10 hover:from-rose-500/15 hover:to-orange-500/15 text-rose-600 dark:text-rose-400 border-rose-500/20 hover:border-rose-500/40 dark:hover:border-rose-400/40',
+        type: 'formula',
+    },
+    {
+        id: 'cli-tools',
+        label: 'CLI Tools & Utilities',
+        desc: 'Terminal shell enhancements & helper search tools',
+        icon: Cpu,
+        color: 'from-violet-500/10 to-purple-500/10 hover:from-violet-500/15 hover:to-purple-500/15 text-violet-600 dark:text-violet-400 border-violet-500/20 hover:border-violet-500/40 dark:hover:border-violet-400/40',
+        type: 'formula',
+    },
+];
 
 const Dashboard = () => {
-    const { data: caskData = [], isLoading: isLoadingCasks, error } = useBrewData("cask");
+    const { data: caskData = [], isLoading: isLoadingCasks } = useBrewData("cask");
     const { data: formulaData = [], isLoading: isLoadingFormulae } = useBrewData("formula");
     
-    const [randomPicks, setRandomPicks] = useState<BrewItem[]>([]);
-    const [isRefreshing, setIsRefreshing] = useState(false);
     const { recentItems, clearRecent } = useRecentlyViewed();
-    const [filteredData, setFilteredData] = useState<BrewItem[]>(caskData ?? []);
+    const { bookmarks } = useBookmarks();
     const [analyticsTab, setAnalyticsTab] = useState<'cask' | 'formula'>('cask');
+    const [shelfTab, setShelfTab] = useState<'bookmarks' | 'recents'>('bookmarks');
 
-    const isLoading = isLoadingCasks;
-
+    // Auto-choose the active personalized shelf tab based on what contains data
     useEffect(() => {
-        if (isLoadingCasks) return;
-        else if (error) return;
-        else {
-            let fdata = caskData?.filter(i => !i.deprecated && !i.disabled) || [];
-            fdata = fdata.filter(i => !i.token.startsWith('font-'));
-            setFilteredData(fdata);
+        if (bookmarks.length === 0 && recentItems.length > 0) {
+            setShelfTab('recents');
+        } else if (bookmarks.length > 0) {
+            setShelfTab('bookmarks');
         }
-    }, [caskData, isLoadingCasks, error]);
+    }, [bookmarks.length, recentItems.length]);
 
     // Analytics queries
     const { data: caskAnalytics30d, isLoading: isLoadingCaskAnalytics, error: caskAnalyticsError } = useQuery({
@@ -91,6 +167,20 @@ const Dashboard = () => {
     const maxCount = topItems[0] ? parseInt(topItems[0].count.replace(/,/g, ''), 10) : 1;
     const totalFormatted = activeAnalytics ? formatCount(String(activeAnalytics.total_count)) : null;
 
+    // Derived editorial items from caskData
+    const trendingItems = useMemo(() => {
+        if (!caskAnalytics30d?.items || !caskData.length) return [];
+        return caskAnalytics30d.items
+            .slice(0, 12)
+            .map((item: any) => caskData.find(c => c.token === item.cask))
+            .filter(Boolean) as BrewItem[];
+    }, [caskAnalytics30d, caskData]);
+
+    const editorPickItems = useMemo(() => {
+        if (!caskData.length) return [];
+        return caskData.filter(i => ['raycast', 'warp', 'tableplus', 'zed', 'proxyman', 'cleanshot', 'rectangle', 'orbstack'].includes(i.token)).slice(0, 12);
+    }, [caskData]);
+
     // Metric aggregates
     const totalCasks = caskData.length;
     const totalFormulae = formulaData.length;
@@ -101,283 +191,199 @@ const Dashboard = () => {
     const totalFoss = fossCasks + fossFormulae;
     const fossPercentage = totalApps > 0 ? Math.round((totalFoss / totalApps) * 100) : 0;
 
-
-    // Generate new random picks (indices only) based on current data
-    const generateRandomIndices = useCallback((): number[] => {
-
-        if (!filteredData.length) return [];
-        const dataLen = filteredData.length;
-        const numPicks = Math.min(8, dataLen);
-        const indicesSet = new Set<number>();
-        while (indicesSet.size < numPicks) {
-            indicesSet.add(Math.floor(Math.random() * dataLen));
-        }
-        return Array.from(indicesSet);
-    }, [filteredData]);
-
-    // Store indices and timestamp to localStorage
-    const storePicks = useCallback((indices: number[]) => {
-        const stored: StoredPicks = {
-            indices,
-            timestamp: Date.now(),
-        };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
-    }, []);
-
-    // Load stored picks and map them to actual BrewItems
-    const loadStoredPicks = useCallback((): BrewItem[] => {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return [];
-
-        try {
-            const stored: StoredPicks = JSON.parse(raw);
-            const now = Date.now();
-            if (now - stored.timestamp > TTL_MS) {
-                // Expired
-                return [];
-            }
-
-            // Map indices to actual data items, filter out any that are out of bounds
-            const items = stored.indices
-                .map(idx => filteredData[idx])
-                .filter((item): item is BrewItem => item !== undefined);
-
-            return items;
-        } catch (e) {
-            console.error("Failed to parse stored picks", e);
-            return [];
-        }
-    }, [filteredData]);
-
-    // Refresh random picks (manual or automatic)
-    const refreshRandomPicks = useCallback(async () => {
-        if (isLoading || !filteredData.length) return;
-
-        setIsRefreshing(true);
-        try {
-            const newIndices = generateRandomIndices();
-            if (newIndices.length) {
-                const newPicks = newIndices.map(idx => filteredData[idx]);
-                setRandomPicks(newPicks);
-                storePicks(newIndices);
-            } else {
-                setRandomPicks([]);
-            }
-        } finally {
-            setIsRefreshing(false);
-        }
-    }, [filteredData, isLoading, generateRandomIndices, storePicks]);
-
-    // Initial load and data changes: decide whether to use stored or generate fresh
-    useEffect(() => {
-
-        if (isLoading || !filteredData.length) return;
-
-        const storedItems = loadStoredPicks();
-        if (storedItems.length) {
-            setRandomPicks(storedItems);
-        } else {
-            // No valid stored picks, generate fresh
-            refreshRandomPicks();
-        }
-    }, [filteredData, isLoading, loadStoredPicks, refreshRandomPicks]);
-
-    // Auto-refresh: check every minute if the stored picks are expired, and refresh if needed
-    useEffect(() => {
-        if (isLoading) return; // Wait for data to load
-
-        const intervalId = setInterval(() => {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return;
-
-            try {
-                const stored: StoredPicks = JSON.parse(raw);
-                const now = Date.now();
-                if (now - stored.timestamp >= TTL_MS) {
-                    // Expired, refresh
-                    refreshRandomPicks();
-                }
-            } catch (e) {
-                console.error("Failed to parse stored picks in interval", e);
-            }
-        }, 60000); // check every minute
-
-        return () => clearInterval(intervalId);
-    }, [isLoading, refreshRandomPicks]);
+    const hasShelfItems = bookmarks.length > 0 || recentItems.length > 0;
 
     return (
-        <div className="sections flex flex-col gap-6 transition-all duration-500 px-0">
-            {/* Welcome Hero Banner */}
-            <div className="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 via-teal-500/5 to-transparent p-6 sm:p-8 shadow-lg hover:shadow-emerald-500/5 transition-all duration-300 group">
-                <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-500/10 blur-3xl transition-all duration-500 group-hover:scale-125 pointer-events-none" />
-                <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-teal-500/10 blur-3xl transition-all duration-500 group-hover:scale-125 pointer-events-none" />
-                
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div className="space-y-2 max-w-xl">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                            <span className="flex h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            Registry Online
-                        </span>
-                        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-400">
-                            Discover & Manage Homebrew
-                        </h2>
-                        <p className="text-zinc-600 dark:text-zinc-400 text-sm sm:text-base leading-relaxed">
-                            BrewLens is a modern, light-speed visual explorer for Homebrew. Search, filter, and track installation statistics for your favorite casks and formulae.
-                        </p>
+        <div className="sections flex flex-col gap-8 transition-all duration-500 px-0">
+            
+            {/* 1. Curated Editorial Hero Carousel */}
+            {caskData.length > 0 && (
+                <div className="w-full">
+                    <FeaturedBanner items={caskData} />
+                </div>
+            )}
+
+            {/* 2. Command Center Stats Grid — Highly compact horizontal strip */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 bg-zinc-50/50 dark:bg-zinc-900/20 border border-zinc-200/50 dark:border-zinc-800/40 rounded-2xl p-2.5 shadow-2xs">
+                <div className="flex items-center gap-3 px-3 py-1.5 border-r border-zinc-200/30 dark:border-zinc-800/30">
+                    <Layers size={18} className="text-emerald-500 shrink-0" />
+                    <div>
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Total Packages</p>
+                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
+                            {isLoadingCasks || isLoadingFormulae ? "..." : totalApps.toLocaleString()}
+                        </h4>
                     </div>
-                    
-                    <div className="flex flex-wrap gap-3 shrink-0">
-                        <NavLink to="/all" className="w-full sm:w-auto">
-                            <Button className="w-full flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
-                                <span>Browse Packages</span>
-                                <ArrowRight size={16} />
-                            </Button>
-                        </NavLink>
-                        <NavLink to="/installation" className="w-full sm:w-auto">
-                            <Button variant="secondary" className="w-full flex items-center justify-center gap-2 border border-zinc-200 dark:border-zinc-700 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
-                                <span>Install Guide</span>
-                            </Button>
-                        </NavLink>
+                </div>
+                
+                <div className="flex items-center gap-3 px-3 py-1.5 lg:border-r border-zinc-200/30 dark:border-zinc-800/30">
+                    <Cpu size={18} className="text-blue-500 shrink-0" />
+                    <div>
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">CLI Formulae</p>
+                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
+                            {isLoadingFormulae ? "..." : totalFormulae.toLocaleString()}
+                        </h4>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-3 px-3 py-1.5 border-r border-zinc-200/30 dark:border-zinc-800/30">
+                    <Layers size={18} className="text-cyan-500 shrink-0" />
+                    <div>
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Desktop Casks</p>
+                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
+                            {isLoadingCasks ? "..." : totalCasks.toLocaleString()}
+                        </h4>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-3 px-3 py-1.5">
+                    <ShieldCheck size={18} className="text-purple-500 shrink-0" />
+                    <div>
+                        <p className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">Open Source Ratio</p>
+                        <h4 className="text-sm sm:text-base font-extrabold text-zinc-900 dark:text-zinc-50 leading-tight">
+                            {isLoadingCasks || isLoadingFormulae ? "..." : `${fossPercentage}%`}
+                        </h4>
                     </div>
                 </div>
             </div>
 
-            {/* Command Center Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="relative overflow-hidden rounded-2xl border border-zinc-100 dark:border-zinc-800/80 bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md p-4 transition-all duration-300 hover:border-emerald-500/30 hover:shadow-lg group">
-                    <div className="absolute right-2 top-2 text-emerald-500/10 transition-transform duration-300 group-hover:scale-110 pointer-events-none">
-                        <Layers size={40} />
+            {/* 3. Curated App Lanes */}
+            {trendingItems.length > 0 && (
+                <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                        <div className="flex items-center justify-center p-2 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 shadow-xs">
+                            <Flame size={16} />
+                        </div>
+                        <SectionHeader
+                            title="Trending Casks"
+                            subtitle="Most installed cask packages in the last 30 days"
+                        />
                     </div>
-                    <p className="text-[10px] sm:text-xs font-semibold text-zinc-400 uppercase tracking-wider">Total Packages</p>
-                    <h3 className="text-xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">
-                        {isLoadingCasks || isLoadingFormulae ? (
-                            <span className="inline-block h-8 w-16 bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded" />
-                        ) : (
-                            totalApps.toLocaleString()
-                        )}
-                    </h3>
-                    <p className="text-[9px] sm:text-[10px] text-zinc-400 mt-1">Casks & Formulae</p>
+                    <AppLane items={trendingItems} />
                 </div>
-                
-                <div className="relative overflow-hidden rounded-2xl border border-zinc-100 dark:border-zinc-800/80 bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md p-4 transition-all duration-300 hover:border-blue-500/30 hover:shadow-lg group">
-                    <div className="absolute right-2 top-2 text-blue-500/10 transition-transform duration-300 group-hover:scale-110 pointer-events-none">
-                        <Cpu size={40} />
+            )}
+
+            {editorPickItems.length > 0 && (
+                <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                        <div className="flex items-center justify-center p-2 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 shadow-xs">
+                            <Sparkles size={16} />
+                        </div>
+                        <SectionHeader
+                            title="Editor's Picks"
+                            subtitle="Hand-picked visual tools and terminal utilities"
+                        />
                     </div>
-                    <p className="text-[10px] sm:text-xs font-semibold text-zinc-400 uppercase tracking-wider">Total Formulae</p>
-                    <h3 className="text-xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">
-                        {isLoadingFormulae ? (
-                            <span className="inline-block h-8 w-16 bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded" />
-                        ) : (
-                            totalFormulae.toLocaleString()
-                        )}
-                    </h3>
-                    <p className="text-[9px] sm:text-[10px] text-zinc-400 mt-1">CLI utilities & tools</p>
+                    <AppLane items={editorPickItems} />
+                </div>
+            )}
+
+            {/* 4. Beautiful Category Grid Explorer Section */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                    <div className="flex items-center justify-center p-2 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shadow-xs">
+                        <LayoutGrid size={16} />
+                    </div>
+                    <SectionHeader
+                        title="Browse by Category"
+                        subtitle="Explore cask packages and terminal formulae by theme"
+                    />
                 </div>
 
-                <div className="relative overflow-hidden rounded-2xl border border-zinc-100 dark:border-zinc-800/80 bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md p-4 transition-all duration-300 hover:border-cyan-500/30 hover:shadow-lg group">
-                    <div className="absolute right-2 top-2 text-cyan-500/10 transition-transform duration-300 group-hover:scale-110 pointer-events-none">
-                        <Layers size={40} />
-                    </div>
-                    <p className="text-[10px] sm:text-xs font-semibold text-zinc-400 uppercase tracking-wider">Total Casks</p>
-                    <h3 className="text-xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">
-                        {isLoadingCasks ? (
-                            <span className="inline-block h-8 w-16 bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded" />
-                        ) : (
-                            totalCasks.toLocaleString()
-                        )}
-                    </h3>
-                    <p className="text-[9px] sm:text-[10px] text-zinc-400 mt-1">Desktop apps</p>
-                </div>
-
-                <div className="relative overflow-hidden rounded-2xl border border-zinc-100 dark:border-zinc-800/80 bg-white/40 dark:bg-zinc-900/40 backdrop-blur-md p-4 transition-all duration-300 hover:border-purple-500/30 hover:shadow-lg group">
-                    <div className="absolute right-2 top-2 text-purple-500/10 transition-transform duration-300 group-hover:scale-110 pointer-events-none">
-                        <ShieldCheck size={40} />
-                    </div>
-                    <p className="text-[10px] sm:text-xs font-semibold text-zinc-400 uppercase tracking-wider">Open Source Ratio</p>
-                    <h3 className="text-xl sm:text-3xl font-extrabold text-zinc-900 dark:text-zinc-50 mt-1">
-                        {isLoadingCasks || isLoadingFormulae ? (
-                            <span className="inline-block h-8 w-16 bg-zinc-200 dark:bg-zinc-800 animate-pulse rounded" />
-                        ) : (
-                            `${fossPercentage}%`
-                        )}
-                    </h3>
-                    <p className="text-[9px] sm:text-[10px] text-zinc-400 mt-1">OSS license ratio</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {DISCOVER_CATEGORIES.map((cat) => {
+                        const Icon = cat.icon;
+                        return (
+                            <NavLink
+                                key={cat.id}
+                                to={`/all?category=${cat.id}&type=${cat.type}`}
+                                className={cn(
+                                    "group relative flex items-start gap-4 p-4 rounded-2xl border transition-all duration-300 bg-gradient-to-br shadow-xs hover:shadow-md hover:-translate-y-0.5",
+                                    cat.color
+                                )}
+                            >
+                                <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 shadow-2xs group-hover:scale-105 transition-transform duration-300">
+                                    <Icon size={18} />
+                                </div>
+                                <div className="min-w-0">
+                                    <h4 className="font-bold text-sm tracking-tight text-zinc-900 dark:text-zinc-100 leading-snug group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                        {cat.label}
+                                    </h4>
+                                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-normal mt-0.5 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                                        {cat.desc}
+                                    </p>
+                                    <span className="inline-flex items-center gap-1 mt-2 text-[9px] font-bold uppercase tracking-wider bg-white/50 dark:bg-zinc-950/30 px-2 py-0.5 rounded border border-zinc-200/50 dark:border-zinc-800/40">
+                                        {cat.type}
+                                    </span>
+                                </div>
+                            </NavLink>
+                        );
+                    })}
                 </div>
             </div>
 
-            {/* Recently Viewed Section */}
-            {recentItems && recentItems.length > 0 && (
-                <div className="section bg-gradient-to-br from-cyan-400/5 via-blue-500/3 to-transparent dark:from-cyan-500/5 dark:via-blue-600/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4 transition-all duration-300 hover:border-cyan-500/20 hover:shadow-lg">
-                    <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-2 gap-y-2">
-                        <div className="title flex items-center font-bold text-zinc-900 dark:text-zinc-200 text-lg">
-                            <span className="flex items-center justify-center bg-cyan-500/10 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 p-2 rounded-xl mr-3 shadow-sm">
-                                <Clock size={16} />
-                            </span>
-                            <span>Recently Viewed</span>
-                            <span className="ml-2 text-xs font-normal text-zinc-400 bg-zinc-100 dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">
-                                {recentItems.length} items
-                            </span>
+            {/* 5. Combined Personalized tabbed "My Shelf" Section */}
+            {hasShelfItems && (
+                <div className="section bg-gradient-to-br from-violet-500/5 via-fuchsia-500/3 to-transparent dark:from-violet-600/5 dark:via-fuchsia-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4.5 transition-all duration-300 hover:border-violet-500/20 hover:shadow-lg">
+                    <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-3.5 gap-y-3">
+                        <div className="flex items-center bg-gray-100/80 dark:bg-zinc-800/85 p-0.5 rounded-xl border border-zinc-200/30 dark:border-zinc-700/30 shadow-inner">
+                            {bookmarks.length > 0 && (
+                                <button
+                                    onClick={() => setShelfTab('bookmarks')}
+                                    className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                                        shelfTab === 'bookmarks' 
+                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]" 
+                                            : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                                    )}
+                                >
+                                    <Bookmark size={13} />
+                                    <span>Bookmarks</span>
+                                    <span className="text-[10px] opacity-70">({bookmarks.length})</span>
+                                </button>
+                            )}
+                            {recentItems.length > 0 && (
+                                <button
+                                    onClick={() => setShelfTab('recents')}
+                                    className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                                        shelfTab === 'recents' 
+                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]" 
+                                            : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+                                    )}
+                                >
+                                    <Clock size={13} />
+                                    <span>Recently Viewed</span>
+                                    <span className="text-[10px] opacity-70">({recentItems.length})</span>
+                                </button>
+                            )}
                         </div>
-                        <div className="action">
-                            <Button variant="ghost" size="sm" onClick={() => clearRecent()} className="hover:bg-cyan-500/10 hover:text-cyan-600 cursor-pointer">
-                                <BrushCleaning size={16} className="mr-2" /> 
-                                <span className="text-sm font-medium">Clear Recents</span>
+
+                        {shelfTab === 'recents' && recentItems.length > 0 && (
+                            <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={clearRecent} 
+                                className="text-zinc-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 text-xs shrink-0 cursor-pointer h-7"
+                            >
+                                <Trash2 size={13} className="mr-1.5" /> 
+                                <span>Clear History</span>
                             </Button>
-                        </div>
+                        )}
                     </div>
-                    <div className="contents mt-3">
-                        <RecentlyViewedSection />
+
+                    <div className="contents">
+                        {shelfTab === 'bookmarks' ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                {bookmarks.slice(0, 4).map((item) => (
+                                    <ItemCard key={item.id} item={item} enableBackground={false} />
+                                ))}
+                            </div>
+                        ) : (
+                            <RecentlyViewedSection maxVisible={4} />
+                        )}
                     </div>
                 </div>
             )}
 
-            {/* Bookmarks Section */}
-            <BookmarksSection maxItems={4} />
-
-            {/* Random Picks Section */}
-            <div className="section bg-gradient-to-br from-purple-400/5 via-pink-500/3 to-transparent dark:from-purple-600/5 dark:via-pink-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4 transition-all duration-300 hover:border-purple-500/20 hover:shadow-lg">
-                <div className="header flex justify-between flex-wrap gap-y-2 items-center text-md text-zinc-900 dark:text-zinc-300 mb-2">
-                    <div className="title flex items-center font-bold text-zinc-900 dark:text-zinc-200 text-lg">
-                        <span className="flex items-center justify-center bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 p-2 rounded-xl mr-3 shadow-sm">
-                            <Shuffle size={16} />
-                        </span>
-                        <span>Random Picks</span>
-                    </div>
-                    <div className="action flex gap-2">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={refreshRandomPicks}
-                            disabled={isRefreshing || isLoading}
-                            className="hover:bg-purple-500/10 hover:text-purple-600 cursor-pointer"
-                        >
-                            <span className="text-sm font-medium flex gap-2 items-center">
-                                <RefreshCcw size={16} className={isRefreshing ? "animate-spin" : ""} /> {isRefreshing ? "Refreshing..." : "Refresh"}
-                            </span>
-                        </Button>
-                        <NavLink to={`/all`}>
-                            <Button variant="ghost" size="sm" className="hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer">
-                                <Grid size={16} className="mr-2" /> <span className="text-sm font-medium">All Apps</span>
-                            </Button>
-                        </NavLink>
-                    </div>
-                </div>
-                <div className="contents mt-3">
-                    {isLoading && <p className="text-sm text-zinc-400">Loading random picks...</p>}
-                    {!isLoading && randomPicks.length > 0 && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                            {randomPicks.map((item) => (
-                                <ItemCard key={item.id} item={item} enableBackground={true} />
-                            ))}
-                        </div>
-                    )}
-                    {!isLoading && randomPicks.length === 0 && filteredData.length > 0 && (
-                        <p className="text-sm text-zinc-400">No items to display.</p>
-                    )}
-                </div>
-            </div>
-
-            {/* Analytics Section – Tabbed Leaders (30 Days) */}
+            {/* 6. Analytics installations tabbed section */}
             <div className="section bg-gradient-to-br from-amber-400/5 via-orange-500/3 to-transparent dark:from-amber-500/5 dark:via-orange-600/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4 transition-all duration-300 hover:border-amber-500/20 hover:shadow-lg">
                 <div className="header flex flex-col sm:flex-row sm:justify-between sm:items-center text-md text-zinc-900 dark:text-zinc-300 mb-3 gap-y-3">
                     <div className="title flex items-center font-bold text-zinc-900 dark:text-zinc-200 text-lg flex-wrap gap-x-2">
@@ -451,15 +457,6 @@ const Dashboard = () => {
                         </NavLink>
                     </div>
                 </div>
-            </div>
-
-            {/* Hit Counter Badge */}
-            <div className="hidden flex justify-center py-6 opacity-80 hover:opacity-100 transition-opacity">
-                <img
-                    src="https://hitscounter.dev/api/hit?url=https%3A%2F%2Famit9838.github.io%2Fbrewlens%2F&label=Visits&icon=person-walking&color=%23198754&message=&style=flat&tz=UTC"
-                    alt="Hit Counter"
-                    className="h-6"
-                />
             </div>
         </div>
     );
