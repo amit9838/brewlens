@@ -6,7 +6,6 @@ import { Button } from "../ui/Button";
 import { NavLink } from "react-router-dom";
 import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
 import { useBookmarks } from '../contexts/BookmarksContext';
-import { type BrewItem } from '../../types';
 import { 
     Clock, 
     TrendingUp, 
@@ -172,8 +171,15 @@ const Dashboard = () => {
         if (!caskAnalytics30d?.items || !caskData.length) return [];
         return caskAnalytics30d.items
             .slice(0, 12)
-            .map((item: any) => caskData.find(c => c.token === item.cask))
-            .filter(Boolean) as BrewItem[];
+            .map((item: any) => {
+                const found = caskData.find(c => c.token === item.cask);
+                if (!found) return null;
+                return {
+                    ...found,
+                    downloads: item.count,
+                };
+            })
+            .filter(Boolean) as any[];
     }, [caskAnalytics30d, caskData]);
 
     const editorPickItems = useMemo(() => {
@@ -256,9 +262,11 @@ const Dashboard = () => {
                         <SectionHeader
                             title="Trending Casks"
                             subtitle="Most installed cask packages in the last 30 days"
+                            action={<NavLink to="/analytics">View Trending →</NavLink>}
+                            className="flex-1"
                         />
                     </div>
-                    <AppLane items={trendingItems} />
+                    <AppLane items={trendingItems} variant="trending" />
                 </div>
             )}
 
@@ -271,9 +279,11 @@ const Dashboard = () => {
                         <SectionHeader
                             title="Editor's Picks"
                             subtitle="Hand-picked visual tools and terminal utilities"
+                            action={<NavLink to="/all">View All →</NavLink>}
+                            className="flex-1"
                         />
                     </div>
-                    <AppLane items={editorPickItems} />
+                    <AppLane items={editorPickItems} variant="editor" />
                 </div>
             )}
 
