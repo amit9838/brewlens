@@ -1,11 +1,14 @@
 import { ItemCard } from "../ItemCard";
 import RecentlyViewedSection from "../ui/RecentlyViewedStrip";
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useBrewData } from "../../hooks/useBrewData";
 import { Button } from "../ui/Button";
 import { NavLink } from "react-router-dom";
 import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
 import { useBookmarks } from '../contexts/BookmarksContext';
+import BookmarksModal from "../ui/BookmarksModal";
+import { useModal } from "../contexts/ModalContexts";
+
 import {
     Clock,
     Cpu,
@@ -106,6 +109,7 @@ const DISCOVER_CATEGORIES = [
 
 const Dashboard = () => {
     const { data: caskData = [] } = useBrewData("cask");
+    const { openModal, closeModal } = useModal();
 
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { bookmarks } = useBookmarks();
@@ -149,6 +153,9 @@ const Dashboard = () => {
         return caskData.filter(i => EDITORS_PICKS_TOKENS.includes(i.token));
     }, [caskData]);
 
+    const handleBookmarkView = useCallback(() =>
+        openModal(() => <BookmarksModal />, { closeOnBackdropClick: true, size: 'lg' }),
+        []);
 
     const hasShelfItems = bookmarks.length > 0 || recentItems.length > 0;
 
@@ -159,41 +166,6 @@ const Dashboard = () => {
             {caskData.length > 0 && (
                 <div className="w-full">
                     <FeaturedBanner items={caskData} />
-                </div>
-            )}
-
-            {/* 3. Curated App Lanes */}
-            {trendingItems.length > 0 && (
-                <div className="space-y-3 mt-6">
-                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center justify-center p-2 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 shadow-xs">
-                            <Flame size={16} />
-                        </div>
-                        <SectionHeader
-                            title="Trending Apps"
-                            subtitle="Most installed cask packages in the last 30 days"
-                            action={<NavLink to="/analytics">View Trending →</NavLink>}
-                            className="flex-1"
-                        />
-                    </div>
-                    <AppLane items={trendingItems} variant="trending" />
-                </div>
-            )}
-
-            {editorPickItems.length > 0 && (
-                <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center justify-center p-2 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 shadow-xs">
-                            <Sparkles size={16} />
-                        </div>
-                        <SectionHeader
-                            title="Editor's Picks"
-                            subtitle="Hand-picked visual tools and terminal utilities"
-                            action={<NavLink to="/all">View All →</NavLink>}
-                            className="flex-1"
-                        />
-                    </div>
-                    <AppLane items={editorPickItems} variant="editor" />
                 </div>
             )}
 
@@ -241,6 +213,41 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            {/* 3. Curated App Lanes */}
+            {trendingItems.length > 0 && (
+                <div className="space-y-3 mt-6">
+                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                        <div className="flex items-center justify-center p-2 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 shadow-xs">
+                            <Flame size={16} />
+                        </div>
+                        <SectionHeader
+                            title="Trending Apps"
+                            subtitle="Most installed cask packages in the last 30 days"
+                            action={<NavLink to="/analytics">View Trending →</NavLink>}
+                            className="flex-1"
+                        />
+                    </div>
+                    <AppLane items={trendingItems} variant="trending" />
+                </div>
+            )}
+
+            {editorPickItems.length > 0 && (
+                <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                        <div className="flex items-center justify-center p-2 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 shadow-xs">
+                            <Sparkles size={16} />
+                        </div>
+                        <SectionHeader
+                            title="Editor's Picks"
+                            subtitle="Hand-picked visual tools and terminal utilities"
+                            action={<NavLink to="/all">View All →</NavLink>}
+                            className="flex-1"
+                        />
+                    </div>
+                    <AppLane items={editorPickItems} variant="editor" />
+                </div>
+            )}
+
             {/* 5. Combined Personalized tabbed "My Shelf" Section */}
             {hasShelfItems && (
                 <div className="section bg-gradient-to-br from-violet-500/5 via-fuchsia-500/3 to-transparent dark:from-violet-600/5 dark:via-fuchsia-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4.5 transition-all duration-300 hover:border-violet-500/20 hover:shadow-lg">
@@ -287,17 +294,28 @@ const Dashboard = () => {
                                 <span>Clear History</span>
                             </Button>
                         )}
+                        {shelfTab === 'bookmarks' && bookmarks.length > 0 && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={handleBookmarkView}
+                                className="text-zinc-500 hover:text-red-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/20 text-xs shrink-0 cursor-pointer h-7"
+                            >
+                                <Bookmark size={13} className="mr-1.5" />
+                                <span>Bookmarks</span>
+                            </Button>
+                        )}
                     </div>
 
                     <div className="contents">
                         {shelfTab === 'bookmarks' ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                                {bookmarks.slice(0, 4).map((item) => (
+                                {bookmarks.slice(0, 8).map((item) => (
                                     <ItemCard key={item.id} item={item} enableBackground={false} />
                                 ))}
                             </div>
                         ) : (
-                            <RecentlyViewedSection maxVisible={4} />
+                            <RecentlyViewedSection maxVisible={12} />
                         )}
                     </div>
                 </div>

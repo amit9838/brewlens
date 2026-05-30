@@ -6,7 +6,7 @@
  */
 import { useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Flame } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, Download } from 'lucide-react';
 import { FaviconImage } from './FaviconImage';
 
 interface AppLaneProps {
@@ -39,7 +39,7 @@ function formatDownloads(raw: string | number | undefined): string | null {
 const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
     <NavLink
         to={`/${item.type}/${item.token}`}
-        className="group flex items-center gap-3 w-64 h-24 bg-white dark:bg-zinc-900/70 border border-zinc-100 dark:border-zinc-800/50 px-3 rounded-2xl hover:border-green-500 dark:hover:border-green-500 hover:shadow-md transition-all duration-200 shrink-0"
+        className="group flex items-center gap-3 w-64 h-24 bg-white dark:bg-zinc-900/70 border border-zinc-100 dark:border-zinc-800/50 px-3 rounded-2xl hover:border-green-500/40 dark:hover:border-green-500/30 hover:shadow-md transition-all duration-200 shrink-0"
     >
         {/* Icon — iOS-style rounded square */}
         <FaviconImage
@@ -62,10 +62,10 @@ const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
             </p>
 
             {/* Bottom row: version pill + badge */}
-            <div className="flex items-center gap-1.5 mt-1.5">
+            <div className="flex items-center gap-1.5 mt-1.5  ">
                 {item.version && (
                     <span className="bg-gray-100 dark:bg-zinc-700/30 px-2 py-0.5 text-[10px] rounded-full text-zinc-500 dark:text-zinc-400 shrink-0">
-                        v{item.version}
+                        v{item.version.slice(0, 16)}{item.version.length > 16 && '...'}
                     </span>
                 )}
                 {badge}
@@ -73,7 +73,7 @@ const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
         </div>
 
         {/* GET pill */}
-        <span className="text-[9px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 px-3 py-1 rounded-full transition-all duration-200 group-hover:bg-emerald-600 group-hover:text-white dark:group-hover:bg-emerald-500 shrink-0 select-none">
+        <span className="text-[9px] mb-10 font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 px-3 py-1 rounded-full transition-all duration-200 group-hover:bg-emerald-600 group-hover:text-white dark:group-hover:bg-emerald-500 shrink-0 select-none">
             GET
         </span>
     </NavLink>
@@ -105,24 +105,37 @@ export const AppLane: React.FC<AppLaneProps> = ({ items, variant, onSeeAll }) =>
             {/* Scrollable row */}
             <div
                 ref={scrollRef}
-                className="flex gap-3 overflow-x-auto pb-2 scroll-smooth snap-x snap-mandatory"
+                className="flex gap-3 overflow-x-auto pb- scroll-smooth snap-x snap-mandatory"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
-                {items.map(item => {
+                {items.map((item, idx) => {
                     let badge: React.ReactNode = null;
-
                     if (variant === 'trending') {
                         const count = formatDownloads(item.downloads);
                         if (count) {
-                            badge = (
-                                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-950/30 px-2 py-0.5 rounded-full border border-orange-100 dark:border-orange-900/30">
-                                    <Flame size={9} strokeWidth={2} />
-                                    {count}
-                                </span>
-                            );
+                            if (idx < 3) {
+                                // Top 3: flame + count with decreasing opacity
+                                const opacityClass =
+                                    idx === 0 ? 'opacity-100' : idx === 1 ? 'opacity-80' : 'opacity-60';
+                                badge = (
+                                    <span
+                                        className={`inline-flex items-center gap-1 text-[10px] font-semibold text-orange-600/80 dark:text-orange-400/60 bg-orange-50 dark:bg-orange-950/30 px-2 py-0.5 rounded-full border border-orange-100 dark:border-orange-900/30 ${opacityClass}`}
+                                    >
+                                        <Flame size={9} strokeWidth={2} />
+                                        {count}
+                                    </span>
+                                );
+                            } else {
+                                // Others: download icon only
+                                badge = (
+                                    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600/80 dark:text-blue-400/60 bg-blue-50 dark:bg-blue-950/30 px-2 py-0.5 rounded-full border border-blue-100 dark:border-blue-900/30">
+                                        <Download size={9} strokeWidth={2} />
+                                        {count}
+                                    </span>
+                                );
+                            }
                         }
                     }
-
 
                     return (
                         <div key={item.id} className="snap-start">
