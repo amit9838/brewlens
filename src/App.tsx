@@ -15,7 +15,7 @@ import Installation from './components/page/Installation';
 import FormulaeDetail from './components/page/FormulaeDetail';
 import About from './components/page/About';
 import Analytics from './components/page/Analytics';
-import Dashboard from './components/page/Dashboard';
+import Dashboard from './components/page/Explore';
 
 const queryClient = new QueryClient();
 

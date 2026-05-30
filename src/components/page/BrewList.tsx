@@ -282,7 +282,7 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
         if (deferredSearch) {
             const keywords = deferredSearch.toLowerCase().split(/[\s,]+/).filter(Boolean);
             if (keywords.length > 0) {
-                result = result.filter(item => 
+                result = result.filter(item =>
                     keywords.some(kw => item._searchString.includes(kw))
                 );
             }
@@ -331,7 +331,7 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
 
     const handleBookmarkView = useCallback(() =>
         openModal(() => <BookmarksModal />, { closeOnBackdropClick: true, size: 'lg' }),
-        []);
+    []);
 
     const activeCategory = categories.find(c => c.id === activeCategoryId);
     const ActiveCatIcon = activeCategory ? (CATEGORY_ICONS[activeCategory.id] || Home) : Home;
