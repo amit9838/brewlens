@@ -109,7 +109,7 @@ const DISCOVER_CATEGORIES = [
 
 const Dashboard = () => {
     const { data: caskData = [] } = useBrewData("cask");
-    const { openModal, closeModal } = useModal();
+    const { openModal } = useModal();
 
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { bookmarks } = useBookmarks();

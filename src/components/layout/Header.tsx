@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
-import { MenuIcon, Moon, Sun, Grid } from "lucide-react";
+import { MenuIcon, Moon, Sun, LayoutGrid, Compass } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/brewlens_logo.png";
 import { GlobalSearchBar } from "../ui/GlobalSearchBar";
@@ -62,9 +62,10 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
         <div className="ml-auto flex items-center gap-1 shrink-0">
           <NavLink to={onAllPage ? '/' : '/all'}>
             <Button variant="ghost" size="md">
-              <Grid size={18} />
+              
+              {onAllPage ? <Compass size={18}/> : <LayoutGrid size={18} />}
               <span className="hidden sm:inline ml-1 text-sm font-medium">
-                {onAllPage ? 'Discover' : 'All Apps'}
+                {onAllPage ? 'Explore' : 'All Apps'}
               </span>
             </Button>
           </NavLink>
