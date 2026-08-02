@@ -30,7 +30,7 @@ export const ItemListRow = memo(({ item, showDesc = true }: Props) => {
   return (
     <div
       onClick={handleRowClick}
-      className="flex items-center gap-3 px-3 py-2 rounded-xl border border-zinc-100 dark:border-zinc-800/50 bg-white dark:bg-zinc-900/70 hover:border-green-500/40 transition-all group cursor-pointer"
+      className="flex items-center gap-3 px-3 py-2 rounded-xl border border-zinc-200/60 dark:border-zinc-700/40 bg-zinc-50 dark:bg-zinc-800/50 hover:bg-white dark:hover:bg-zinc-800 transition-all group cursor-pointer"
     >
       {/* Favicon */}
       <div className="shrink-0">
@@ -44,7 +44,7 @@ export const ItemListRow = memo(({ item, showDesc = true }: Props) => {
 
       {/* Name + token (Flexible width) */}
       <div className="flex flex-col min-w-0 flex-1 sm:flex-none sm:w-48">
-        <span className="font-semibold text-sm text-gray-900 dark:text-zinc-100 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors leading-tight truncate">
+        <span className="font-medium text-sm text-gray-900 dark:text-zinc-100 transition-colors leading-tight truncate">
           {item.name}
         </span>
         <span className="text-[10px] text-gray-400 dark:text-zinc-500 font-mono truncate leading-tight mt-0.5">
@@ -63,8 +63,8 @@ export const ItemListRow = memo(({ item, showDesc = true }: Props) => {
       <div className="flex items-center justify-end gap-2">
         {/* Badges container */}
         <div className="flex items-center flex-wrap justify-end gap-1.5">
-          {/* Version (hidden on very small) */}
-          <span className="hidden sm:inline-block text-[10px] text-zinc-400 dark:text-zinc-500 font-mono bg-gray-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded truncate max-w-20">
+          {/* Version */}
+          <span className="inline-block text-[10px] text-zinc-400 dark:text-zinc-500 font-mono bg-white dark:bg-zinc-700/30 px-1.5 py-0.5 rounded truncate max-w-20">
             v{item.version}
           </span>
 
@@ -86,10 +86,10 @@ export const ItemListRow = memo(({ item, showDesc = true }: Props) => {
             </span>
           )}
 
-          {/* Type badge */}
+          {/* Type badge — hidden on mobile */}
           <span
             className={cn(
-              "text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded",
+              "hidden sm:inline-block text-[10px] font-semibold uppercase tracking-wide px-1.5 py-0.5 rounded",
               item.type === "cask"
                 ? "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400"
                 : "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400",

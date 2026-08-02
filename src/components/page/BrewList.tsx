@@ -37,7 +37,10 @@ import {
     GitBranch,
     Cpu,
     Network,
-    Hammer
+    Hammer,
+    Bot,
+    Gamepad2,
+    Gauge,
 } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
 import { Button } from "../ui/Button";
@@ -60,27 +63,10 @@ interface Props {
     setType: (type: BrewType) => void;
 }
 
-// Map category IDs to clean flat Lucide icons
-const CATEGORY_ICONS: Record<string, React.ComponentType<any>> = {
-    all: Home,
-    productivity: Zap,
-    'dev-tools': Terminal,
-    browsers: Globe,
-    design: Palette,
-    media: Film,
-    utilities: Sliders,
-    communication: MessageSquare,
-    security: Shield,
-    fonts: Type,
-
-    // Formulae categories
-    languages: Code,
-    databases: Database,
-    devops: Rocket,
-    git: GitBranch,
-    'cli-tools': Cpu,
-    networking: Network,
-    'build-tools': Hammer,
+// Icon component resolution from category icon names
+const ICON_MAP: Record<string, React.ComponentType<any>> = {
+    Home, Zap, Terminal, Globe, Palette, Film, Sliders, MessageSquare, Shield, Type,
+    Bot, Gamepad2, Code, Database, Rocket, GitBranch, Cpu, Network, Hammer, Gauge,
 };
 
 // ─── Category Tab Bar ─────────────────────────────────────────────────────────
@@ -92,7 +78,7 @@ const CategoryTabs: React.FC<{
     <div className="relative">
         <div className="flex gap-1 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
             {categories.map(cat => {
-                const IconComponent = CATEGORY_ICONS[cat.id] || Home;
+                const IconComponent = ICON_MAP[cat.icon] || Home;
                 const isActive = activeId === cat.id;
                 return (
                     <button
@@ -334,7 +320,7 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
     []);
 
     const activeCategory = categories.find(c => c.id === activeCategoryId);
-    const ActiveCatIcon = activeCategory ? (CATEGORY_ICONS[activeCategory.id] || Home) : Home;
+    const ActiveCatIcon = activeCategory ? (ICON_MAP[activeCategory.icon] || Home) : Home;
 
     // ─── Render ───────────────────────────────────────────────────────────────
     return (

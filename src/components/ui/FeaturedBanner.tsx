@@ -4,30 +4,24 @@
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FEATURED_CASKS, CASK_CATEGORIES, getCategoryForToken } from '../../data/categories';
+import { FEATURED_CASKS } from '../../data/curated';
+import { CASK_CATEGORIES, getCategoryForToken, getCategoryStyle } from '../../data/categories';
 import type { BrewItem } from '../../types';
 import { Button } from './Button';
 import {
     ChevronLeft, ChevronRight, Terminal, Zap, Palette, Globe,
-    Film, Sliders, MessageSquare, Shield, Type, Home, Download
+    Film, Sliders, MessageSquare, Shield, Type, Home, Download,
+    Bot, Gamepad2,
 } from 'lucide-react';
 
 interface FeaturedBannerProps {
     items: BrewItem[];
 }
 
-// Consolidated style map: grouped colors for leaner code while supporting light/dark modes
-const CATEGORY_STYLE_MAP: Record<string, { icon: React.ElementType, color: string, bg: string }> = {
-    'dev-tools': { icon: Terminal, color: 'text-indigo-600 dark:text-indigo-400', bg: 'bg-indigo-500/10 border-indigo-500/20' },
-    productivity: { icon: Zap, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/20' },
-    design: { icon: Palette, color: 'text-pink-600 dark:text-pink-400', bg: 'bg-pink-500/10 border-pink-500/20' },
-    browsers: { icon: Globe, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-500/10 border-blue-500/20' },
-    media: { icon: Film, color: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10 border-rose-500/20' },
-    utilities: { icon: Sliders, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-500/10 border-purple-500/20' },
-    communication: { icon: MessageSquare, color: 'text-teal-600 dark:text-teal-400', bg: 'bg-teal-500/10 border-teal-500/20' },
-    security: { icon: Shield, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
-    fonts: { icon: Type, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
-    all: { icon: Home, color: 'text-zinc-600 dark:text-zinc-400', bg: 'bg-zinc-500/10 border-zinc-500/20' }
+// Lucide icon resolution from icon name strings
+const ICON_MAP: Record<string, React.ElementType> = {
+    Home, Zap, Terminal, Globe, Palette, Film, Sliders, MessageSquare, Shield, Type,
+    Bot, Gamepad2,
 };
 
 export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
@@ -69,9 +63,11 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                 const sUrl = `https://www.google.com/s2/favicons?domain=${si.homepage}&sz=128`;
 
                 const catId = getCategoryForToken(si, CASK_CATEGORIES);
-                const catLabel = CASK_CATEGORIES.find(c => c.id === catId)?.label || 'Featured';
-                const style = CATEGORY_STYLE_MAP[catId] || CATEGORY_STYLE_MAP.all;
-                const CatIcon = style.icon;
+                const cat = CASK_CATEGORIES.find(c => c.id === catId);
+                const catLabel = cat?.label || 'Featured';
+                const catColor = cat?.color || 'zinc';
+                const styleClasses = getCategoryStyle(catColor);
+                const CatIcon = ICON_MAP[cat?.icon || 'Home'] || Home;
 
                 return (
                     <div
@@ -107,7 +103,7 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
 
                                 {/* Text */}
                                 <div className="flex-1 min-w-0">
-                                    <span className={`inline-block text-[10px] font-bold tracking-widest uppercase mb-2 px-2.5 py-0.5 rounded-full border ${style.color} ${style.bg}`}>
+                                    <span className={`inline-block text-[10px] font-bold tracking-widest uppercase mb-2 px-2.5 py-0.5 rounded-full border ${styleClasses.text} ${styleClasses.bannerBg} ${styleClasses.bannerBorder}`}>
                                         {catLabel}
                                     </span>
                                     <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white truncate leading-tight mb-1 flex items-center gap-2">
@@ -131,7 +127,7 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
 
                             {/* Right: Artistic oversized category icon */}
                             <div 
-                                className={`hidden md:flex shrink-0 items-center justify-center pointer-events-none select-none absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 opacity-5 dark:opacity-[0.07] ${style.color}`}
+                                className={`hidden md:flex shrink-0 items-center justify-center pointer-events-none select-none absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 opacity-5 dark:opacity-[0.07] ${styleClasses.text}`}
                                 style={{ transform: 'translateY(-30%) translateX(20%) rotate(15deg)' }}
                             >
                                 <CatIcon size={120} strokeWidth={0.6} />

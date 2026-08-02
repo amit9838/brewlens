@@ -23,14 +23,26 @@ import {
     Rocket,
     Bookmark,
     Trash2,
-    LayoutGrid
+    LayoutGrid,
+    Film,
+    Sliders,
+    MessageSquare,
+    Shield,
+    Type,
+    Bot,
+    Gamepad2,
+    Network,
+    Hammer,
+    GitBranch,
+    Gauge,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "../../lib/utils";
 import { FeaturedBanner } from "../ui/FeaturedBanner";
 import { AppLane } from "../ui/AppLane";
 import { SectionHeader } from "../ui/SectionHeader";
-import { EDITORS_PICKS_TOKENS } from "../../data/categories";
+import { EDITORS_PICKS_TOKENS } from "../../data/curated";
+import { CASK_CATEGORIES, FORMULA_CATEGORIES, getCategoryStyle } from "../../data/categories";
 
 const fetchCaskAnalytics = async (period: string = '30d') => {
     const res = await fetch(`https://formulae.brew.sh/api/analytics/cask-install/${period}.json`);
@@ -38,78 +50,69 @@ const fetchCaskAnalytics = async (period: string = '30d') => {
     return res.json();
 };
 
+// Lucide icon resolution from category icon name strings
+const ICON_MAP: Record<string, React.ComponentType<any>> = {
+    Terminal, Zap, Palette, Globe, Film, Sliders, MessageSquare, Shield, Type,
+    Bot, Gamepad2, Code, Database, Rocket, GitBranch, Cpu, Network, Hammer, Gauge,
+};
 
-// Curated grid categories definitions
-const DISCOVER_CATEGORIES = [
-    {
-        id: 'dev-tools',
-        label: 'Developer Tools',
-        desc: 'Terminals, IDEs, compilers & databases',
-        icon: Terminal,
-        color: 'from-indigo-500/10 to-blue-500/10 hover:from-indigo-500/15 hover:to-blue-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/20 hover:border-indigo-500/40 dark:hover:border-indigo-400/40',
-        type: 'cask',
-    },
-    {
-        id: 'productivity',
-        label: 'Productivity',
-        desc: 'Notes, task organizers & calendar apps',
-        icon: Zap,
-        color: 'from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/15 hover:to-teal-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:border-emerald-500/40 dark:hover:border-emerald-400/40',
-        type: 'cask',
-    },
-    {
-        id: 'design',
-        label: 'Design & Creative',
-        desc: 'Photo editors, vector tools & 3D art',
-        icon: Palette,
-        color: 'from-pink-500/10 to-rose-500/10 hover:from-pink-500/15 hover:to-rose-500/15 text-pink-600 dark:text-pink-400 border-pink-500/20 hover:border-pink-500/40 dark:hover:border-pink-400/40',
-        type: 'cask',
-    },
-    {
-        id: 'browsers',
-        label: 'Web Browsers',
-        desc: 'Fast, secure & modern browser options',
-        icon: Globe,
-        color: 'from-blue-500/10 to-cyan-500/10 hover:from-blue-500/15 hover:to-cyan-500/15 text-blue-600 dark:text-blue-400 border-blue-500/20 hover:border-blue-500/40 dark:hover:border-blue-400/40',
-        type: 'cask',
-    },
-    {
-        id: 'languages',
-        label: 'Programming Languages',
-        desc: 'Compilers, package managers & runtimes',
-        icon: Code,
-        color: 'from-cyan-500/10 to-teal-500/10 hover:from-cyan-500/15 hover:to-teal-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/20 hover:border-cyan-500/40 dark:hover:border-cyan-400/40',
-        type: 'formula',
-    },
-    {
-        id: 'databases',
-        label: 'Databases & Servers',
-        desc: 'SQL, Document caches & messaging queues',
-        icon: Database,
-        color: 'from-amber-500/10 to-orange-500/10 hover:from-amber-500/15 hover:to-orange-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:border-amber-500/40 dark:hover:border-amber-400/40',
-        type: 'formula',
-    },
-    {
-        id: 'devops',
-        label: 'DevOps & Containers',
-        desc: 'Docker, Kubernetes, AWS & cloud engines',
-        icon: Rocket,
-        color: 'from-rose-500/10 to-orange-500/10 hover:from-rose-500/15 hover:to-orange-500/15 text-rose-600 dark:text-rose-400 border-rose-500/20 hover:border-rose-500/40 dark:hover:border-rose-400/40',
-        type: 'formula',
-    },
-    {
-        id: 'cli-tools',
-        label: 'CLI Tools & Utilities',
-        desc: 'Terminal shell enhancements & helper search tools',
-        icon: Cpu,
-        color: 'from-violet-500/10 to-purple-500/10 hover:from-violet-500/15 hover:to-purple-500/15 text-violet-600 dark:text-violet-400 border-violet-500/20 hover:border-violet-500/40 dark:hover:border-violet-400/40',
-        type: 'formula',
-    },
-];
+// Generate discover grid categories from category definitions.
+// Filters out 'all' and combines cask + formula non-overlapping categories.
+// Priority casks, then formulae — type is inferred from which array the cat lives in.
+function buildDiscoverCategories(): Array<{
+    id: string;
+    label: string;
+    desc: string;
+    icon: React.ComponentType<any>;
+    type: 'cask' | 'formula';
+    surface: string;
+    hoverSurface: string;
+    border: string;
+    hoverBorder: string;
+    iconBg: string;
+    iconColor: string;
+    badgeBg: string;
+    badgeColor: string;
+}> {
+    const seen = new Set<string>();
+    const result: ReturnType<typeof buildDiscoverCategories> = [];
+
+    for (const cat of [...CASK_CATEGORIES, ...FORMULA_CATEGORIES]) {
+        if (cat.id === 'all' || seen.has(cat.id)) continue;
+        seen.add(cat.id);
+
+        const icon = ICON_MAP[cat.icon];
+        if (!icon) continue; // skip categories whose icon isn't mapped yet
+
+        const s = getCategoryStyle(cat.color);
+        const type: 'cask' | 'formula' = CASK_CATEGORIES.some(c => c.id === cat.id) ? 'cask' : 'formula';
+
+        result.push({
+            id: cat.id,
+            label: cat.label,
+            desc: cat.description || `${cat.label} packages`,
+            icon,
+            type,
+            surface: s.surface,
+            hoverSurface: s.hoverSurface,
+            border: s.border,
+            hoverBorder: s.hoverBorder,
+            iconBg: s.iconBg,
+            iconColor: s.iconColor,
+            badgeBg: s.badgeBg,
+            badgeColor: s.badgeColor,
+        });
+    }
+
+    return result;
+}
 
 const Dashboard = () => {
     const { data: caskData = [] } = useBrewData("cask");
     const { openModal } = useModal();
+
+    // Build discover categories once from the canonical definitions
+    const DISCOVER_CATEGORIES = useMemo(() => buildDiscoverCategories(), []);
 
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { bookmarks } = useBookmarks();
@@ -172,8 +175,8 @@ const Dashboard = () => {
             {/* 4. Beautiful Category Grid Explorer Section */}
             <div className="space-y-4">
                 <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                    <div className="flex items-center justify-center p-2 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shadow-xs">
-                        <LayoutGrid size={16} />
+                    <div className="flex items-center justify-center p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+                        <LayoutGrid size={18} strokeWidth={1.8} />
                     </div>
                     <SectionHeader
                         title="Browse by Category"
@@ -181,7 +184,7 @@ const Dashboard = () => {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     {DISCOVER_CATEGORIES.map((cat) => {
                         const Icon = cat.icon;
                         return (
@@ -189,21 +192,36 @@ const Dashboard = () => {
                                 key={cat.id}
                                 to={`/all?category=${cat.id}&type=${cat.type}`}
                                 className={cn(
-                                    "group relative flex items-start gap-4 p-4 rounded-2xl border transition-all duration-300 bg-gradient-to-br shadow-xs hover:shadow-md hover:-translate-y-0.5",
-                                    cat.color
+                                    "group relative flex items-center sm:items-start gap-3 p-3 sm:p-4 rounded-2xl overflow-hidden",
+                                    "transition-all duration-300 ease-out",
+                                    cat.border,
+                                    cat.hoverBorder,
+                                    cat.surface,
+                                    cat.hoverSurface
                                 )}
                             >
-                                <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 shadow-2xs group-hover:scale-105 transition-transform duration-300">
-                                    <Icon size={18} />
+                                {/* Light overlay on hover */}
+                                <div className="absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                                <div className={cn(
+                                    "flex items-center justify-center shrink-0",
+                                    "w-9 h-9 rounded-lg",
+                                    "transition-transform duration-300 group-hover:scale-105",
+                                    cat.iconBg,
+                                    cat.iconColor
+                                )}>
+                                    <Icon size={18} strokeWidth={1.8} />
                                 </div>
-                                <div className="min-w-0">
-                                    <h4 className="font-bold text-sm tracking-tight text-zinc-900 dark:text-zinc-100 leading-snug group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 leading-snug">
                                         {cat.label}
                                     </h4>
-                                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-normal mt-0.5 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
-                                        {cat.desc}
-                                    </p>
-                                    <span className="inline-flex items-center gap-1 mt-2 text-[9px] font-bold uppercase tracking-wider bg-white/50 dark:bg-zinc-950/30 px-2 py-0.5 rounded border border-zinc-200/50 dark:border-zinc-800/40">
+                                    <span className={cn(
+                                        "inline-flex items-center mt-0 sm:mt-2",
+                                        "text-[9px] font-semibold uppercase tracking-wide",
+                                        "px-2 py-0.5 rounded-full",
+                                        cat.badgeBg,
+                                        cat.badgeColor
+                                    )}>
                                         {cat.type}
                                     </span>
                                 </div>
@@ -217,8 +235,8 @@ const Dashboard = () => {
             {trendingItems.length > 0 && (
                 <div className="space-y-3 mt-6">
                     <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center justify-center p-2 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 shadow-xs">
-                            <Flame size={16} />
+                        <div className="flex items-center justify-center p-2.5 rounded-xl bg-orange-50 dark:bg-orange-500/15 text-orange-600 dark:text-orange-400">
+                            <Flame size={18} strokeWidth={1.8} />
                         </div>
                         <SectionHeader
                             title="Trending Apps"
@@ -234,8 +252,8 @@ const Dashboard = () => {
             {editorPickItems.length > 0 && (
                 <div className="space-y-3">
                     <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center justify-center p-2 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 shadow-xs">
-                            <Sparkles size={16} />
+                        <div className="flex items-center justify-center p-2.5 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                            <Sparkles size={18} strokeWidth={1.8} />
                         </div>
                         <SectionHeader
                             title="Editor's Picks"
@@ -250,7 +268,17 @@ const Dashboard = () => {
 
             {/* 5. Combined Personalized tabbed "My Shelf" Section */}
             {hasShelfItems && (
-                <div className="section bg-gradient-to-br from-violet-500/5 via-fuchsia-500/3 to-transparent dark:from-violet-600/5 dark:via-fuchsia-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4.5 transition-all duration-300 hover:border-violet-500/20 hover:shadow-lg">
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                        <div className="flex items-center justify-center p-2.5 rounded-xl bg-violet-50 dark:bg-violet-500/15 text-violet-600 dark:text-violet-400">
+                            <Bookmark size={18} strokeWidth={1.8} />
+                        </div>
+                        <SectionHeader
+                            title="My Shelf"
+                            subtitle="Your saved bookmarks and recently viewed items"
+                        />
+                    </div>
+                <div className="section bg-gradient-to-br from-violet-500/5 via-fuchsia-500/3 to-transparent dark:from-violet-600/5 dark:via-fuchsia-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4.5 transition-all duration-300 hover:border-violet-500/20">
                     <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-3.5 gap-y-3">
                         <div className="flex items-center bg-gray-100/80 dark:bg-zinc-800/85 p-0.5 rounded-xl border border-zinc-200/30 dark:border-zinc-700/30 shadow-inner">
                             {bookmarks.length > 0 && (
@@ -258,7 +286,7 @@ const Dashboard = () => {
                                     onClick={() => setShelfTab('bookmarks')}
                                     className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
                                         shelfTab === 'bookmarks'
-                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]"
+                                            ? "bg-white dark:bg-zinc-700 text-violet-600 dark:text-violet-400 scale-[1.02]"
                                             : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                                     )}
                                 >
@@ -272,7 +300,7 @@ const Dashboard = () => {
                                     onClick={() => setShelfTab('recents')}
                                     className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
                                         shelfTab === 'recents'
-                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]"
+                                            ? "bg-white dark:bg-zinc-700 text-violet-600 dark:text-violet-400 scale-[1.02]"
                                             : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                                     )}
                                 >
@@ -318,6 +346,7 @@ const Dashboard = () => {
                             <RecentlyViewedSection maxVisible={12} />
                         )}
                     </div>
+                </div>
                 </div>
             )}
             {/* Hit Counter Badge */}
