@@ -38,14 +38,15 @@ const fetchCaskAnalytics = async (period: string = '30d') => {
     return res.json();
 };
 
-// Curated grid categories with uniform accent gradient across each card
+// Curated grid categories with flat accent backgrounds
 const DISCOVER_CATEGORIES = [
     {
         id: 'dev-tools',
         label: 'Developer Tools',
         desc: 'Terminals, IDEs, compilers & databases',
         icon: Terminal,
-        surface: 'from-indigo-100/95 to-indigo-50/80 dark:from-indigo-500/18 dark:to-indigo-400/8',
+        surface: 'bg-indigo-100 dark:bg-indigo-500/12',
+        hoverSurface: 'group-hover:bg-indigo-200 dark:group-hover:bg-indigo-500/20',
         border: 'border-indigo-200/60 dark:border-indigo-500/20',
         hoverBorder: 'hover:border-indigo-300/70 dark:hover:border-indigo-400/40',
         iconBg: 'bg-indigo-100 dark:bg-indigo-500/20',
@@ -59,7 +60,8 @@ const DISCOVER_CATEGORIES = [
         label: 'Productivity',
         desc: 'Notes, task organizers & calendar apps',
         icon: Zap,
-        surface: 'from-emerald-100/95 to-emerald-50/80 dark:from-emerald-500/18 dark:to-emerald-400/8',
+        surface: 'bg-emerald-100 dark:bg-emerald-500/12',
+        hoverSurface: 'group-hover:bg-emerald-200 dark:group-hover:bg-emerald-500/20',
         border: 'border-emerald-200/60 dark:border-emerald-500/20',
         hoverBorder: 'hover:border-emerald-300/70 dark:hover:border-emerald-400/40',
         iconBg: 'bg-emerald-100 dark:bg-emerald-500/20',
@@ -73,7 +75,8 @@ const DISCOVER_CATEGORIES = [
         label: 'Design & Creative',
         desc: 'Photo editors, vector tools & 3D art',
         icon: Palette,
-        surface: 'from-pink-100/95 to-pink-50/80 dark:from-pink-500/18 dark:to-pink-400/8',
+        surface: 'bg-pink-100 dark:bg-pink-500/12',
+        hoverSurface: 'group-hover:bg-pink-200 dark:group-hover:bg-pink-500/20',
         border: 'border-pink-200/60 dark:border-pink-500/20',
         hoverBorder: 'hover:border-pink-300/70 dark:hover:border-pink-400/40',
         iconBg: 'bg-pink-100 dark:bg-pink-500/20',
@@ -87,7 +90,8 @@ const DISCOVER_CATEGORIES = [
         label: 'Web Browsers',
         desc: 'Fast, secure & modern browser options',
         icon: Globe,
-        surface: 'from-blue-100/95 to-blue-50/80 dark:from-blue-500/18 dark:to-blue-400/8',
+        surface: 'bg-blue-100 dark:bg-blue-500/12',
+        hoverSurface: 'group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20',
         border: 'border-blue-200/60 dark:border-blue-500/20',
         hoverBorder: 'hover:border-blue-300/70 dark:hover:border-blue-400/40',
         iconBg: 'bg-blue-100 dark:bg-blue-500/20',
@@ -101,7 +105,8 @@ const DISCOVER_CATEGORIES = [
         label: 'Programming Languages',
         desc: 'Compilers, package managers & runtimes',
         icon: Code,
-        surface: 'from-cyan-100/95 to-cyan-50/80 dark:from-cyan-500/18 dark:to-cyan-400/8',
+        surface: 'bg-cyan-100 dark:bg-cyan-500/12',
+        hoverSurface: 'group-hover:bg-cyan-200 dark:group-hover:bg-cyan-500/20',
         border: 'border-cyan-200/60 dark:border-cyan-500/20',
         hoverBorder: 'hover:border-cyan-300/70 dark:hover:border-cyan-400/40',
         iconBg: 'bg-cyan-100 dark:bg-cyan-500/20',
@@ -115,7 +120,8 @@ const DISCOVER_CATEGORIES = [
         label: 'Databases & Servers',
         desc: 'SQL, Document caches & messaging queues',
         icon: Database,
-        surface: 'from-amber-100/95 to-amber-50/80 dark:from-amber-500/18 dark:to-amber-400/8',
+        surface: 'bg-amber-100 dark:bg-amber-500/12',
+        hoverSurface: 'group-hover:bg-amber-200 dark:group-hover:bg-amber-500/20',
         border: 'border-amber-200/60 dark:border-amber-500/20',
         hoverBorder: 'hover:border-amber-300/70 dark:hover:border-amber-400/40',
         iconBg: 'bg-amber-100 dark:bg-amber-500/20',
@@ -129,7 +135,8 @@ const DISCOVER_CATEGORIES = [
         label: 'DevOps & Containers',
         desc: 'Docker, Kubernetes, AWS & cloud engines',
         icon: Rocket,
-        surface: 'from-rose-100/95 to-rose-50/80 dark:from-rose-500/18 dark:to-rose-400/8',
+        surface: 'bg-rose-100 dark:bg-rose-500/12',
+        hoverSurface: 'group-hover:bg-rose-200 dark:group-hover:bg-rose-500/20',
         border: 'border-rose-200/60 dark:border-rose-500/20',
         hoverBorder: 'hover:border-rose-300/70 dark:hover:border-rose-400/40',
         iconBg: 'bg-rose-100 dark:bg-rose-500/20',
@@ -143,7 +150,8 @@ const DISCOVER_CATEGORIES = [
         label: 'CLI Tools & Utilities',
         desc: 'Terminal shell enhancements & helper search tools',
         icon: Cpu,
-        surface: 'from-violet-100/95 to-violet-50/80 dark:from-violet-500/18 dark:to-violet-400/8',
+        surface: 'bg-violet-100 dark:bg-violet-500/12',
+        hoverSurface: 'group-hover:bg-violet-200 dark:group-hover:bg-violet-500/20',
         border: 'border-violet-200/60 dark:border-violet-500/20',
         hoverBorder: 'hover:border-violet-300/70 dark:hover:border-violet-400/40',
         iconBg: 'bg-violet-100 dark:bg-violet-500/20',
@@ -236,16 +244,16 @@ const Dashboard = () => {
                                 key={cat.id}
                                 to={`/all?category=${cat.id}&type=${cat.type}`}
                                 className={cn(
-                                    "group flex items-start gap-4 p-5 rounded-2xl",
-                                    "bg-gradient-to-br",
-                                    "shadow-sm hover:shadow-md",
+                                    "group relative flex items-start gap-4 p-5 rounded-2xl overflow-hidden",
                                     "transition-all duration-300 ease-out",
-                                    "hover:-translate-y-0.5 active:translate-y-0",
                                     cat.border,
                                     cat.hoverBorder,
-                                    cat.surface
+                                    cat.surface,
+                                    cat.hoverSurface
                                 )}
                             >
+                                {/* Light overlay on hover */}
+                                <div className="absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                                 <div className={cn(
                                     "flex items-center justify-center shrink-0",
                                     "w-11 h-11 rounded-xl",
@@ -325,7 +333,7 @@ const Dashboard = () => {
                             subtitle="Your saved bookmarks and recently viewed items"
                         />
                     </div>
-                <div className="section bg-gradient-to-br from-violet-500/5 via-fuchsia-500/3 to-transparent dark:from-violet-600/5 dark:via-fuchsia-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4.5 transition-all duration-300 hover:border-violet-500/20 hover:shadow-lg">
+                <div className="section bg-gradient-to-br from-violet-500/5 via-fuchsia-500/3 to-transparent dark:from-violet-600/5 dark:via-fuchsia-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4.5 transition-all duration-300 hover:border-violet-500/20">
                     <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-3.5 gap-y-3">
                         <div className="flex items-center bg-gray-100/80 dark:bg-zinc-800/85 p-0.5 rounded-xl border border-zinc-200/30 dark:border-zinc-700/30 shadow-inner">
                             {bookmarks.length > 0 && (
@@ -333,7 +341,7 @@ const Dashboard = () => {
                                     onClick={() => setShelfTab('bookmarks')}
                                     className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
                                         shelfTab === 'bookmarks'
-                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]"
+                                            ? "bg-white dark:bg-zinc-700 text-violet-600 dark:text-violet-400 scale-[1.02]"
                                             : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                                     )}
                                 >
@@ -347,7 +355,7 @@ const Dashboard = () => {
                                     onClick={() => setShelfTab('recents')}
                                     className={cn("flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
                                         shelfTab === 'recents'
-                                            ? "bg-white dark:bg-zinc-700 shadow-md text-violet-600 dark:text-violet-400 scale-[1.02]"
+                                            ? "bg-white dark:bg-zinc-700 text-violet-600 dark:text-violet-400 scale-[1.02]"
                                             : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
                                     )}
                                 >
