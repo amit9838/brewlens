@@ -192,7 +192,7 @@ const Dashboard = () => {
                                 key={cat.id}
                                 to={`/all?category=${cat.id}&type=${cat.type}`}
                                 className={cn(
-                                    "group relative flex items-center sm:items-start gap-3 p-4 rounded-2xl overflow-hidden",
+                                    "group relative flex items-center sm:items-start gap-3 p-3 sm:p-4 rounded-2xl overflow-hidden",
                                     "transition-all duration-300 ease-out",
                                     cat.border,
                                     cat.hoverBorder,
