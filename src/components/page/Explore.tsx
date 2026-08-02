@@ -38,15 +38,20 @@ const fetchCaskAnalytics = async (period: string = '30d') => {
     return res.json();
 };
 
-
-// Curated grid categories definitions
+// Curated grid categories with uniform accent gradient across each card
 const DISCOVER_CATEGORIES = [
     {
         id: 'dev-tools',
         label: 'Developer Tools',
         desc: 'Terminals, IDEs, compilers & databases',
         icon: Terminal,
-        color: 'from-indigo-500/10 to-blue-500/10 hover:from-indigo-500/15 hover:to-blue-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-500/20 hover:border-indigo-500/40 dark:hover:border-indigo-400/40',
+        surface: 'from-indigo-100/95 to-indigo-50/80 dark:from-indigo-500/18 dark:to-indigo-400/8',
+        border: 'border-indigo-200/60 dark:border-indigo-500/20',
+        hoverBorder: 'hover:border-indigo-300/70 dark:hover:border-indigo-400/40',
+        iconBg: 'bg-indigo-100 dark:bg-indigo-500/20',
+        iconColor: 'text-indigo-600 dark:text-indigo-400',
+        badgeBg: 'bg-indigo-100 dark:bg-indigo-400/15',
+        badgeColor: 'text-indigo-700 dark:text-indigo-300',
         type: 'cask',
     },
     {
@@ -54,7 +59,13 @@ const DISCOVER_CATEGORIES = [
         label: 'Productivity',
         desc: 'Notes, task organizers & calendar apps',
         icon: Zap,
-        color: 'from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/15 hover:to-teal-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 hover:border-emerald-500/40 dark:hover:border-emerald-400/40',
+        surface: 'from-emerald-100/95 to-emerald-50/80 dark:from-emerald-500/18 dark:to-emerald-400/8',
+        border: 'border-emerald-200/60 dark:border-emerald-500/20',
+        hoverBorder: 'hover:border-emerald-300/70 dark:hover:border-emerald-400/40',
+        iconBg: 'bg-emerald-100 dark:bg-emerald-500/20',
+        iconColor: 'text-emerald-600 dark:text-emerald-400',
+        badgeBg: 'bg-emerald-100 dark:bg-emerald-400/15',
+        badgeColor: 'text-emerald-700 dark:text-emerald-300',
         type: 'cask',
     },
     {
@@ -62,7 +73,13 @@ const DISCOVER_CATEGORIES = [
         label: 'Design & Creative',
         desc: 'Photo editors, vector tools & 3D art',
         icon: Palette,
-        color: 'from-pink-500/10 to-rose-500/10 hover:from-pink-500/15 hover:to-rose-500/15 text-pink-600 dark:text-pink-400 border-pink-500/20 hover:border-pink-500/40 dark:hover:border-pink-400/40',
+        surface: 'from-pink-100/95 to-pink-50/80 dark:from-pink-500/18 dark:to-pink-400/8',
+        border: 'border-pink-200/60 dark:border-pink-500/20',
+        hoverBorder: 'hover:border-pink-300/70 dark:hover:border-pink-400/40',
+        iconBg: 'bg-pink-100 dark:bg-pink-500/20',
+        iconColor: 'text-pink-600 dark:text-pink-400',
+        badgeBg: 'bg-pink-100 dark:bg-pink-400/15',
+        badgeColor: 'text-pink-700 dark:text-pink-300',
         type: 'cask',
     },
     {
@@ -70,7 +87,13 @@ const DISCOVER_CATEGORIES = [
         label: 'Web Browsers',
         desc: 'Fast, secure & modern browser options',
         icon: Globe,
-        color: 'from-blue-500/10 to-cyan-500/10 hover:from-blue-500/15 hover:to-cyan-500/15 text-blue-600 dark:text-blue-400 border-blue-500/20 hover:border-blue-500/40 dark:hover:border-blue-400/40',
+        surface: 'from-blue-100/95 to-blue-50/80 dark:from-blue-500/18 dark:to-blue-400/8',
+        border: 'border-blue-200/60 dark:border-blue-500/20',
+        hoverBorder: 'hover:border-blue-300/70 dark:hover:border-blue-400/40',
+        iconBg: 'bg-blue-100 dark:bg-blue-500/20',
+        iconColor: 'text-blue-600 dark:text-blue-400',
+        badgeBg: 'bg-blue-100 dark:bg-blue-400/15',
+        badgeColor: 'text-blue-700 dark:text-blue-300',
         type: 'cask',
     },
     {
@@ -78,7 +101,13 @@ const DISCOVER_CATEGORIES = [
         label: 'Programming Languages',
         desc: 'Compilers, package managers & runtimes',
         icon: Code,
-        color: 'from-cyan-500/10 to-teal-500/10 hover:from-cyan-500/15 hover:to-teal-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/20 hover:border-cyan-500/40 dark:hover:border-cyan-400/40',
+        surface: 'from-cyan-100/95 to-cyan-50/80 dark:from-cyan-500/18 dark:to-cyan-400/8',
+        border: 'border-cyan-200/60 dark:border-cyan-500/20',
+        hoverBorder: 'hover:border-cyan-300/70 dark:hover:border-cyan-400/40',
+        iconBg: 'bg-cyan-100 dark:bg-cyan-500/20',
+        iconColor: 'text-cyan-600 dark:text-cyan-400',
+        badgeBg: 'bg-cyan-100 dark:bg-cyan-400/15',
+        badgeColor: 'text-cyan-700 dark:text-cyan-300',
         type: 'formula',
     },
     {
@@ -86,7 +115,13 @@ const DISCOVER_CATEGORIES = [
         label: 'Databases & Servers',
         desc: 'SQL, Document caches & messaging queues',
         icon: Database,
-        color: 'from-amber-500/10 to-orange-500/10 hover:from-amber-500/15 hover:to-orange-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20 hover:border-amber-500/40 dark:hover:border-amber-400/40',
+        surface: 'from-amber-100/95 to-amber-50/80 dark:from-amber-500/18 dark:to-amber-400/8',
+        border: 'border-amber-200/60 dark:border-amber-500/20',
+        hoverBorder: 'hover:border-amber-300/70 dark:hover:border-amber-400/40',
+        iconBg: 'bg-amber-100 dark:bg-amber-500/20',
+        iconColor: 'text-amber-600 dark:text-amber-400',
+        badgeBg: 'bg-amber-100 dark:bg-amber-400/15',
+        badgeColor: 'text-amber-700 dark:text-amber-300',
         type: 'formula',
     },
     {
@@ -94,7 +129,13 @@ const DISCOVER_CATEGORIES = [
         label: 'DevOps & Containers',
         desc: 'Docker, Kubernetes, AWS & cloud engines',
         icon: Rocket,
-        color: 'from-rose-500/10 to-orange-500/10 hover:from-rose-500/15 hover:to-orange-500/15 text-rose-600 dark:text-rose-400 border-rose-500/20 hover:border-rose-500/40 dark:hover:border-rose-400/40',
+        surface: 'from-rose-100/95 to-rose-50/80 dark:from-rose-500/18 dark:to-rose-400/8',
+        border: 'border-rose-200/60 dark:border-rose-500/20',
+        hoverBorder: 'hover:border-rose-300/70 dark:hover:border-rose-400/40',
+        iconBg: 'bg-rose-100 dark:bg-rose-500/20',
+        iconColor: 'text-rose-600 dark:text-rose-400',
+        badgeBg: 'bg-rose-100 dark:bg-rose-400/15',
+        badgeColor: 'text-rose-700 dark:text-rose-300',
         type: 'formula',
     },
     {
@@ -102,7 +143,13 @@ const DISCOVER_CATEGORIES = [
         label: 'CLI Tools & Utilities',
         desc: 'Terminal shell enhancements & helper search tools',
         icon: Cpu,
-        color: 'from-violet-500/10 to-purple-500/10 hover:from-violet-500/15 hover:to-purple-500/15 text-violet-600 dark:text-violet-400 border-violet-500/20 hover:border-violet-500/40 dark:hover:border-violet-400/40',
+        surface: 'from-violet-100/95 to-violet-50/80 dark:from-violet-500/18 dark:to-violet-400/8',
+        border: 'border-violet-200/60 dark:border-violet-500/20',
+        hoverBorder: 'hover:border-violet-300/70 dark:hover:border-violet-400/40',
+        iconBg: 'bg-violet-100 dark:bg-violet-500/20',
+        iconColor: 'text-violet-600 dark:text-violet-400',
+        badgeBg: 'bg-violet-100 dark:bg-violet-400/15',
+        badgeColor: 'text-violet-700 dark:text-violet-300',
         type: 'formula',
     },
 ];
@@ -172,8 +219,8 @@ const Dashboard = () => {
             {/* 4. Beautiful Category Grid Explorer Section */}
             <div className="space-y-4">
                 <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                    <div className="flex items-center justify-center p-2 rounded-xl bg-indigo-500/10 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shadow-xs">
-                        <LayoutGrid size={16} />
+                    <div className="flex items-center justify-center p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400">
+                        <LayoutGrid size={18} strokeWidth={1.8} />
                     </div>
                     <SectionHeader
                         title="Browse by Category"
@@ -189,21 +236,39 @@ const Dashboard = () => {
                                 key={cat.id}
                                 to={`/all?category=${cat.id}&type=${cat.type}`}
                                 className={cn(
-                                    "group relative flex items-start gap-4 p-4 rounded-2xl border transition-all duration-300 bg-gradient-to-br shadow-xs hover:shadow-md hover:-translate-y-0.5",
-                                    cat.color
+                                    "group flex items-start gap-4 p-5 rounded-2xl",
+                                    "bg-gradient-to-br",
+                                    "shadow-sm hover:shadow-md",
+                                    "transition-all duration-300 ease-out",
+                                    "hover:-translate-y-0.5 active:translate-y-0",
+                                    cat.border,
+                                    cat.hoverBorder,
+                                    cat.surface
                                 )}
                             >
-                                <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 shadow-2xs group-hover:scale-105 transition-transform duration-300">
-                                    <Icon size={18} />
+                                <div className={cn(
+                                    "flex items-center justify-center shrink-0",
+                                    "w-11 h-11 rounded-xl",
+                                    "transition-transform duration-300 group-hover:scale-105",
+                                    cat.iconBg,
+                                    cat.iconColor
+                                )}>
+                                    <Icon size={20} strokeWidth={1.8} />
                                 </div>
-                                <div className="min-w-0">
-                                    <h4 className="font-bold text-sm tracking-tight text-zinc-900 dark:text-zinc-100 leading-snug group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                                <div className="min-w-0 flex-1">
+                                    <h4 className="text-[15px] font-medium text-zinc-900 dark:text-zinc-100 leading-snug">
                                         {cat.label}
                                     </h4>
-                                    <p className="text-[11px] text-zinc-500 dark:text-zinc-400 leading-normal mt-0.5 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
+                                    <p className="text-[13px] text-zinc-500 dark:text-zinc-400 leading-relaxed mt-1">
                                         {cat.desc}
                                     </p>
-                                    <span className="inline-flex items-center gap-1 mt-2 text-[9px] font-bold uppercase tracking-wider bg-white/50 dark:bg-zinc-950/30 px-2 py-0.5 rounded border border-zinc-200/50 dark:border-zinc-800/40">
+                                    <span className={cn(
+                                        "inline-flex items-center mt-3",
+                                        "text-[10px] font-semibold uppercase tracking-wide",
+                                        "px-2.5 py-1 rounded-full",
+                                        cat.badgeBg,
+                                        cat.badgeColor
+                                    )}>
                                         {cat.type}
                                     </span>
                                 </div>
