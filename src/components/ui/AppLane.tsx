@@ -2,7 +2,7 @@
  * @file AppLane.tsx
  * Horizontal scroll lane for the Discover page.
  * Renders curated rows of modern, compact horizontal app cards with left/right scroll arrows.
- * Card design is consistent with the ItemCard design language used across the site.
+ * Card design follows Material Design tonal surface principles.
  */
 import { useRef } from 'react';
 import { NavLink } from 'react-router-dom';
@@ -30,16 +30,16 @@ function formatDownloads(raw: string | number | undefined): string | null {
 }
 
 /**
- * Standard lane card — matches ItemCard design system:
- * - Rounded icon with light border (matches ItemCard's favicon style)
- * - Green hover accent on name
- * - Consistent zinc border → green on hover
- * - Compact version pill
+ * Material Design tonal lane card:
+ * - Lighter tonal bg for clear page separation
+ * - Thinner title weight
+ * - GET tag hidden by default, shown on hover
+ * - No border change on hover; instead bg darkens/lightens subtly
  */
 const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
     <NavLink
         to={`/${item.type}/${item.token}`}
-        className="group flex items-center gap-3 w-64 h-24 bg-white dark:bg-zinc-900/70 border border-zinc-100 dark:border-zinc-800/50 px-3 rounded-2xl hover:border-green-500/40 dark:hover:border-green-500/30 hover:shadow-md transition-all duration-200 shrink-0"
+        className="group flex items-center gap-3 w-64 h-24 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/40 px-3 rounded-2xl hover:bg-white dark:hover:bg-zinc-800 hover:shadow-md transition-all duration-200 shrink-0"
     >
         {/* Icon — iOS-style rounded square */}
         <FaviconImage
@@ -52,7 +52,7 @@ const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
         {/* Content */}
         <div className="flex-1 min-w-0">
             {/* Name */}
-            <p className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate leading-snug group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate leading-snug">
                 {item.name}
             </p>
 
@@ -62,9 +62,9 @@ const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
             </p>
 
             {/* Bottom row: version pill + badge */}
-            <div className="flex items-center gap-1.5 mt-1.5  ">
+            <div className="flex items-center gap-1.5 mt-1.5">
                 {item.version && (
-                    <span className="bg-gray-100 dark:bg-zinc-700/30 px-2 py-0.5 text-[10px] rounded-full text-zinc-500 dark:text-zinc-400 shrink-0">
+                    <span className="bg-white dark:bg-zinc-700/30 px-2 py-0.5 text-[10px] rounded-full text-zinc-500 dark:text-zinc-400 shrink-0">
                         v{item.version.slice(0, 16)}{item.version.length > 16 && '...'}
                     </span>
                 )}
@@ -72,8 +72,8 @@ const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
             </div>
         </div>
 
-        {/* GET pill */}
-        <span className="text-[9px] mb-10 font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 px-3 py-1 rounded-full transition-all duration-200 group-hover:bg-emerald-600 group-hover:text-white dark:group-hover:bg-emerald-500 shrink-0 select-none">
+        {/* GET pill — only visible on hover */}
+        <span className="text-[9px] mb-10 font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-100 dark:border-emerald-900/30 px-3 py-1 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100 shrink-0 select-none">
             GET
         </span>
     </NavLink>
