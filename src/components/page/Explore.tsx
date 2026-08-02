@@ -215,9 +215,6 @@ const Dashboard = () => {
                                     <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 leading-snug">
                                         {cat.label}
                                     </h4>
-                                    <p className="hidden sm:block text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed mt-0.5 line-clamp-2">
-                                        {cat.desc}
-                                    </p>
                                     <span className={cn(
                                         "inline-flex items-center mt-0 sm:mt-2",
                                         "text-[9px] font-semibold uppercase tracking-wide",
