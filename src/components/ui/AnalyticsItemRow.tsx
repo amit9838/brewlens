@@ -50,8 +50,8 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
         <NavLink to={`/${type}/${name}`} className="block">
             <div className={cn(
                 "flex flex-wrap items-center gap-2 sm:gap-4 px-4 py-3 my-2 rounded-xl transition-all cursor-pointer",
-                "bg-white dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800/50",
-                hoverColor
+                "bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/40",
+                "hover:bg-white dark:hover:bg-zinc-800"
             )}>
                 {/* Rank */}
                 <span className="w-6 text-xs text-zinc-400 text-right shrink-0">{item.number}.</span>
@@ -65,7 +65,7 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
                 />
 
                 {/* Name – takes remaining space, truncates */}
-                <span className="flex-1 min-w-0 text-sm font-semibold truncate text-gray-900 dark:text-zinc-100">{name}</span>
+                <span className="flex-1 min-w-0 text-sm font-medium truncate text-gray-900 dark:text-zinc-100">{name}</span>
 
                 {/* Count and percentage: on mobile combine them, on large show count only */}
                 <span className="text-xs text-zinc-500 shrink-0 text-right font-mono">

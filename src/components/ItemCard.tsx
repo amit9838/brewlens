@@ -53,9 +53,9 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
 
             {/* Card content */}
             <div
-                className={`relative z-10 flex flex-col p-4 border border-zinc-100 dark:border-zinc-800/50 rounded-2xl hover:border-green-500 transition-all h-full group ${enableBackground
-                    ? "bg-white/80 dark:bg-zinc-900/80"
-                    : "bg-white dark:bg-zinc-900/70"
+                className={`relative z-10 flex flex-col p-4 border border-zinc-200/60 dark:border-zinc-700/40 rounded-2xl transition-all h-full group hover:bg-white dark:hover:bg-zinc-800 hover:shadow-md ${enableBackground
+                    ? "bg-zinc-50/80 dark:bg-zinc-900/70"
+                    : "bg-zinc-50 dark:bg-zinc-800/50"
                     }`}
             >
                 <div className="flex gap-4 items-start mb-3">
@@ -66,7 +66,7 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
                         className="p-1 rounded-full border border-gray-100 dark:border-zinc-800"
                     />
                     <div className="min-w-0">
-                        <h3 className="font-bold text-gray-900 dark:text-gray-100 truncate">{item.name}</h3>
+                        <h3 className="font-medium text-gray-900 dark:text-gray-100 truncate">{item.name}</h3>
                         <span className="opacity-60 pb-1 text-xs rounded-full" title={item.version}>
                             {item.raw.tap}
                         </span>
@@ -75,7 +75,7 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
 
                 <div className="flex gap-2 flex-wrap mb-1">
                     <div className="max-w-[14rem] overflow-hidden text-ellipsis text-nowrap text-zinc-500 dark:text-zinc-400 rounded-full">
-                        <span className="bg-gray-100 dark:bg-zinc-700/30 px-3 py-2 text-xs rounded-full" title={item.version}>
+                        <span className="bg-white dark:bg-zinc-700/30 px-3 py-2 text-xs rounded-full" title={item.version}>
                             v{item.version}
                         </span>
                     </div>
