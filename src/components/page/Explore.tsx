@@ -282,8 +282,8 @@ const Dashboard = () => {
             {trendingItems.length > 0 && (
                 <div className="space-y-3 mt-6">
                     <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center justify-center p-2 rounded-xl bg-orange-500/10 dark:bg-orange-500/20 text-orange-600 dark:text-orange-400 shadow-xs">
-                            <Flame size={16} />
+                        <div className="flex items-center justify-center p-2.5 rounded-xl bg-orange-50 dark:bg-orange-500/15 text-orange-600 dark:text-orange-400">
+                            <Flame size={18} strokeWidth={1.8} />
                         </div>
                         <SectionHeader
                             title="Trending Apps"
@@ -299,8 +299,8 @@ const Dashboard = () => {
             {editorPickItems.length > 0 && (
                 <div className="space-y-3">
                     <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center justify-center p-2 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 shadow-xs">
-                            <Sparkles size={16} />
+                        <div className="flex items-center justify-center p-2.5 rounded-xl bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                            <Sparkles size={18} strokeWidth={1.8} />
                         </div>
                         <SectionHeader
                             title="Editor's Picks"
@@ -315,6 +315,16 @@ const Dashboard = () => {
 
             {/* 5. Combined Personalized tabbed "My Shelf" Section */}
             {hasShelfItems && (
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-zinc-900 dark:text-zinc-100">
+                        <div className="flex items-center justify-center p-2.5 rounded-xl bg-violet-50 dark:bg-violet-500/15 text-violet-600 dark:text-violet-400">
+                            <Bookmark size={18} strokeWidth={1.8} />
+                        </div>
+                        <SectionHeader
+                            title="My Shelf"
+                            subtitle="Your saved bookmarks and recently viewed items"
+                        />
+                    </div>
                 <div className="section bg-gradient-to-br from-violet-500/5 via-fuchsia-500/3 to-transparent dark:from-violet-600/5 dark:via-fuchsia-700/2 dark:to-transparent border border-zinc-100 dark:border-zinc-800/50 rounded-2xl p-4.5 transition-all duration-300 hover:border-violet-500/20 hover:shadow-lg">
                     <div className="header flex flex-wrap justify-between items-center text-md text-zinc-900 dark:text-zinc-300 mb-3.5 gap-y-3">
                         <div className="flex items-center bg-gray-100/80 dark:bg-zinc-800/85 p-0.5 rounded-xl border border-zinc-200/30 dark:border-zinc-700/30 shadow-inner">
@@ -383,6 +393,7 @@ const Dashboard = () => {
                             <RecentlyViewedSection maxVisible={12} />
                         )}
                     </div>
+                </div>
                 </div>
             )}
             {/* Hit Counter Badge */}
