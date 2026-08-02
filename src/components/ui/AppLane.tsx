@@ -39,7 +39,7 @@ function formatDownloads(raw: string | number | undefined): string | null {
 const LaneCard: React.FC<LaneCardProps> = ({ item, badge }) => (
     <NavLink
         to={`/${item.type}/${item.token}`}
-        className="group flex items-center gap-3 w-64 h-24 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/40 px-3 rounded-2xl hover:bg-white dark:hover:bg-zinc-800 hover:shadow-md transition-all duration-200 shrink-0"
+        className="group flex items-center gap-3 w-64 h-24 bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200/60 dark:border-zinc-700/40 px-3 rounded-2xl hover:bg-white dark:hover:bg-zinc-800 transition-all duration-200 shrink-0"
     >
         {/* Icon — iOS-style rounded square */}
         <FaviconImage

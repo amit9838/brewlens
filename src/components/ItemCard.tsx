@@ -53,7 +53,7 @@ export const ItemCard = memo(({ item, enableBackground = false }: ItemCardProps)
 
             {/* Card content */}
             <div
-                className={`relative z-10 flex flex-col p-4 border border-zinc-200/60 dark:border-zinc-700/40 rounded-2xl transition-all h-full group hover:bg-white dark:hover:bg-zinc-800 hover:shadow-md ${enableBackground
+                className={`relative z-10 flex flex-col p-4 border border-zinc-200/60 dark:border-zinc-700/40 rounded-2xl transition-all h-full group hover:bg-white dark:hover:bg-zinc-800 ${enableBackground
                     ? "bg-zinc-50/80 dark:bg-zinc-900/70"
                     : "bg-zinc-50 dark:bg-zinc-800/50"
                     }`}

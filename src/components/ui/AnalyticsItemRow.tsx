@@ -42,10 +42,6 @@ export const AnalyticsItemRow = ({ item, homepage, maxCount, variant = 'default'
                 ? "bg-green-500"
                 : "bg-green-600/70";
 
-    const hoverColor = variant === 'amber'
-        ? "hover:border-amber-500/30"
-        : "hover:border-green-500/30";
-
     return (
         <NavLink to={`/${type}/${name}`} className="block">
             <div className={cn(
