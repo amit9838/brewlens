@@ -23,14 +23,26 @@ import {
     Rocket,
     Bookmark,
     Trash2,
-    LayoutGrid
+    LayoutGrid,
+    Film,
+    Sliders,
+    MessageSquare,
+    Shield,
+    Type,
+    Bot,
+    Gamepad2,
+    Network,
+    Hammer,
+    GitBranch,
+    Gauge,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "../../lib/utils";
 import { FeaturedBanner } from "../ui/FeaturedBanner";
 import { AppLane } from "../ui/AppLane";
 import { SectionHeader } from "../ui/SectionHeader";
-import { EDITORS_PICKS_TOKENS } from "../../data/categories";
+import { EDITORS_PICKS_TOKENS } from "../../data/curated";
+import { CASK_CATEGORIES, FORMULA_CATEGORIES, getCategoryStyle } from "../../data/categories";
 
 const fetchCaskAnalytics = async (period: string = '30d') => {
     const res = await fetch(`https://formulae.brew.sh/api/analytics/cask-install/${period}.json`);
@@ -38,133 +50,69 @@ const fetchCaskAnalytics = async (period: string = '30d') => {
     return res.json();
 };
 
-// Curated grid categories with flat accent backgrounds
-const DISCOVER_CATEGORIES = [
-    {
-        id: 'dev-tools',
-        label: 'Developer Tools',
-        desc: 'Terminals, IDEs, compilers & databases',
-        icon: Terminal,
-        surface: 'bg-indigo-100 dark:bg-indigo-500/12',
-        hoverSurface: 'group-hover:bg-indigo-200 dark:group-hover:bg-indigo-500/20',
-        border: 'border-indigo-200/60 dark:border-indigo-500/20',
-        hoverBorder: 'hover:border-indigo-300/70 dark:hover:border-indigo-400/40',
-        iconBg: 'bg-indigo-100 dark:bg-indigo-500/20',
-        iconColor: 'text-indigo-600 dark:text-indigo-400',
-        badgeBg: 'bg-indigo-100 dark:bg-indigo-400/15',
-        badgeColor: 'text-indigo-700 dark:text-indigo-300',
-        type: 'cask',
-    },
-    {
-        id: 'productivity',
-        label: 'Productivity',
-        desc: 'Notes, task organizers & calendar apps',
-        icon: Zap,
-        surface: 'bg-emerald-100 dark:bg-emerald-500/12',
-        hoverSurface: 'group-hover:bg-emerald-200 dark:group-hover:bg-emerald-500/20',
-        border: 'border-emerald-200/60 dark:border-emerald-500/20',
-        hoverBorder: 'hover:border-emerald-300/70 dark:hover:border-emerald-400/40',
-        iconBg: 'bg-emerald-100 dark:bg-emerald-500/20',
-        iconColor: 'text-emerald-600 dark:text-emerald-400',
-        badgeBg: 'bg-emerald-100 dark:bg-emerald-400/15',
-        badgeColor: 'text-emerald-700 dark:text-emerald-300',
-        type: 'cask',
-    },
-    {
-        id: 'design',
-        label: 'Design & Creative',
-        desc: 'Photo editors, vector tools & 3D art',
-        icon: Palette,
-        surface: 'bg-pink-100 dark:bg-pink-500/12',
-        hoverSurface: 'group-hover:bg-pink-200 dark:group-hover:bg-pink-500/20',
-        border: 'border-pink-200/60 dark:border-pink-500/20',
-        hoverBorder: 'hover:border-pink-300/70 dark:hover:border-pink-400/40',
-        iconBg: 'bg-pink-100 dark:bg-pink-500/20',
-        iconColor: 'text-pink-600 dark:text-pink-400',
-        badgeBg: 'bg-pink-100 dark:bg-pink-400/15',
-        badgeColor: 'text-pink-700 dark:text-pink-300',
-        type: 'cask',
-    },
-    {
-        id: 'browsers',
-        label: 'Web Browsers',
-        desc: 'Fast, secure & modern browser options',
-        icon: Globe,
-        surface: 'bg-blue-100 dark:bg-blue-500/12',
-        hoverSurface: 'group-hover:bg-blue-200 dark:group-hover:bg-blue-500/20',
-        border: 'border-blue-200/60 dark:border-blue-500/20',
-        hoverBorder: 'hover:border-blue-300/70 dark:hover:border-blue-400/40',
-        iconBg: 'bg-blue-100 dark:bg-blue-500/20',
-        iconColor: 'text-blue-600 dark:text-blue-400',
-        badgeBg: 'bg-blue-100 dark:bg-blue-400/15',
-        badgeColor: 'text-blue-700 dark:text-blue-300',
-        type: 'cask',
-    },
-    {
-        id: 'languages',
-        label: 'Programming Languages',
-        desc: 'Compilers, package managers & runtimes',
-        icon: Code,
-        surface: 'bg-cyan-100 dark:bg-cyan-500/12',
-        hoverSurface: 'group-hover:bg-cyan-200 dark:group-hover:bg-cyan-500/20',
-        border: 'border-cyan-200/60 dark:border-cyan-500/20',
-        hoverBorder: 'hover:border-cyan-300/70 dark:hover:border-cyan-400/40',
-        iconBg: 'bg-cyan-100 dark:bg-cyan-500/20',
-        iconColor: 'text-cyan-600 dark:text-cyan-400',
-        badgeBg: 'bg-cyan-100 dark:bg-cyan-400/15',
-        badgeColor: 'text-cyan-700 dark:text-cyan-300',
-        type: 'formula',
-    },
-    {
-        id: 'databases',
-        label: 'Databases & Servers',
-        desc: 'SQL, Document caches & messaging queues',
-        icon: Database,
-        surface: 'bg-amber-100 dark:bg-amber-500/12',
-        hoverSurface: 'group-hover:bg-amber-200 dark:group-hover:bg-amber-500/20',
-        border: 'border-amber-200/60 dark:border-amber-500/20',
-        hoverBorder: 'hover:border-amber-300/70 dark:hover:border-amber-400/40',
-        iconBg: 'bg-amber-100 dark:bg-amber-500/20',
-        iconColor: 'text-amber-600 dark:text-amber-400',
-        badgeBg: 'bg-amber-100 dark:bg-amber-400/15',
-        badgeColor: 'text-amber-700 dark:text-amber-300',
-        type: 'formula',
-    },
-    {
-        id: 'devops',
-        label: 'DevOps & Containers',
-        desc: 'Docker, Kubernetes, AWS & cloud engines',
-        icon: Rocket,
-        surface: 'bg-rose-100 dark:bg-rose-500/12',
-        hoverSurface: 'group-hover:bg-rose-200 dark:group-hover:bg-rose-500/20',
-        border: 'border-rose-200/60 dark:border-rose-500/20',
-        hoverBorder: 'hover:border-rose-300/70 dark:hover:border-rose-400/40',
-        iconBg: 'bg-rose-100 dark:bg-rose-500/20',
-        iconColor: 'text-rose-600 dark:text-rose-400',
-        badgeBg: 'bg-rose-100 dark:bg-rose-400/15',
-        badgeColor: 'text-rose-700 dark:text-rose-300',
-        type: 'formula',
-    },
-    {
-        id: 'cli-tools',
-        label: 'CLI Tools & Utilities',
-        desc: 'Terminal shell enhancements & helper search tools',
-        icon: Cpu,
-        surface: 'bg-violet-100 dark:bg-violet-500/12',
-        hoverSurface: 'group-hover:bg-violet-200 dark:group-hover:bg-violet-500/20',
-        border: 'border-violet-200/60 dark:border-violet-500/20',
-        hoverBorder: 'hover:border-violet-300/70 dark:hover:border-violet-400/40',
-        iconBg: 'bg-violet-100 dark:bg-violet-500/20',
-        iconColor: 'text-violet-600 dark:text-violet-400',
-        badgeBg: 'bg-violet-100 dark:bg-violet-400/15',
-        badgeColor: 'text-violet-700 dark:text-violet-300',
-        type: 'formula',
-    },
-];
+// Lucide icon resolution from category icon name strings
+const ICON_MAP: Record<string, React.ComponentType<any>> = {
+    Terminal, Zap, Palette, Globe, Film, Sliders, MessageSquare, Shield, Type,
+    Bot, Gamepad2, Code, Database, Rocket, GitBranch, Cpu, Network, Hammer, Gauge,
+};
+
+// Generate discover grid categories from category definitions.
+// Filters out 'all' and combines cask + formula non-overlapping categories.
+// Priority casks, then formulae — type is inferred from which array the cat lives in.
+function buildDiscoverCategories(): Array<{
+    id: string;
+    label: string;
+    desc: string;
+    icon: React.ComponentType<any>;
+    type: 'cask' | 'formula';
+    surface: string;
+    hoverSurface: string;
+    border: string;
+    hoverBorder: string;
+    iconBg: string;
+    iconColor: string;
+    badgeBg: string;
+    badgeColor: string;
+}> {
+    const seen = new Set<string>();
+    const result: ReturnType<typeof buildDiscoverCategories> = [];
+
+    for (const cat of [...CASK_CATEGORIES, ...FORMULA_CATEGORIES]) {
+        if (cat.id === 'all' || seen.has(cat.id)) continue;
+        seen.add(cat.id);
+
+        const icon = ICON_MAP[cat.icon];
+        if (!icon) continue; // skip categories whose icon isn't mapped yet
+
+        const s = getCategoryStyle(cat.color);
+        const type: 'cask' | 'formula' = CASK_CATEGORIES.some(c => c.id === cat.id) ? 'cask' : 'formula';
+
+        result.push({
+            id: cat.id,
+            label: cat.label,
+            desc: cat.description || `${cat.label} packages`,
+            icon,
+            type,
+            surface: s.surface,
+            hoverSurface: s.hoverSurface,
+            border: s.border,
+            hoverBorder: s.hoverBorder,
+            iconBg: s.iconBg,
+            iconColor: s.iconColor,
+            badgeBg: s.badgeBg,
+            badgeColor: s.badgeColor,
+        });
+    }
+
+    return result;
+}
 
 const Dashboard = () => {
     const { data: caskData = [] } = useBrewData("cask");
     const { openModal } = useModal();
+
+    // Build discover categories once from the canonical definitions
+    const DISCOVER_CATEGORIES = useMemo(() => buildDiscoverCategories(), []);
 
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { bookmarks } = useBookmarks();
@@ -236,7 +184,7 @@ const Dashboard = () => {
                     />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     {DISCOVER_CATEGORIES.map((cat) => {
                         const Icon = cat.icon;
                         return (
@@ -244,7 +192,7 @@ const Dashboard = () => {
                                 key={cat.id}
                                 to={`/all?category=${cat.id}&type=${cat.type}`}
                                 className={cn(
-                                    "group relative flex items-start gap-4 p-5 rounded-2xl overflow-hidden",
+                                    "group relative flex items-start gap-3 p-4 rounded-2xl overflow-hidden",
                                     "transition-all duration-300 ease-out",
                                     cat.border,
                                     cat.hoverBorder,
@@ -256,24 +204,24 @@ const Dashboard = () => {
                                 <div className="absolute inset-0 bg-white/40 dark:bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                                 <div className={cn(
                                     "flex items-center justify-center shrink-0",
-                                    "w-11 h-11 rounded-xl",
+                                    "w-9 h-9 rounded-lg",
                                     "transition-transform duration-300 group-hover:scale-105",
                                     cat.iconBg,
                                     cat.iconColor
                                 )}>
-                                    <Icon size={20} strokeWidth={1.8} />
+                                    <Icon size={18} strokeWidth={1.8} />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <h4 className="text-[15px] font-medium text-zinc-900 dark:text-zinc-100 leading-snug">
+                                    <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 leading-snug">
                                         {cat.label}
                                     </h4>
-                                    <p className="text-[13px] text-zinc-500 dark:text-zinc-400 leading-relaxed mt-1">
+                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed mt-0.5 line-clamp-2">
                                         {cat.desc}
                                     </p>
                                     <span className={cn(
-                                        "inline-flex items-center mt-3",
-                                        "text-[10px] font-semibold uppercase tracking-wide",
-                                        "px-2.5 py-1 rounded-full",
+                                        "inline-flex items-center mt-2",
+                                        "text-[9px] font-semibold uppercase tracking-wide",
+                                        "px-2 py-0.5 rounded-full",
                                         cat.badgeBg,
                                         cat.badgeColor
                                     )}>
