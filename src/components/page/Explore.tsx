@@ -184,7 +184,7 @@ const Dashboard = () => {
                     />
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3">
                     {DISCOVER_CATEGORIES.map((cat) => {
                         const Icon = cat.icon;
                         return (
@@ -192,7 +192,7 @@ const Dashboard = () => {
                                 key={cat.id}
                                 to={`/all?category=${cat.id}&type=${cat.type}`}
                                 className={cn(
-                                    "group relative flex items-start gap-3 p-4 rounded-2xl overflow-hidden",
+                                    "group relative flex items-center sm:items-start gap-3 p-4 rounded-2xl overflow-hidden",
                                     "transition-all duration-300 ease-out",
                                     cat.border,
                                     cat.hoverBorder,
@@ -215,11 +215,11 @@ const Dashboard = () => {
                                     <h4 className="text-sm font-medium text-zinc-900 dark:text-zinc-100 leading-snug">
                                         {cat.label}
                                     </h4>
-                                    <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed mt-0.5 line-clamp-2">
+                                    <p className="hidden sm:block text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed mt-0.5 line-clamp-2">
                                         {cat.desc}
                                     </p>
                                     <span className={cn(
-                                        "inline-flex items-center mt-2",
+                                        "inline-flex items-center mt-0 sm:mt-2",
                                         "text-[9px] font-semibold uppercase tracking-wide",
                                         "px-2 py-0.5 rounded-full",
                                         cat.badgeBg,
