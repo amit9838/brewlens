@@ -31,6 +31,8 @@ import {
     MessageSquare,
     Shield,
     Type,
+    Bot,
+    Gamepad2,
     Code,
     Database,
     Rocket,
@@ -38,8 +40,6 @@ import {
     Cpu,
     Network,
     Hammer,
-    Bot,
-    Gamepad2,
     Gauge,
 } from "lucide-react";
 import { Pagination } from "../ui/Pagination";
@@ -58,18 +58,12 @@ import {
     type Category,
 } from "../../data/categories";
 
-interface Props {
-    type: BrewType;
-    setType: (type: BrewType) => void;
-}
 
-// Icon component resolution from category icon names
 const ICON_MAP: Record<string, React.ComponentType<any>> = {
     Home, Zap, Terminal, Globe, Palette, Film, Sliders, MessageSquare, Shield, Type,
     Bot, Gamepad2, Code, Database, Rocket, GitBranch, Cpu, Network, Hammer, Gauge,
 };
 
-// ─── Category Tab Bar ─────────────────────────────────────────────────────────
 const CategoryTabs: React.FC<{
     categories: Category[];
     activeId: string;
@@ -97,12 +91,10 @@ const CategoryTabs: React.FC<{
                 );
             })}
         </div>
-        {/* Fade edge */}
         <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent pointer-events-none" />
     </div>
 );
 
-// ─── Quick Filters popover ────────────────────────────────────────────────────
 const FilterPills: React.FC<{
     type: BrewType;
     activeFilters: Set<string>;
@@ -178,10 +170,9 @@ const FilterPills: React.FC<{
     );
 };
 
-
-// ─── Main component ───────────────────────────────────────────────────────────
-export const BrewList: React.FC<Props> = ({ type, setType }) => {
+export const BrewList: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    const type: BrewType = (searchParams.get('type') as BrewType) === 'formula' ? 'formula' : 'cask';
     const search = searchParams.get('q') || '';
     const setSearch = useCallback((val: string) => {
         if (val) {
@@ -206,28 +197,12 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
     const [showFonts, setShowFonts] = useStorage<boolean>('brewlist_showFonts', false);
     const [viewMode, setViewMode] = useStorage<'grid' | 'list'>('brewlist_viewMode', 'grid');
 
-    // Sync category from URL search params
-    const categoryParam = searchParams.get('category') || 'all';
-    const [activeCategoryId, setActiveCategoryId] = useState(categoryParam);
-
-    useEffect(() => {
-        const cat = searchParams.get('category') || 'all';
-        setActiveCategoryId(cat);
-    }, [searchParams]);
-
-    // Sync type from URL search params
-    useEffect(() => {
-        const t = searchParams.get('type') as BrewType;
-        if (t === 'cask' || t === 'formula') {
-            setType(t);
-        }
-    }, [searchParams, setType]);
+    const activeCategoryId = searchParams.get('category') || 'all';
 
     const { openModal, closeModal } = useModal();
 
     const categories = type === 'cask' ? CASK_CATEGORIES : FORMULA_CATEGORIES;
 
-    // Queries
     const { data = [], isLoading, error } = useBrewData(type);
 
     const deferredSearch = useDeferredValue(search);
@@ -252,16 +227,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
 
     const clearFilters = () => setActiveFilters(new Set());
 
-    const changeType = (t: BrewType) => {
-        const newParams = new URLSearchParams(searchParams);
-        newParams.set('type', t);
-        newParams.delete('category'); // Reset category when switching type
-        setSearchParams(newParams);
-        setType(t);
-        clearFilters();
-    };
-
-    // Base filtered data (search + quick filters, no category yet)
     const baseFiltered = useMemo(() => {
         data.sort((a, b) => a.name.localeCompare(b.name));
         let result = data;
@@ -281,7 +246,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
         return result;
     }, [data, deferredSearch, activeFilters, showFonts]);
 
-    // Category filtered
     const filtered = useMemo(() => {
         if (activeCategoryId === 'all') return baseFiltered;
         const cat = categories.find(c => c.id === activeCategoryId);
@@ -291,6 +255,16 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
 
     const pagination = usePagination(filtered, itemsPerPage, `cp_${type}`);
     const { currentData, setCurrentPage, totalPages } = pagination;
+
+    const changeType = (t: BrewType) => {
+        const newParams = new URLSearchParams(searchParams);
+        newParams.set('type', t);
+        newParams.delete('category');
+        newParams.delete('q');
+        setSearchParams(newParams);
+        setCurrentPage(1);
+        clearFilters();
+    };
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -322,19 +296,16 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
     const activeCategory = categories.find(c => c.id === activeCategoryId);
     const ActiveCatIcon = activeCategory ? (ICON_MAP[activeCategory.icon] || Home) : Home;
 
-    // ─── Render ───────────────────────────────────────────────────────────────
     return (
         <div className="container max-w-[1400px] mx-auto px-0 py-2 space-y-5">
 
-            {/* ── Toolbar ── */}
             <div className="flex w-full flex-wrap justify-between items-center gap-3 px-1 py-1">
-                {/* Type switcher + count */}
                 <div className="flex items-center gap-3">
                     <div className="bg-gray-100 dark:bg-zinc-800/80 p-0.5 rounded-xl flex shadow-inner border border-zinc-200/30 dark:border-zinc-700/30">
                         {(['cask', 'formula'] as const).map(t => (
                             <button
                                 key={t}
-                                onClick={() => { changeType(t); setSearch(''); }}
+                                onClick={() => changeType(t)}
                                 className={cn(
                                     "px-3.5 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all duration-300 cursor-pointer",
                                     type === t
@@ -351,7 +322,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                     </span>
                 </div>
 
-                {/* Right actions */}
                 <div className="flex items-center gap-2 ml-auto">
                     <Button
                         onClick={handleBookmarkView}
@@ -374,7 +344,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
 
                     <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800 mx-0.5" />
 
-                    {/* View toggle */}
                     <div className="flex items-center bg-gray-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200/50 dark:border-zinc-700/50">
                         <button
                             onClick={() => setViewMode('grid')}
@@ -404,7 +373,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                 </div>
             </div>
 
-            {/* ── Category Tab Bar + Filters popover ── */}
             <div className="flex items-center gap-2">
                 <div className="flex-1 min-w-0">
                     <CategoryTabs
@@ -434,13 +402,10 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                 </div>
             </div>
 
-            {/* ── Loading / Error ── */}
             {isLoading && <SkeletonGrid count={48} />}
             {error && <ErrorState error={error} />}
 
             {!isLoading && !error && <>
-
-                {/* ── Search feedback banner ── */}
                 {search && (
                     <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-emerald-500/5 via-green-500/5 to-transparent border border-emerald-500/15 rounded-2xl">
                         <div className="flex items-center gap-2 text-sm text-emerald-800 dark:text-emerald-400">
@@ -461,7 +426,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                     </div>
                 )}
 
-                {/* ── Grid section header ── */}
                 {activeCategoryId === 'all' ? (
                     <SectionHeader
                         title={`All ${type === 'cask' ? 'Casks' : 'Formulae'}`}
@@ -479,7 +443,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                     </div>
                 )}
 
-                {/* ── Grid / List ── */}
                 {currentData.length > 0 && (
                     viewMode === 'grid' ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
@@ -496,7 +459,6 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                     )
                 )}
 
-                {/* ── Empty state ── */}
                 {currentData.length === 0 && (
                     <div className="h-60 flex flex-col items-center justify-center p-20 text-gray-500">
                         <Search className="mb-4 h-12 w-12 opacity-30" />
@@ -505,13 +467,11 @@ export const BrewList: React.FC<Props> = ({ type, setType }) => {
                     </div>
                 )}
 
-                {/* ── Pagination ── */}
                 {totalPages > 1 && (
                     <Pagination pagination={pagination} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
                 )}
             </>}
 
-            {/* ── Footer tip ── */}
             <div className="flex items-center justify-center gap-2 pt-4 pb-2 text-xs text-zinc-400 dark:text-zinc-500 select-none">
                 <Keyboard size={14} className="opacity-70" />
                 <span>
