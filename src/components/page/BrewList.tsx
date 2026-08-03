@@ -205,6 +205,16 @@ export const BrewList: React.FC = () => {
 
     const { data = [], isLoading, error } = useBrewData(type);
 
+    // Precompute token→category mapping once when data/categories change,
+    // avoiding O(n × categories) scanning on every category tab switch.
+    const catIndex = useMemo(() => {
+        const map = new Map<string, string>();
+        for (const item of data) {
+            map.set(item.token, getCategoryForToken(item, categories));
+        }
+        return map;
+    }, [data, categories]);
+
     const deferredSearch = useDeferredValue(search);
 
     const groups: Record<string, string[]> = {
@@ -248,10 +258,8 @@ export const BrewList: React.FC = () => {
 
     const filtered = useMemo(() => {
         if (activeCategoryId === 'all') return baseFiltered;
-        const cat = categories.find(c => c.id === activeCategoryId);
-        if (!cat) return baseFiltered;
-        return baseFiltered.filter(i => getCategoryForToken(i, categories) === activeCategoryId);
-    }, [baseFiltered, activeCategoryId, categories]);
+        return baseFiltered.filter(i => (catIndex.get(i.token) || 'all') === activeCategoryId);
+    }, [baseFiltered, activeCategoryId, catIndex]);
 
     const pagination = usePagination(filtered, itemsPerPage, `cp_${type}`);
     const { currentData, setCurrentPage, totalPages } = pagination;
