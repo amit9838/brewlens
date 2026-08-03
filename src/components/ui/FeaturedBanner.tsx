@@ -10,15 +10,14 @@ import type { BrewItem } from '../../types';
 import { Button } from './Button';
 import {
     ChevronLeft, ChevronRight, Terminal, Zap, Palette, Globe,
-    Film, Sliders, MessageSquare, Shield, Type, Home, Download,
-    Bot, Gamepad2,
+    Film, Sliders, MessageSquare, Shield, Type, Bot, Gamepad2,
+    Home, Download,
 } from 'lucide-react';
 
 interface FeaturedBannerProps {
     items: BrewItem[];
 }
 
-// Lucide icon resolution from icon name strings
 const ICON_MAP: Record<string, React.ElementType> = {
     Home, Zap, Terminal, Globe, Palette, Film, Sliders, MessageSquare, Shield, Type,
     Bot, Gamepad2,
@@ -28,8 +27,6 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
     const [active, setActive] = useState(0);
     const [paused, setPaused] = useState(false);
 
-    // Optimized: useMemo prevents recalculating this array on every 4s interval tick
-    // Reduce combines the previous map + filter(Boolean) into a single iteration
     const slides = useMemo(() => 
         FEATURED_CASKS.reduce<{ token: string; item: BrewItem }[]>((acc, token) => {
             const item = items.find(i => i.token === token);
@@ -50,8 +47,6 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
 
     if (total === 0) return null;
 
-
-    
     return (
         <div
             className="relative overflow-hidden rounded-3xl h-52 sm:h-64 select-none bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-white/10"
@@ -74,7 +69,6 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                         key={s.token}
                         className={`absolute inset-0 transition-opacity duration-700 ${i === active ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
                     >
-                        {/* Blurred background with Light/Dark support */}
                         <div className="absolute inset-0 overflow-hidden">
                             <img
                                 src={sUrl}
@@ -85,13 +79,11 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                             <div className="absolute inset-0 bg-gradient-to-r from-zinc-200/60 via-zinc-200/70 to-zinc-100/50 dark:from-zinc-900/80 dark:via-zinc-900/80 dark:to-zinc-950/70" />
                         </div>
 
-                        {/* Content */}
                         <NavLink
                             to={`/cask/${s.token}`}
                             className="absolute inset-0 z-10 flex items-center justify-between gap-6 px-8 sm:px-12 group"
                         >
                             <div className="flex items-center gap-6 min-w-0 flex-1 ml-4">
-                                {/* App icon */}
                                 <div className="shrink-0 p-1 rounded-2xl bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-zinc-200 dark:border-white/10 flex items-center justify-center overflow-hidden">
                                     <img
                                         src={sUrl}
@@ -101,7 +93,6 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                                     />
                                 </div>
 
-                                {/* Text */}
                                 <div className="flex-1 min-w-0">
                                     <span className={`inline-block text-[10px] font-bold tracking-widest uppercase mb-2 px-2.5 py-0.5 rounded-full border ${styleClasses.text} ${styleClasses.bannerBg} ${styleClasses.bannerBorder}`}>
                                         {catLabel}
@@ -114,7 +105,7 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                                     </p>
                                     <Button
                                         variant="glass"
-                                        onClick={(e) => { e.preventDefault(); /* Prevent NavLink trigger if installing directly */ }}
+                                        onClick={(e) => { e.preventDefault(); }}
                                         isPill
                                         size="sm"
                                         className="mt-2 w-fit"
@@ -125,7 +116,6 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                                 </div>
                             </div>
 
-                            {/* Right: Artistic oversized category icon */}
                             <div 
                                 className={`hidden md:flex shrink-0 items-center justify-center pointer-events-none select-none absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 opacity-5 dark:opacity-[0.07] ${styleClasses.text}`}
                                 style={{ transform: 'translateY(-30%) translateX(20%) rotate(15deg)' }}
@@ -137,7 +127,6 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                 );
             })}
 
-            {/* Prev / Next arrows */}
             <button
                 onClick={e => { e.preventDefault(); e.stopPropagation(); prev(); }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-zinc-200/50 dark:bg-black/30 hover:bg-zinc-300/80 dark:hover:bg-black/50 text-zinc-700 dark:text-white flex items-center justify-center transition-colors backdrop-blur-sm cursor-pointer border border-transparent hover:border-zinc-600 dark:hover:border-zinc-200"
@@ -153,7 +142,6 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                 <ChevronRight size={16} />
             </button>
 
-            {/* Dot indicators */}
             <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
                 {slides.map((_, i) => (
                     <button
