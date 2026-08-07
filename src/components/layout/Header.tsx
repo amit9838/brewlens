@@ -12,7 +12,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
   const location = useLocation();
   const onAllPage = location.pathname === '/all';
-  const showSearch = true;
+  const showSearch = !['/about', '/installation'].includes(location.pathname);
 
   const [theme, setTheme] = useState(
     () => localStorage.getItem("theme") || "light",
