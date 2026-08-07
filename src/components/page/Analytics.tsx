@@ -57,7 +57,10 @@ const formatCount = (count: string) => {
 
 export default function Analytics() {
     const [period, setPeriod] = useState<Period>('30d');
-    const [showAll, setShowAll] = useState(false);
+    const [displayLimit, setDisplayLimit] = useState(50);
+
+    const LIMIT_STEPS = [50, 100, 200, 500];
+    const nextLimit = LIMIT_STEPS.find(s => s > displayLimit) ?? null;
 
     const { data: analytics, isLoading, error } = useQuery({
         queryKey: ['analytics', period],
@@ -72,7 +75,7 @@ export default function Analytics() {
     });
 
     const items = analytics?.items ?? [];
-    const displayed = showAll ? items : items.slice(0, 25);
+    const displayed = items.slice(0, displayLimit);
     const maxCount = items[0] ? parseInt(items[0].count.replace(/,/g, ''), 10) : 1;
     const totalFormatted = analytics
         ? formatCount(String(analytics.total_count))
@@ -102,7 +105,7 @@ export default function Analytics() {
                     {(['30d', '90d', '365d'] as Period[]).map(p => (
                         <Button key={p} isPill size="sm"
                             variant={period === p ? 'primary' : 'outline'}
-                            onClick={() => { setPeriod(p); setShowAll(false); }}>
+                            onClick={() => { setPeriod(p); setDisplayLimit(50); }}>
                             {PERIOD_LABELS[p]}
                         </Button>
                     ))}
@@ -137,10 +140,10 @@ export default function Analytics() {
                         );
                     })}
 
-                    {!showAll && items.length > 25 && (
+                    {nextLimit && items.length > displayLimit && (
                         <div className="flex justify-center pt-2">
-                            <Button variant="secondary" size="sm" onClick={() => setShowAll(true)}>
-                                View All ({items.length})
+                            <Button variant="secondary" size="sm" onClick={() => setDisplayLimit(nextLimit)}>
+                                Show {nextLimit}
                             </Button>
                         </div>
                     )}

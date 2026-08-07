@@ -9,6 +9,12 @@ import { cn } from "../../lib/utils";
 import SkeletonDetails from "./SkeletonDetails";
 import { getSourceCodeStatus } from "../../lib/utils";
 import { useRecentlyViewed } from "../contexts/RecentlyViewedContext";
+import { CategoryBadge } from "../ui/CategoryBadge";
+import { FaviconImage } from "../ui/FaviconImage";
+import {
+  getCategoryForToken,
+  FORMULA_CATEGORIES,
+} from "../../data/categories";
 import {
   ExternalLink,
   Info,
@@ -122,6 +128,8 @@ export const FormulaeDetail = () => {
 
   const { verified, isFoss, fossUrl } = getSourceCodeStatus(item.raw, type);
 
+  const categoryId = getCategoryForToken(item, FORMULA_CATEGORIES);
+
   const installAnalyticsMap = new Map([
     [
       "1 month",
@@ -160,22 +168,27 @@ export const FormulaeDetail = () => {
         {/* Hero Section */}
         <div className="bg-[#8d655c] dark:bg-[#3d1a12] text-zinc-100 rounded-3xl p-8 flex flex-col md:flex-row items-center gap-6">
           <div className="w-24 h-24 bg-zinc-200  rounded-2xl flex items-center justify-center border border-white/10 shadow-xl overflow-hidden">
-            {/* Replace with actual icon logic if available */}
-            <img
-              src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=256`}
-              alt={name[0]}
-              className="w-24 h-24 rounded-md"
+            <FaviconImage
+              homepage={item.homepage}
+              name={name}
+              size={96}
+              className="rounded-md"
             />
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="text-[10px] tracking-widest font-bold text-zinc-300 mb-2 uppercase">
-              HOMEBREW FORMULA: {tap}
-              {packageStatus(item).isNotInstallable && (
-                <span className="float-end rounded-full bg-orange-500/70 text-white px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
-                  {packageStatus(item).reason}
-                </span>
-              )}
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <p className="text-[10px] tracking-widest font-bold text-zinc-300 uppercase">
+                HOMEBREW FORMULA: {tap}
+              </p>
+              <div className="flex flex-col items-end gap-2">
+                <CategoryBadge categoryId={categoryId} type="formula" />
+                {packageStatus(item).isNotInstallable && (
+                  <span className="rounded-full bg-orange-500/70 text-white px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
+                    {packageStatus(item).reason}
+                  </span>
+                )}
+              </div>
             </div>
             <h1 className="text-5xl font-bold mb-4 tracking-tight">{name}</h1>
 

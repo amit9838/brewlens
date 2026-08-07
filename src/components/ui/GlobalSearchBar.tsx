@@ -157,13 +157,13 @@ export const GlobalSearchBar: React.FC = () => {
                         const val = e.target.value;
                         setSearch(val);
                         if (isOnAllPage) {
+                            const newParams = new URLSearchParams(searchParams);
                             if (val) {
-                                setSearchParams({ q: val });
+                                newParams.set('q', val);
                             } else {
-                                const newParams = new URLSearchParams(searchParams);
                                 newParams.delete('q');
-                                setSearchParams(newParams);
                             }
+                            setSearchParams(newParams);
                         }
                     }}
                     onFocus={handleFocus}

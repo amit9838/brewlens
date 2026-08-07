@@ -8,7 +8,6 @@ import { RecentlyViewedProvider } from './components/contexts/RecentlyViewedCont
 import { NavDrawer } from './components/layout/Drawer';
 import { Header } from './components/layout/Header';
 import { BrewList } from './components/page/BrewList';
-import { type BrewType } from "./types";
 import { Routes, Route } from 'react-router-dom';
 import { CaskDetail } from './components/page/CaskDetail';
 import Installation from './components/page/Installation';
@@ -21,7 +20,6 @@ const queryClient = new QueryClient();
 
 function HomebrewExplorer() {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [type, setType] = useState<BrewType>('cask');
 
   return (
     <div className="min-h-screen bg-gray-300/50 dark:bg-[#111] text-gray-900 dark:text-gray-100 p-4 sm:p-8 transition-colors">
@@ -32,9 +30,8 @@ function HomebrewExplorer() {
         <Header setIsOpen={setIsOpen} />
         <Routes>
           <Route path="/install" element={<div>Install Guide</div>} />
-          {/* <BrewList type={type} setType={setType} /> */}
           <Route path="/" element={<Dashboard />} />
-          <Route path="/all" element={<BrewList type={type} setType={setType} />} />
+          <Route path="/all" element={<BrewList />} />
           <Route path="/installation" element={<Installation />} />
           <Route path="/cask/:token" element={<CaskDetail />} />
           <Route path="/formula/:token" element={<FormulaeDetail />} />

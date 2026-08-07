@@ -9,6 +9,9 @@ import { BookmarkButton } from "../ui/BookmarkButton";
 import SkeletonDetails from "./SkeletonDetails";
 import { getSourceCodeStatus } from "../../lib/utils";
 import { useRecentlyViewed } from "../contexts/RecentlyViewedContext";
+import { CategoryBadge } from "../ui/CategoryBadge";
+import { FaviconImage } from "../ui/FaviconImage";
+import { getCategoryForToken, CASK_CATEGORIES } from "../../data/categories";
 import {
   ExternalLink,
   Box,
@@ -119,6 +122,8 @@ export function CaskDetail() {
 
   const { verified, isFoss, fossUrl } = getSourceCodeStatus(item.raw, type);
 
+  const categoryId = getCategoryForToken(item, CASK_CATEGORIES);
+
   const installAnalyticsMap = new Map([
     [
       "1 month",
@@ -157,23 +162,28 @@ export function CaskDetail() {
       <header className="mb-6  overflow-hidden rounded-3xl bg-[#376154] dark:bg-[#09271e] p-10 border border-white/5">
         <div className="flex flex-col md:flex-row items-center gap-6">
           <div className="w-24 h-24 bg-zinc-200 rounded-2xl flex items-center justify-center border border-white/10 shadow-xl overflow-hidden">
-            {/* Replace with actual icon logic if available */}
-            <img
-              src={`https://www.google.com/s2/favicons?domain=${item.homepage}&sz=256`}
-              alt={item.name[0]}
-              className="w-24 h-24 rounded-md"
+            <FaviconImage
+              homepage={item.homepage}
+              name={item.name}
+              size={96}
+              className="rounded-md"
             />
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <p className="text-xs font-bold tracking-widest text-emerald-500/80 uppercase mb-2">
-              HOMEBREW CASK: {token}
-              {packageStatus(item).isNotInstallable && (
-                <span className="float-end rounded-full bg-orange-400/50 text-orange-700 dark:text-orange-100 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
-                  {packageStatus(item).reason}
-                </span>
-              )}
-            </p>
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <p className="text-xs font-bold tracking-widest text-emerald-500/80 uppercase">
+                HOMEBREW CASK: {token}
+              </p>
+              <div className="flex flex-col items-end gap-2">
+                <CategoryBadge categoryId={categoryId} type="cask" />
+                {packageStatus(item).isNotInstallable && (
+                  <span className="rounded-full bg-orange-400/50 text-orange-700 dark:text-orange-100 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
+                    {packageStatus(item).reason}
+                  </span>
+                )}
+              </div>
+            </div>
 
             <h1 className="text-5xl font-bold tracking-tight text-white mb-4">
               {displayName}
@@ -243,7 +253,7 @@ export function CaskDetail() {
             <p className="text-lg opacity-70 leading-relaxed mb-6">
               {description}
             </p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-xs font-bold text-emerald-400 border border-emerald-500/20">
                 Version {version}
               </span>
