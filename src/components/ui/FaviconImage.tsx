@@ -6,6 +6,13 @@
  */
 import { useState } from "react";
 
+/**
+ * Module-level cache of successfully loaded favicon homepages.
+ * Prevents re-fetching and letter-avatar flash when the same package
+ * appears in both list and detail views.
+ */
+const loadedFavicons = new Map<string, boolean>();
+
 interface FaviconImageProps {
     homepage?: string;
     name: string;
@@ -20,10 +27,11 @@ export const FaviconImage: React.FC<FaviconImageProps> = ({
     className = "",
 }) => {
     const faviconUrl = homepage
-        ? `https://www.google.com/s2/favicons?domain=${homepage}&sz=64`
+        ? `https://www.google.com/s2/favicons?domain=${homepage}&sz=256`
         : null;
 
-    const [errored, setErrored] = useState(!faviconUrl);
+    const alreadyLoaded = homepage ? loadedFavicons.get(homepage) : false;
+    const [errored, setErrored] = useState(!faviconUrl && !alreadyLoaded);
 
     // Letter-avatar fallback — use first char of name, upper-cased
     const letter = name.trim()[0]?.toUpperCase() ?? "?";
@@ -43,11 +51,11 @@ export const FaviconImage: React.FC<FaviconImageProps> = ({
     return (
         <img
             src={faviconUrl}
-            loading="lazy"
+            onLoad={() => homepage && loadedFavicons.set(homepage, true)}
             onError={() => setErrored(true)}
             alt=""
             aria-hidden="true"
-            className={`object-cover shrink-0 ${className}`}
+            className={`object-contain shrink-0 ${className}`}
             style={{ width: size, height: size }}
         />
     );
