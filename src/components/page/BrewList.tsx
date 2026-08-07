@@ -175,13 +175,13 @@ export const BrewList: React.FC = () => {
     const type: BrewType = (searchParams.get('type') as BrewType) === 'formula' ? 'formula' : 'cask';
     const search = searchParams.get('q') || '';
     const setSearch = useCallback((val: string) => {
+        const newParams = new URLSearchParams(searchParams);
         if (val) {
-            setSearchParams({ q: val });
+            newParams.set('q', val);
         } else {
-            const newParams = new URLSearchParams(searchParams);
             newParams.delete('q');
-            setSearchParams(newParams);
         }
+        setSearchParams(newParams);
     }, [searchParams, setSearchParams]);
 
     const [itemsPerPage, setItemsPerPage] = useState(48);
