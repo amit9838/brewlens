@@ -171,7 +171,7 @@ export function CaskDetail() {
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex sm:flex-row flex-col items-center justify-between gap-3 mb-2">
               <p className="text-xs font-bold tracking-widest text-emerald-500/80 uppercase">
                 HOMEBREW CASK: {token}
               </p>
@@ -189,7 +189,7 @@ export function CaskDetail() {
               {displayName}
             </h1>
 
-            <div className=" flex flex-wrap items-center gap-2">
+            <div className=" flex flex-wrap items-center sm:ustify-between gap-2">
               <div className="group relative flex items-center gap-1 rounded-full border border-white/10 bg-black/40 px-5 py-2.5">
                 <span className="text-sm pr-1  font-medium text-gray-300">
                   Install:
@@ -202,7 +202,7 @@ export function CaskDetail() {
                   variant="glass"
                   size="icon"
                   isPill
-                  className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
+                  className="absolute right-[0.15rem]  z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
                 >
                   {copied.installCmd ? (
                     <Check className="w-4 h-4" />

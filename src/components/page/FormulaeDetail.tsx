@@ -177,7 +177,7 @@ export const FormulaeDetail = () => {
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex sm:flex-row flex-col items-center justify-between gap-3 mb-2">
               <p className="text-[10px] tracking-widest font-bold text-zinc-300 uppercase">
                 HOMEBREW FORMULA: {tap}
               </p>
@@ -206,7 +206,7 @@ export const FormulaeDetail = () => {
                     variant="glass"
                     size="icon"
                     isPill
-                    className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
+                    className="absolute right-[0.15rem]  z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
                   >
                     {copied.installCmd ? (
                       <Check className="w-4 h-4" />
