@@ -7,6 +7,7 @@ import { BookmarksProvider } from './components/contexts/BookmarksContext';
 import { RecentlyViewedProvider } from './components/contexts/RecentlyViewedContext';
 import { NavDrawer } from './components/layout/Drawer';
 import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
 import { BrewList } from './components/page/BrewList';
 import { Routes, Route } from 'react-router-dom';
 import { CaskDetail } from './components/page/CaskDetail';
@@ -40,6 +41,7 @@ function HomebrewExplorer() {
         </Routes>
 
         {/* Footer */}
+        <Footer />
       </div>
     </div>
   );
