@@ -42,12 +42,13 @@ BrewLens fetches and parses cask and formula metadata directly from the official
 
 ## Useful URLs
 
-- Home: https://amit9838.github.io/brewlens/#/
-- All packages: https://amit9838.github.io/brewlens/#/all
-- Cask detail (example): https://amit9838.github.io/brewlens/#/cask/visual-studio-code
-- Formula detail (example): https://amit9838.github.io/brewlens/#/formula/wget
-- Analytics: https://amit9838.github.io/brewlens/#/analytics
-- About: https://amit9838.github.io/brewlens/#/about
+- Home: https://amit9838.github.io/brewlens/
+- All packages: https://amit9838.github.io/brewlens/all
+- Installation guide: https://amit9838.github.io/brewlens/installation
+- Cask detail (example): https://amit9838.github.io/brewlens/cask/visual-studio-code
+- Formula detail (example): https://amit9838.github.io/brewlens/formula/wget
+- Analytics: https://amit9838.github.io/brewlens/analytics
+- About: https://amit9838.github.io/brewlens/about
 
 ## Citations
 
