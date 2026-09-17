@@ -51,6 +51,8 @@ export const FaviconImage: React.FC<FaviconImageProps> = ({
     return (
         <img
             src={faviconUrl}
+            loading="lazy"
+            decoding="async"
             onLoad={() => homepage && loadedFavicons.set(homepage, true)}
             onError={() => setErrored(true)}
             alt=""

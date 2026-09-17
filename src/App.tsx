@@ -7,6 +7,7 @@ import { BookmarksProvider } from './components/contexts/BookmarksContext';
 import { RecentlyViewedProvider } from './components/contexts/RecentlyViewedContext';
 import { NavDrawer } from './components/layout/Drawer';
 import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
 import { BrewList } from './components/page/BrewList';
 import { Routes, Route } from 'react-router-dom';
 import { CaskDetail } from './components/page/CaskDetail';
@@ -27,9 +28,8 @@ function HomebrewExplorer() {
         <NavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
         {/* HEADER */}
-        <Header setIsOpen={setIsOpen} />
+        <Header setIsOpen={setIsOpen} isOpen={isOpen} />
         <Routes>
-          <Route path="/install" element={<div>Install Guide</div>} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/all" element={<BrewList />} />
           <Route path="/installation" element={<Installation />} />
@@ -40,6 +40,7 @@ function HomebrewExplorer() {
         </Routes>
 
         {/* Footer */}
+        <Footer />
       </div>
     </div>
   );

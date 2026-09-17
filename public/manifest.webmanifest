@@ -1,0 +1,23 @@
+{
+  "name": "BrewLens — The Homebrew App Store",
+  "short_name": "BrewLens",
+  "description": "A modern web interface to browse, search, and discover Homebrew formulae and casks — the ultimate GUI for macOS package management.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "og-image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

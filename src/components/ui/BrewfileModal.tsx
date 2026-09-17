@@ -38,7 +38,7 @@ export default function BrewfileModal({ items }: BrewfileModalProps) {
                     </pre>
                 </div>
                 <p className="text-[11px] text-zinc-500 dark:text-zinc-500 mt-3 px-1">
-                    Save this content as a file named <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded text-zinc-700 dark:text-zinc-300">Brewfile</code> then run <code className="bg-zinc-100 dark:bg-zinc-800 px-1 rounded text-zinc-700 dark:text-zinc-300">brew bundle</code> in that directory to install everything at once.
+                    Copy above package(s) which you can share or import the bookmarks.
                 </p>
             </ModalBody>
 

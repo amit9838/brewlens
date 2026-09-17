@@ -3,35 +3,184 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/favicon.svg" />
+  <script>
+    (function () {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      } else if (location.hash.indexOf('#/') === 0) {
+        var path = location.pathname.replace(/\/+$/, '') + location.hash.slice(1);
+        history.replaceState(null, null, path || '/');
+      }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#4f46e5" />
 
   <title>BrewLens — The Homebrew App Store</title>
-  <meta name="title" content="BrewLens — The Homebrew App Store" />
   <meta name="description"
-    content="A modern web interface to browse, search, and discover Homebrew formulae and casks. The ultimate GUI for macOS package management." />
-  <meta name="keywords"
-    content="homebrew, brew, macos, linux, wsl, windows subsystem for linux, homebrew gui, brew browser, homebrew app store, package manager, software discovery, brew casks, brew formulae, amit9838, brewlens, open source, typescript, react, web-based brew, brew search engine, brew visualizer, homebrew dashboard, macos package manager gui, install mac apps, brew analytics" />
+    content="Free, open-source web GUI for Homebrew: browse and search every cask and formula with versions, install commands, and checksums — no terminal required." />
   <meta name="author" content="Amit Chaudhary" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
 
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://amit9838.github.io/brewlens/" />
+  <meta property="og:site_name" content="BrewLens" />
+  <meta property="og:locale" content="en_US" />
   <meta property="og:title" content="BrewLens — The Homebrew App Store" />
   <meta property="og:description"
     content="Stop searching the terminal. Browse and discover Homebrew packages with a beautiful, snappy web interface." />
-  <meta property="og:image" content="https://github.com/amit9838/brewlens/raw/main/public/og-image.png" />
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://amit9838.github.io/brewlens/" />
-  <meta property="twitter:title" content="BrewLens — The Homebrew App Store" />
-  <meta property="twitter:description"
+  <meta property="og:image" content="https://amit9838.github.io/brewlens/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="BrewLens — a web-based explorer for Homebrew casks and formulae" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://amit9838.github.io/brewlens/" />
+  <meta name="twitter:title" content="BrewLens — The Homebrew App Store" />
+  <meta name="twitter:description"
     content="A modern web interface to browse, search, and discover Homebrew formulae and casks." />
-  <meta property="twitter:image" content="https://github.com/amit9838/brewlens/raw/main/public/og-image.png" />
+  <meta name="twitter:image" content="https://amit9838.github.io/brewlens/og-image.png" />
 
-  <link rel="canonical" href="https://amit9838.github.io/brewlens/" />
+  <!-- Structured data: read by search engines (rich results) and AI models -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BrewLens",
+    "alternateName": "The Homebrew App Store",
+    "url": "https://amit9838.github.io/brewlens/",
+    "description": "A free, open-source web interface to browse, search, and discover Homebrew formulae and casks — a GUI for macOS package management.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux, Windows (WSL), Web Browser",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Amit Chaudhary", "url": "https://github.com/amit9838" },
+    "publisher": { "@type": "Person", "name": "Amit Chaudhary", "url": "https://github.com/amit9838" },
+    "license": "https://github.com/amit9838/brewlens/blob/main/LICENSE",
+    "image": "https://amit9838.github.io/brewlens/og-image.png",
+    "featureList": [
+      "Browse all Homebrew casks (macOS apps) and formulae (CLI tools)",
+      "Instant keyboard-first search across every Homebrew package",
+      "Package details: version, install command, homepage, SHA-256 checksum, dependencies, artifacts",
+      "Trending apps from Homebrew 30-day install analytics",
+      "Local bookmarks and recently viewed history",
+      "Brewfile import and export",
+      "Deprecation and disable status for every package"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is BrewLens?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "BrewLens is a free, open-source web interface for Homebrew. It lets you browse, search, and inspect every Homebrew cask (macOS app) and formula (CLI tool) directly in your browser, with no terminal commands required. It is read-only and does not install anything on your machine."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does BrewLens install Homebrew packages?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. BrewLens is a read-only explorer. It shows the exact install command for each package, such as 'brew install --cask firefox' or 'brew install wget', which you run yourself in your terminal."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is BrewLens free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. BrewLens is completely free, open source under the MIT license, requires no account, and stores all bookmarks and history locally in your browser."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does BrewLens work for Linux and Windows?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. While casks are macOS-only, Homebrew formulae also run on Linux and Windows Subsystem for Linux (WSL). BrewLens lets you browse and inspect all formulae from any OS, in any browser."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where does BrewLens get its data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "BrewLens fetches package metadata directly from the official Homebrew API at formulae.brew.sh, including analytics from Homebrew's 30-day install statistics."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>
-  <div id="root"></div>
+  <!--
+    Crawlable content for search engines and AI crawlers that don't run
+    JavaScript. The `hidden` attribute keeps it from ever painting for users
+    (raw-HTML crawlers ignore it), and React replaces all of #root on mount.
+  -->
+  <div id="root">
+    <div id="bl-crawlable" hidden style="max-width: 760px; margin: 0 auto; padding: 48px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #18181b; line-height: 1.6;">
+      <h1 style="font-size: 2rem; font-weight: 700; margin: 0 0 8px;">Brew<span style="font-weight: 300;">Lens</span> — The Homebrew App Store</h1>
+      <p style="margin: 0 0 24px;">BrewLens is a free, open-source web interface to browse, search, and discover
+        <strong>Homebrew casks (macOS apps)</strong> and <strong>formulae (command-line tools)</strong> — no terminal
+        required. It is a read-only explorer: it never installs anything on your machine; it shows you the exact
+        <code>brew install</code> command to run yourself.</p>
+
+      <h2 style="font-size: 1.25rem; margin: 24px 0 8px;">What you can do with BrewLens</h2>
+      <ul style="margin: 0 0 16px; padding-left: 20px; color: #3f3f46;">
+        <li>Browse every Homebrew cask and formula with instant, keyboard-first search.</li>
+        <li>Inspect package details: version, description, homepage, install command, download URL, SHA-256 checksum, dependencies, and artifacts.</li>
+        <li>See trending apps based on Homebrew 30-day install analytics.</li>
+        <li>Browse by category: dev tools, AI &amp; LLM, design, media, browsers, productivity, languages, databases, DevOps, networking.</li>
+        <li>Save bookmarks, track recently viewed packages, and import/export Brewfiles — all stored locally in your browser.</li>
+      </ul>
+
+      <h2 style="font-size: 1.25rem; margin: 24px 0 8px;">Who it is for</h2>
+      <ul style="margin: 0 0 16px; padding-left: 20px; color: #3f3f46;">
+        <li><strong>Developers</strong> inspecting metadata, versions, and dependencies of casks and formulae.</li>
+        <li><strong>Security teams</strong> verifying download URLs and SHA-256 checksums of Homebrew packages.</li>
+        <li><strong>Sysadmins</strong> auditing apps and tools before deploying to managed macOS or Linux machines.</li>
+        <li><strong>Homebrew contributors</strong> reviewing package structure before opening a pull request.</li>
+        <li><strong>Anyone</strong> who wants to discover great macOS apps installable via Homebrew without touching the Terminal.</li>
+      </ul>
+
+      <h2 style="font-size: 1.25rem; margin: 24px 0 8px;">Quick answers</h2>
+      <h3 style="font-size: 1rem; margin: 16px 0 4px;">Does BrewLens install Homebrew packages?</h3>
+      <p style="margin: 0 0 12px; color: #3f3f46;">No — it is read-only. It shows the exact install command (for example
+        <code>brew install --cask firefox</code> or <code>brew install wget</code>) for you to run in your terminal.</p>
+      <h3 style="font-size: 1rem; margin: 16px 0 4px;">Is BrewLens free?</h3>
+      <p style="margin: 0 0 12px; color: #3f3f46;">Yes — completely free and open source under the MIT license, with no
+        account required. Bookmarks and history stay local to your browser.</p>
+      <h3 style="font-size: 1rem; margin: 16px 0 4px;">Does it work on Linux or Windows?</h3>
+      <p style="margin: 0 0 12px; color: #3f3f46;">Yes. Casks are macOS-only, but Homebrew formulae also run on Linux
+        and Windows Subsystem for Linux (WSL), and all of them can be browsed in BrewLens from any OS.</p>
+      <h3 style="font-size: 1rem; margin: 16px 0 4px;">Where does the data come from?</h3>
+      <p style="margin: 0 0 24px; color: #3f3f46;">Package metadata and analytics are fetched directly from the official
+        Homebrew API at <a href="https://formulae.brew.sh">formulae.brew.sh</a>.</p>
+
+      <h2 style="font-size: 1.25rem; margin: 24px 0 8px;">Links</h2>
+      <ul style="margin: 0; padding-left: 20px; color: #3f3f46;">
+        <li><a href="https://amit9838.github.io/brewlens/all">Browse all Homebrew packages</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/installation">Homebrew installation guide</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/cask/visual-studio-code">Example cask: Visual Studio Code</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/formula/wget">Example formula: wget</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/analytics">Homebrew install analytics</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/about">About BrewLens</a></li>
+        <li><a href="https://github.com/amit9838/brewlens">Source code on GitHub (MIT license)</a></li>
+      </ul>
+    </div>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

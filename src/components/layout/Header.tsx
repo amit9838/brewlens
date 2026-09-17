@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { MenuIcon, Moon, Sun, LayoutGrid, Compass } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/brewlens_logo.png";
 import { GlobalSearchBar } from "../ui/GlobalSearchBar";
 
 interface HeaderProps {
   setIsOpen: (value: boolean) => void;
+  isOpen: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
+export const Header: React.FC<HeaderProps> = ({ setIsOpen, isOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const onAllPage = location.pathname === '/all';
   const showSearch = !['/about', '/installation'].includes(location.pathname);
 
@@ -25,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
 
   const reset_pagination = () => {
     ["cp_cask", "cp_formula"].forEach(key => localStorage.setItem(key, "1"));
-    window.location.href = "/brewlens/#/";
+    navigate("/");
   };
 
   return (
@@ -34,7 +36,13 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
       <div className="flex items-center gap-3">
         {/* Left: menu + logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <Button variant="ghost" onClick={() => setIsOpen(true)}>
+          <Button
+            variant="ghost"
+            onClick={() => setIsOpen(true)}
+            aria-label="Open navigation menu"
+            aria-expanded={isOpen}
+            aria-controls="app-drawer"
+          >
             <MenuIcon size={20} />
           </Button>
           <NavLink

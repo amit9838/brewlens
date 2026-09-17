@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useBrewData } from "../../hooks/useBrewData";
+import { useDocumentMeta } from "../../hooks/useDocumentMeta";
 import type { BrewItem, BrewType } from "../../types";
 
 import { Button } from "../ui/Button";
@@ -58,6 +59,15 @@ export const FormulaeDetail = () => {
   const { data = [], isLoading, error } = useBrewData(type, url);
 
   const item: BrewItem = data[0];
+
+  useDocumentMeta({
+    title: item
+      ? `${item.name} — Homebrew Formula (${item.version}) | BrewLens`
+      : `${token} — Homebrew Formula | BrewLens`,
+    description: item
+      ? `${item.desc ?? item.name} — install with "${item.installCmd}". View version, homepage, dependencies, and install command for the ${item.name} Homebrew formula on BrewLens.`
+      : `View the ${token} Homebrew formula on BrewLens: description, version, install command, homepage, and dependencies.`,
+  });
 
   useEffect(() => {
     if (item) trackView(item);
@@ -177,7 +187,7 @@ export const FormulaeDetail = () => {
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex sm:flex-row flex-col items-center justify-between gap-3 mb-2">
               <p className="text-[10px] tracking-widest font-bold text-zinc-300 uppercase">
                 HOMEBREW FORMULA: {tap}
               </p>
@@ -206,7 +216,7 @@ export const FormulaeDetail = () => {
                     variant="glass"
                     size="icon"
                     isPill
-                    className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
+                    className="absolute right-[0.15rem]  z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
                   >
                     {copied.installCmd ? (
                       <Check className="w-4 h-4" />

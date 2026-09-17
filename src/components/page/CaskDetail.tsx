@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
+import { useDocumentMeta } from "../../hooks/useDocumentMeta";
 import { type BrewItem, type BrewType } from "../../types";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Share2, ChevronLeft } from "lucide-react";
@@ -26,6 +27,7 @@ import {
   Download,
   HardDriveDownload,
 } from "lucide-react";
+import { AppleLogo } from "../ui/AppleLogo";
 
 /**
  * Formats an artifact value for display.
@@ -57,6 +59,15 @@ export function CaskDetail() {
   const { data = [], isLoading, error } = useBrewData(type, url);
 
   const item: BrewItem = data[0];
+
+  useDocumentMeta({
+    title: item
+      ? `${item.name} — Homebrew Cask (${item.version}) | BrewLens`
+      : `${token} — Homebrew Cask | BrewLens`,
+    description: item
+      ? `${item.desc ?? item.name} — install with "${item.installCmd}". View version, homepage, download URL, and SHA-256 checksum for the ${item.name} Homebrew cask on BrewLens.`
+      : `View the ${token} Homebrew cask on BrewLens: version, install command, homepage, download URL, and checksum.`,
+  });
 
   useEffect(() => {
     if (item) trackView(item);
@@ -171,7 +182,7 @@ export function CaskDetail() {
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex sm:flex-row flex-col items-center justify-between gap-3 mb-2">
               <p className="text-xs font-bold tracking-widest text-emerald-500/80 uppercase">
                 HOMEBREW CASK: {token}
               </p>
@@ -189,7 +200,7 @@ export function CaskDetail() {
               {displayName}
             </h1>
 
-            <div className=" flex flex-wrap items-center gap-2">
+            <div className=" flex flex-wrap items-center sm:ustify-between gap-2">
               <div className="group relative flex items-center gap-1 rounded-full border border-white/10 bg-black/40 px-5 py-2.5">
                 <span className="text-sm pr-1  font-medium text-gray-300">
                   Install:
@@ -202,7 +213,7 @@ export function CaskDetail() {
                   variant="glass"
                   size="icon"
                   isPill
-                  className="absolute right-[0.15rem] top-[0.15rem] z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
+                  className="absolute right-[0.15rem]  z-10 text-zinc-200 hover:text-zinc-100 px-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all"
                 >
                   {copied.installCmd ? (
                     <Check className="w-4 h-4" />
@@ -257,8 +268,8 @@ export function CaskDetail() {
               <span className="rounded-full bg-emerald-500/10 px-4 py-1.5 text-xs font-bold text-emerald-400 border border-emerald-500/20">
                 Version {version}
               </span>
-              <span className="rounded-full bg-black/5 dark:bg-white/5 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
-                Type: GUI Application
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-black/5 dark:bg-white/5 px-4 py-1.5 text-xs font-bold opacity-70 border border-white/10">
+                <AppleLogo className="w-4 h-4" /> macOS GUI Application
               </span>
               {isFoss && (
                 <span className="rounded-full bg-blue-500/10 text-blue-500 px-4 py-1.5 text-xs font-bold border border-blue-500/20">
@@ -314,7 +325,8 @@ export function CaskDetail() {
               OS COMPATIBILITY
             </p>
 
-            <span className="inline-block rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-bold text-blue-400 border border-blue-500/20">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 px-4 py-1.5 text-xs font-bold text-blue-400 border border-blue-500/20">
+              <AppleLogo className="w-3.5 h-3.5" />
               macOS{" "}
               {typeof raw.depends_on?.macos === "object"
                 ? `${Object.keys(raw.depends_on.macos)[0]} ${Object.values(raw.depends_on.macos)[0]}`

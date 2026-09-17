@@ -11,7 +11,7 @@ import { Button } from './Button';
 import {
     ChevronLeft, ChevronRight, Terminal, Zap, Palette, Globe,
     Film, Sliders, MessageSquare, Shield, Type, Bot, Gamepad2,
-    Home, Download,
+    Home, Download
 } from 'lucide-react';
 
 interface FeaturedBannerProps {
@@ -27,13 +27,13 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
     const [active, setActive] = useState(0);
     const [paused, setPaused] = useState(false);
 
-    const slides = useMemo(() => 
+    const slides = useMemo(() =>
         FEATURED_CASKS.reduce<{ token: string; item: BrewItem }[]>((acc, token) => {
             const item = items.find(i => i.token === token);
             if (item) acc.push({ token, item });
             return acc;
-        }, []), 
-    [items]);
+        }, []),
+        [items]);
 
     const total = slides.length;
     const next = useCallback(() => setActive(a => (a + 1) % total), [total]);
@@ -103,20 +103,23 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                                     <p className="text-sm text-zinc-600 dark:text-zinc-300 line-clamp-1 mb-4 max-w-md">
                                         {si.desc || "Curated visual application."}
                                     </p>
-                                    <Button
-                                        variant="glass"
-                                        onClick={(e) => { e.preventDefault(); }}
-                                        isPill
-                                        size="sm"
-                                        className="mt-2 w-fit"
-                                    >
-                                        <Download size={16} />
-                                        Install
-                                    </Button>
+                                    <div className="flex items-center">
+                                        <Button
+                                            variant="glass"
+                                            // onClick={(e) => { e.preventDefault(); }}
+                                            isPill
+                                            size="sm"
+                                            className="mt-2 w-fit"
+                                        >
+                                            <Download size={16} />
+                                            Get
+                                        </Button>
+                                        <div className="flex items-center text-xs mx-2 px-2 mt-2 opacity-70  border-l">Install on MacOS</div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div 
+                            <div
                                 className={`hidden md:flex shrink-0 items-center justify-center pointer-events-none select-none absolute right-0 top-1/2 -translate-y-1/2 w-64 h-64 opacity-5 dark:opacity-[0.07] ${styleClasses.text}`}
                                 style={{ transform: 'translateY(-30%) translateX(20%) rotate(15deg)' }}
                             >
@@ -147,11 +150,10 @@ export const FeaturedBanner: React.FC<FeaturedBannerProps> = ({ items }) => {
                     <button
                         key={i}
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setActive(i); }}
-                        className={`transition-all duration-300 rounded-full cursor-pointer ${
-                            i === active
+                        className={`transition-all duration-300 rounded-full cursor-pointer ${i === active
                                 ? 'w-5 h-1.5 bg-zinc-600 dark:bg-white'
                                 : 'w-1.5 h-1.5 bg-zinc-400/50 hover:bg-zinc-500/70 dark:bg-white/40 dark:hover:bg-white/70'
-                        }`}
+                            }`}
                         aria-label={`Slide ${i + 1}`}
                     />
                 ))}

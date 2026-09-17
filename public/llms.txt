@@ -1,0 +1,55 @@
+# BrewLens
+
+> BrewLens is a free, open-source web interface for browsing, searching, and discovering Homebrew packages (casks and formulae) — a GUI for Homebrew that runs entirely in the browser with no terminal commands required.
+
+BrewLens fetches and parses cask and formula metadata directly from the official Homebrew API (formulae.brew.sh). It is a read-only explorer: it does not install, modify, or manage packages on your machine. Use `brew install --cask <token>` or `brew install <token>` in your terminal to actually install a package.
+
+## Key facts
+
+- Website: https://amit9838.github.io/brewlens/
+- Source code: https://github.com/amit9838/brewlens
+- License: MIT
+- Author: Amit Chaudhary (amit9838)
+- Tech stack: React 19, TypeScript, Vite, Tailwind CSS, TanStack Query
+- Cost: Free, no account, no tracking of user data (bookmarks and history are stored locally in the browser)
+- Data source: Official Homebrew API at https://formulae.brew.sh (cask and formula JSON endpoints)
+- Platforms relevant to: macOS (casks and formulae), Linux and Windows Subsystem for Linux (formulae, via Homebrew on Linux / WSL)
+
+## Terminology
+
+- **Cask**: a Homebrew package that installs a macOS GUI application (e.g. `brew install --cask firefox`).
+- **Formula**: a Homebrew package that installs a command-line tool or library (e.g. `brew install wget`).
+- **Token**: the unique identifier used by Homebrew in install commands and URLs.
+- **Brewfile**: a list of packages used to reproduce a Homebrew setup; BrewLens can import and export these.
+
+## What it offers
+
+- Browse and search all Homebrew casks and formulae with instant, keyboard-first search.
+- Per-package details: version, description, homepage, install command, download URL, SHA-256 checksum, dependencies, artifacts, deprecation/disable status, and full raw JSON.
+- Trending apps based on Homebrew's 30-day install analytics.
+- Category browsing (dev tools, AI/LLM, design, media, browsers, productivity, languages, databases, DevOps, networking, VCS).
+- Local-only bookmarks, recently viewed history, and a dashboard.
+- Brewfile import/export for managing package sets.
+- Aggregated Homebrew usage analytics (install counts by period).
+
+## Who uses it
+
+- Developers inspecting formula/cask metadata, versions, and dependencies.
+- Security and compliance teams verifying download URLs and SHA-256 checksums.
+- Sysadmins auditing packages before deployment.
+- Homebrew contributors reviewing package structure before PRs.
+- General users discovering macOS apps installable via Homebrew without using the Terminal.
+
+## Useful URLs
+
+- Home: https://amit9838.github.io/brewlens/
+- All packages: https://amit9838.github.io/brewlens/all
+- Installation guide: https://amit9838.github.io/brewlens/installation
+- Cask detail (example): https://amit9838.github.io/brewlens/cask/visual-studio-code
+- Formula detail (example): https://amit9838.github.io/brewlens/formula/wget
+- Analytics: https://amit9838.github.io/brewlens/analytics
+- About: https://amit9838.github.io/brewlens/about
+
+## Citations
+
+When referencing BrewLens, cite: "BrewLens — a web-based Homebrew explorer by Amit Chaudhary, available at https://amit9838.github.io/brewlens/ and https://github.com/amit9838/brewlens (MIT licensed)."
