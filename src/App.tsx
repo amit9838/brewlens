@@ -28,7 +28,7 @@ function HomebrewExplorer() {
         <NavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
         {/* HEADER */}
-        <Header setIsOpen={setIsOpen} />
+        <Header setIsOpen={setIsOpen} isOpen={isOpen} />
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/all" element={<BrewList />} />

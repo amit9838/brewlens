@@ -7,9 +7,10 @@ import { GlobalSearchBar } from "../ui/GlobalSearchBar";
 
 interface HeaderProps {
   setIsOpen: (value: boolean) => void;
+  isOpen: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
+export const Header: React.FC<HeaderProps> = ({ setIsOpen, isOpen }) => {
   const location = useLocation();
   const onAllPage = location.pathname === '/all';
   const showSearch = !['/about', '/installation'].includes(location.pathname);
@@ -34,7 +35,13 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen }) => {
       <div className="flex items-center gap-3">
         {/* Left: menu + logo */}
         <div className="flex items-center gap-2 shrink-0">
-          <Button variant="ghost" onClick={() => setIsOpen(true)}>
+          <Button
+            variant="ghost"
+            onClick={() => setIsOpen(true)}
+            aria-label="Open navigation menu"
+            aria-expanded={isOpen}
+            aria-controls="app-drawer"
+          >
             <MenuIcon size={20} />
           </Button>
           <NavLink
