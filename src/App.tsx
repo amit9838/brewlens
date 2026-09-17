@@ -30,7 +30,6 @@ function HomebrewExplorer() {
         {/* HEADER */}
         <Header setIsOpen={setIsOpen} />
         <Routes>
-          <Route path="/install" element={<div>Install Guide</div>} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/all" element={<BrewList />} />
           <Route path="/installation" element={<Installation />} />
