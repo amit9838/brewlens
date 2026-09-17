@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "../ui/Button";
 import { TrendingUp } from "lucide-react";
 import { AnalyticsItemRow } from "../ui/AnalyticsItemRow";
+import { useDocumentMeta } from "../../hooks/useDocumentMeta";
 
 type Period = '30d' | '90d' | '365d';
 
@@ -58,6 +59,11 @@ const formatCount = (count: string) => {
 export default function Analytics() {
     const [period, setPeriod] = useState<Period>('30d');
     const [displayLimit, setDisplayLimit] = useState(50);
+
+    useDocumentMeta({
+        title: "Homebrew Install Analytics — Trending Casks & Formulae | BrewLens",
+        description: "See the most-installed Homebrew casks and formulae by install counts over 30, 90, or 365 days, powered by official Homebrew analytics data.",
+    });
 
     const LIMIT_STEPS = [50, 100, 200, 500];
     const nextLimit = LIMIT_STEPS.find(s => s > displayLimit) ?? null;

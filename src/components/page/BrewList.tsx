@@ -6,6 +6,7 @@
  */
 import React, { useState, useMemo, useEffect, useCallback, useDeferredValue } from "react";
 import { useBrewData } from "../../hooks/useBrewData";
+import { useDocumentMeta } from "../../hooks/useDocumentMeta";
 import { usePagination } from "../../hooks/usePagination";
 import { useStorage } from "../../hooks/useStorage";
 import { ItemCard } from "../ItemCard";
@@ -174,6 +175,15 @@ export const BrewList: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const type: BrewType = (searchParams.get('type') as BrewType) === 'formula' ? 'formula' : 'cask';
     const search = searchParams.get('q') || '';
+
+    useDocumentMeta({
+        title: type === 'formula'
+            ? "All Homebrew Formulae — CLI Tools & Libraries | BrewLens"
+            : "All Homebrew Casks — macOS Apps | BrewLens",
+        description: type === 'formula'
+            ? "Browse and search every Homebrew formula — command-line tools and libraries for macOS, Linux, and WSL. See versions, install commands, and dependencies."
+            : "Browse and search every Homebrew cask — GUI apps for macOS. See versions, install commands, download URLs, and checksums.",
+    });
     const setSearch = useCallback((val: string) => {
         const newParams = new URLSearchParams(searchParams);
         if (val) {
@@ -321,7 +331,7 @@ export const BrewList: React.FC = () => {
                                         : "text-gray-500 hover:text-gray-700 dark:hover:text-zinc-300"
                                 )}
                             >
-                                {t}s
+                                {t=='cask'?" ":""}{t}s
                             </button>
                         ))}
                     </div>

@@ -1,9 +1,15 @@
 import { Github, ExternalLink, Heart, BookOpen, Star, Users, GitPullRequest } from 'lucide-react';
 import logo from "../../assets/brewlens_logo.png"
+import { useDocumentMeta } from "../../hooks/useDocumentMeta";
 
 const BrewLensAbout = () => {
     const currentYear = new Date().getFullYear();
     const githubLink = "https://github.com/amit9838/brewlens/";
+
+    useDocumentMeta({
+        title: "About BrewLens — Open-Source Homebrew Explorer",
+        description: "BrewLens is a free, MIT-licensed, open-source Homebrew explorer by Amit Chaudhary. Learn how it works, its data sources, and how to contribute.",
+    });
 
     return (
         <div className="text-zinc-700 dark:text-zinc-200 font-sans selection:bg-amber-500/30 min-h-screen transition-colors duration-300">

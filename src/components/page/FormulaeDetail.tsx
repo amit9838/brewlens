@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useBrewData } from "../../hooks/useBrewData";
+import { useDocumentMeta } from "../../hooks/useDocumentMeta";
 import type { BrewItem, BrewType } from "../../types";
 
 import { Button } from "../ui/Button";
@@ -58,6 +59,15 @@ export const FormulaeDetail = () => {
   const { data = [], isLoading, error } = useBrewData(type, url);
 
   const item: BrewItem = data[0];
+
+  useDocumentMeta({
+    title: item
+      ? `${item.name} — Homebrew Formula (${item.version}) | BrewLens`
+      : `${token} — Homebrew Formula | BrewLens`,
+    description: item
+      ? `${item.desc ?? item.name} — install with "${item.installCmd}". View version, homepage, dependencies, and install command for the ${item.name} Homebrew formula on BrewLens.`
+      : `View the ${token} Homebrew formula on BrewLens: description, version, install command, homepage, and dependencies.`,
+  });
 
   useEffect(() => {
     if (item) trackView(item);

@@ -2,6 +2,7 @@ import { ItemCard } from "../ItemCard";
 import RecentlyViewedSection from "../ui/RecentlyViewedStrip";
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useBrewData } from "../../hooks/useBrewData";
+import { useDocumentMeta } from "../../hooks/useDocumentMeta";
 import { Button } from "../ui/Button";
 import { NavLink } from "react-router-dom";
 import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
@@ -45,6 +46,11 @@ const DISCOVER_CATEGORIES = [
 const Dashboard = () => {
     const { data: caskData = [] } = useBrewData("cask");
     const { openModal } = useModal();
+
+    useDocumentMeta({
+        title: "BrewLens — The Homebrew App Store",
+        description: "Browse, search, and discover Homebrew casks and formulae in your browser. Trending apps, categories, bookmarks, and Brewfile tools — no terminal required.",
+    });
 
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { bookmarks } = useBookmarks();
