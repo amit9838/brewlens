@@ -1,0 +1,56 @@
+# robots.txt — BrewLens (https://amit9838.github.io/brewlens/)
+# Open to search engines and AI crawlers alike.
+
+User-agent: *
+Allow: /
+
+# Search engines
+User-agent: Googlebot
+Allow: /
+Disallow: /*?*q=
+
+User-agent: Bingbot
+Allow: /
+Disallow: /*?*q=
+
+# AI crawlers — explicitly welcome (no training/content restrictions)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+Sitemap: https://amit9838.github.io/brewlens/sitemap.xml
