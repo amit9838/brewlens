@@ -3,6 +3,18 @@
 
 <head>
   <meta charset="UTF-8" />
+  <script>
+    (function () {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      } else if (location.hash.indexOf('#/') === 0) {
+        var path = location.pathname.replace(/\/+$/, '') + location.hash.slice(1);
+        history.replaceState(null, null, path || '/');
+      }
+    })();
+  </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="manifest" href="/manifest.webmanifest" />
@@ -31,8 +43,6 @@
   <meta name="twitter:description"
     content="A modern web interface to browse, search, and discover Homebrew formulae and casks." />
   <meta name="twitter:image" content="https://amit9838.github.io/brewlens/og-image.png" />
-
-  <link rel="canonical" href="https://amit9838.github.io/brewlens/" />
 
   <!-- Structured data: read by search engines (rich results) and AI models -->
   <script type="application/ld+json">
@@ -161,10 +171,12 @@
 
       <h2 style="font-size: 1.25rem; margin: 24px 0 8px;">Links</h2>
       <ul style="margin: 0; padding-left: 20px; color: #3f3f46;">
-        <li><a href="https://amit9838.github.io/brewlens/#/all">Browse all Homebrew packages</a></li>
-        <li><a href="https://amit9838.github.io/brewlens/#/cask/visual-studio-code">Example cask: Visual Studio Code</a></li>
-        <li><a href="https://amit9838.github.io/brewlens/#/formula/wget">Example formula: wget</a></li>
-        <li><a href="https://amit9838.github.io/brewlens/#/analytics">Homebrew install analytics</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/all">Browse all Homebrew packages</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/installation">Homebrew installation guide</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/cask/visual-studio-code">Example cask: Visual Studio Code</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/formula/wget">Example formula: wget</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/analytics">Homebrew install analytics</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/about">About BrewLens</a></li>
         <li><a href="https://github.com/amit9838/brewlens">Source code on GitHub (MIT license)</a></li>
       </ul>
     </div>

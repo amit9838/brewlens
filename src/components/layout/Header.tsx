@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { MenuIcon, Moon, Sun, LayoutGrid, Compass } from "lucide-react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/brewlens_logo.png";
 import { GlobalSearchBar } from "../ui/GlobalSearchBar";
 
@@ -12,6 +12,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ setIsOpen, isOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const onAllPage = location.pathname === '/all';
   const showSearch = !['/about', '/installation'].includes(location.pathname);
 
@@ -26,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen, isOpen }) => {
 
   const reset_pagination = () => {
     ["cp_cask", "cp_formula"].forEach(key => localStorage.setItem(key, "1"));
-    window.location.href = "/brewlens/#/";
+    navigate("/");
   };
 
   return (
