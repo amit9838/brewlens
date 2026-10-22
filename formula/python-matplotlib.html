@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    (function () {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      } else if (location.hash.indexOf('#/') === 0) {
+        var path = location.pathname.replace(/\/+$/, '') + location.hash.slice(1);
+        history.replaceState(null, null, path || '/');
+      }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/brewlens/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/brewlens/manifest.webmanifest" />
+  <meta name="theme-color" content="#4f46e5" />
+
+  <title>python-matplotlib — Homebrew Formula (3.11.2) | BrewLens</title>
+  <meta name="description"
+    content="Python library for creating static, animated, and interactive visualizations — install with &quot;brew install python-matplotlib&quot;. View version, homepage, dependencies, and install command for the python-matplotlib Homebrew formula on BrewLens." />
+  <meta name="author" content="Amit Chaudhary" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://amit9838.github.io/brewlens/formula/python-matplotlib" />
+  <meta property="og:site_name" content="BrewLens" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="python-matplotlib — Homebrew Formula (3.11.2) | BrewLens" />
+  <meta property="og:description"
+    content="Python library for creating static, animated, and interactive visualizations — install with &quot;brew install python-matplotlib&quot;. View version, homepage, dependencies, and install command for the python-matplotlib Homebrew formula on BrewLens." />
+  <meta property="og:image" content="https://amit9838.github.io/brewlens/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="BrewLens — a web-based explorer for Homebrew casks and formulae" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://amit9838.github.io/brewlens/formula/python-matplotlib" />
+  <meta name="twitter:title" content="python-matplotlib — Homebrew Formula (3.11.2) | BrewLens" />
+  <meta name="twitter:description"
+    content="Python library for creating static, animated, and interactive visualizations — install with &quot;brew install python-matplotlib&quot;. View version, homepage, dependencies, and install command for the python-matplotlib Homebrew formula on BrewLens." />
+  <meta name="twitter:image" content="https://amit9838.github.io/brewlens/og-image.png" />
+
+  <!-- Structured data: read by search engines (rich results) and AI models -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BrewLens",
+    "alternateName": "The Homebrew App Store",
+    "url": "https://amit9838.github.io/brewlens/",
+    "description": "A free, open-source web interface to browse, search, and discover Homebrew formulae and casks — a GUI for macOS package management.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux, Windows (WSL), Web Browser",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Amit Chaudhary", "url": "https://github.com/amit9838" },
+    "publisher": { "@type": "Person", "name": "Amit Chaudhary", "url": "https://github.com/amit9838" },
+    "license": "https://github.com/amit9838/brewlens/blob/main/LICENSE",
+    "image": "https://amit9838.github.io/brewlens/og-image.png",
+    "featureList": [
+      "Browse all Homebrew casks (macOS apps) and formulae (CLI tools)",
+      "Instant keyboard-first search across every Homebrew package",
+      "Package details: version, install command, homepage, SHA-256 checksum, dependencies, artifacts",
+      "Trending apps from Homebrew 30-day install analytics",
+      "Local bookmarks and recently viewed history",
+      "Brewfile import and export",
+      "Deprecation and disable status for every package"
+    ]
+  }
+  </script>
+  <script type="module" crossorigin src="/brewlens/assets/index-DxgxFLu1.js"></script>
+  <link rel="stylesheet" crossorigin href="/brewlens/assets/index-buHV5NLA.css">
+  <link rel="canonical" href="https://amit9838.github.io/brewlens/formula/python-matplotlib" />
+</head>
+
+<body>
+  <!--
+    Crawlable content for search engines and AI crawlers that don't run
+    JavaScript. The `hidden` attribute keeps it from ever painting for users
+    (raw-HTML crawlers ignore it), and React replaces all of #root on mount.
+  -->
+  <div id="root">
+    <div id="bl-crawlable" hidden style="max-width: 760px; margin: 0 auto; padding: 48px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #18181b; line-height: 1.6;">
+      <h1>python-matplotlib — Homebrew Formula</h1>
+      <p>Python library for creating static, animated, and interactive visualizations</p>
+      
+      <h2>Install python-matplotlib with Homebrew</h2>
+      <pre><code>brew install python-matplotlib</code></pre>
+      <ul>
+        <li>Token: <code>python-matplotlib</code></li>
+        <li>Version: 3.11.2</li>
+        <li>Homepage: <a href="https://matplotlib.org/">https://matplotlib.org/</a></li>
+        <li>License: PSF-2.0</li>
+        <li>Platforms: macOS, Linux, Windows (WSL)</li>
+      </ul>
+      <h2>Dependencies</h2><ul><li><a href="https://amit9838.github.io/brewlens/formula/freetype">freetype</a></li><li><a href="https://amit9838.github.io/brewlens/formula/numpy">numpy</a></li><li><a href="https://amit9838.github.io/brewlens/formula/pillow">pillow</a></li><li><a href="https://amit9838.github.io/brewlens/formula/python@3.15">python@3.15</a></li><li><a href="https://amit9838.github.io/brewlens/formula/qhull">qhull</a></li></ul>
+
+      <h2>Explore BrewLens</h2>
+      <ul>
+        <li><a href="https://amit9838.github.io/brewlens/">BrewLens home — trending Homebrew apps</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/all">Browse all Homebrew casks</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/all?type=formula">Browse all Homebrew formulae</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/installation">How to install Homebrew</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/analytics">Homebrew install analytics</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/about">About BrewLens</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>

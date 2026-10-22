@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    (function () {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      if (redirect && redirect !== location.href) {
+        history.replaceState(null, null, redirect);
+      } else if (location.hash.indexOf('#/') === 0) {
+        var path = location.pathname.replace(/\/+$/, '') + location.hash.slice(1);
+        history.replaceState(null, null, path || '/');
+      }
+    })();
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/brewlens/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/brewlens/manifest.webmanifest" />
+  <meta name="theme-color" content="#4f46e5" />
+
+  <title>gstreamer — Homebrew Formula (1.28.8) | BrewLens</title>
+  <meta name="description"
+    content="Development framework for multimedia applications — install with &quot;brew install gstreamer&quot;. View version, homepage, dependencies, and install command for the gstreamer Homebrew formula on BrewLens." />
+  <meta name="author" content="Amit Chaudhary" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://amit9838.github.io/brewlens/formula/gstreamer" />
+  <meta property="og:site_name" content="BrewLens" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:title" content="gstreamer — Homebrew Formula (1.28.8) | BrewLens" />
+  <meta property="og:description"
+    content="Development framework for multimedia applications — install with &quot;brew install gstreamer&quot;. View version, homepage, dependencies, and install command for the gstreamer Homebrew formula on BrewLens." />
+  <meta property="og:image" content="https://amit9838.github.io/brewlens/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="BrewLens — a web-based explorer for Homebrew casks and formulae" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://amit9838.github.io/brewlens/formula/gstreamer" />
+  <meta name="twitter:title" content="gstreamer — Homebrew Formula (1.28.8) | BrewLens" />
+  <meta name="twitter:description"
+    content="Development framework for multimedia applications — install with &quot;brew install gstreamer&quot;. View version, homepage, dependencies, and install command for the gstreamer Homebrew formula on BrewLens." />
+  <meta name="twitter:image" content="https://amit9838.github.io/brewlens/og-image.png" />
+
+  <!-- Structured data: read by search engines (rich results) and AI models -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "BrewLens",
+    "alternateName": "The Homebrew App Store",
+    "url": "https://amit9838.github.io/brewlens/",
+    "description": "A free, open-source web interface to browse, search, and discover Homebrew formulae and casks — a GUI for macOS package management.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux, Windows (WSL), Web Browser",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Amit Chaudhary", "url": "https://github.com/amit9838" },
+    "publisher": { "@type": "Person", "name": "Amit Chaudhary", "url": "https://github.com/amit9838" },
+    "license": "https://github.com/amit9838/brewlens/blob/main/LICENSE",
+    "image": "https://amit9838.github.io/brewlens/og-image.png",
+    "featureList": [
+      "Browse all Homebrew casks (macOS apps) and formulae (CLI tools)",
+      "Instant keyboard-first search across every Homebrew package",
+      "Package details: version, install command, homepage, SHA-256 checksum, dependencies, artifacts",
+      "Trending apps from Homebrew 30-day install analytics",
+      "Local bookmarks and recently viewed history",
+      "Brewfile import and export",
+      "Deprecation and disable status for every package"
+    ]
+  }
+  </script>
+  <script type="module" crossorigin src="/brewlens/assets/index-DxgxFLu1.js"></script>
+  <link rel="stylesheet" crossorigin href="/brewlens/assets/index-buHV5NLA.css">
+  <link rel="canonical" href="https://amit9838.github.io/brewlens/formula/gstreamer" />
+</head>
+
+<body>
+  <!--
+    Crawlable content for search engines and AI crawlers that don't run
+    JavaScript. The `hidden` attribute keeps it from ever painting for users
+    (raw-HTML crawlers ignore it), and React replaces all of #root on mount.
+  -->
+  <div id="root">
+    <div id="bl-crawlable" hidden style="max-width: 760px; margin: 0 auto; padding: 48px 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #18181b; line-height: 1.6;">
+      <h1>gstreamer — Homebrew Formula</h1>
+      <p>Development framework for multimedia applications</p>
+      
+      <h2>Install gstreamer with Homebrew</h2>
+      <pre><code>brew install gstreamer</code></pre>
+      <ul>
+        <li>Token: <code>gstreamer</code></li>
+        <li>Version: 1.28.8</li>
+        <li>Homepage: <a href="https://gstreamer.freedesktop.org/">https://gstreamer.freedesktop.org/</a></li>
+        <li>License: LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT</li>
+        <li>Platforms: macOS, Linux, Windows (WSL)</li>
+      </ul>
+      <h2>Dependencies</h2><ul><li><a href="https://amit9838.github.io/brewlens/formula/aom">aom</a></li><li><a href="https://amit9838.github.io/brewlens/formula/cairo">cairo</a></li><li><a href="https://amit9838.github.io/brewlens/formula/dav1d">dav1d</a></li><li><a href="https://amit9838.github.io/brewlens/formula/faac">faac</a></li><li><a href="https://amit9838.github.io/brewlens/formula/faad2">faad2</a></li><li><a href="https://amit9838.github.io/brewlens/formula/ffmpeg">ffmpeg</a></li><li><a href="https://amit9838.github.io/brewlens/formula/flac">flac</a></li><li><a href="https://amit9838.github.io/brewlens/formula/gdk-pixbuf">gdk-pixbuf</a></li><li><a href="https://amit9838.github.io/brewlens/formula/glib">glib</a></li><li><a href="https://amit9838.github.io/brewlens/formula/graphene">graphene</a></li><li><a href="https://amit9838.github.io/brewlens/formula/gtk+3">gtk+3</a></li><li><a href="https://amit9838.github.io/brewlens/formula/gtk4">gtk4</a></li><li><a href="https://amit9838.github.io/brewlens/formula/imath">imath</a></li><li><a href="https://amit9838.github.io/brewlens/formula/jpeg-turbo">jpeg-turbo</a></li><li><a href="https://amit9838.github.io/brewlens/formula/json-glib">json-glib</a></li><li><a href="https://amit9838.github.io/brewlens/formula/lame">lame</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libass">libass</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libnice">libnice</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libogg">libogg</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libpng">libpng</a></li><li><a href="https://amit9838.github.io/brewlens/formula/librsvg">librsvg</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libshout">libshout</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libsndfile">libsndfile</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libsodium">libsodium</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libsoup">libsoup</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libusrsctp">libusrsctp</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libvmaf">libvmaf</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libvorbis">libvorbis</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libvpx">libvpx</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libx11">libx11</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libxcb">libxcb</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libxext">libxext</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libxfixes">libxfixes</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libxi">libxi</a></li><li><a href="https://amit9838.github.io/brewlens/formula/libxtst">libxtst</a></li><li><a href="https://amit9838.github.io/brewlens/formula/little-cms2">little-cms2</a></li><li><a href="https://amit9838.github.io/brewlens/formula/mpg123">mpg123</a></li><li><a href="https://amit9838.github.io/brewlens/formula/nettle">nettle</a></li><li><a href="https://amit9838.github.io/brewlens/formula/opencore-amr">opencore-amr</a></li><li><a href="https://amit9838.github.io/brewlens/formula/openexr">openexr</a></li><li><a href="https://amit9838.github.io/brewlens/formula/openjpeg">openjpeg</a></li><li><a href="https://amit9838.github.io/brewlens/formula/openssl@4">openssl@4</a></li><li><a href="https://amit9838.github.io/brewlens/formula/opus">opus</a></li><li><a href="https://amit9838.github.io/brewlens/formula/orc">orc</a></li><li><a href="https://amit9838.github.io/brewlens/formula/pango">pango</a></li><li><a href="https://amit9838.github.io/brewlens/formula/pygobject3">pygobject3</a></li><li><a href="https://amit9838.github.io/brewlens/formula/python@3.15">python@3.15</a></li><li><a href="https://amit9838.github.io/brewlens/formula/rtmpdump">rtmpdump</a></li><li><a href="https://amit9838.github.io/brewlens/formula/speex">speex</a></li><li><a href="https://amit9838.github.io/brewlens/formula/srt">srt</a></li><li><a href="https://amit9838.github.io/brewlens/formula/srtp">srtp</a></li><li><a href="https://amit9838.github.io/brewlens/formula/svt-av1">svt-av1</a></li><li><a href="https://amit9838.github.io/brewlens/formula/taglib">taglib</a></li><li><a href="https://amit9838.github.io/brewlens/formula/theora">theora</a></li><li><a href="https://amit9838.github.io/brewlens/formula/webp">webp</a></li><li><a href="https://amit9838.github.io/brewlens/formula/x264">x264</a></li><li><a href="https://amit9838.github.io/brewlens/formula/x265">x265</a></li><li><a href="https://amit9838.github.io/brewlens/formula/gettext">gettext</a></li><li><a href="https://amit9838.github.io/brewlens/formula/harfbuzz">harfbuzz</a></li><li><a href="https://amit9838.github.io/brewlens/formula/musepack">musepack</a></li></ul>
+
+      <h2>Explore BrewLens</h2>
+      <ul>
+        <li><a href="https://amit9838.github.io/brewlens/">BrewLens home — trending Homebrew apps</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/all">Browse all Homebrew casks</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/all?type=formula">Browse all Homebrew formulae</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/installation">How to install Homebrew</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/analytics">Homebrew install analytics</a></li>
+        <li><a href="https://amit9838.github.io/brewlens/about">About BrewLens</a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+
+</html>
