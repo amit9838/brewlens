@@ -58,6 +58,8 @@ import {
     getCategoryForToken,
     type Category,
 } from "../../data/categories";
+import { AppleLogo } from "../ui/AppleLogo";
+
 
 
 const ICON_MAP: Record<string, React.ComponentType<any>> = {
@@ -309,7 +311,7 @@ export const BrewList: React.FC = () => {
 
     const handleBookmarkView = useCallback(() =>
         openModal(() => <BookmarksModal />, { closeOnBackdropClick: true, size: 'lg' }),
-    []);
+        []);
 
     const activeCategory = categories.find(c => c.id === activeCategoryId);
     const ActiveCatIcon = activeCategory ? (ICON_MAP[activeCategory.icon] || Home) : Home;
@@ -331,7 +333,10 @@ export const BrewList: React.FC = () => {
                                         : "text-gray-500 hover:text-gray-700 dark:hover:text-zinc-300"
                                 )}
                             >
-                                {t=='cask'?" ":""}{t}s
+                                <div className="flex gap-1 items-center">
+
+                                    {t == 'cask' ? <AppleLogo className="w-3 h-3" /> : ""}{t}s
+                                </div>
                             </button>
                         ))}
                     </div>

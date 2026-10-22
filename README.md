@@ -125,6 +125,7 @@ Distributed under the MIT License — see [`LICENSE`](LICENSE).
 
 - [Homebrew](https://docs.brew.sh/) — the package manager that makes this all possible
 - [lucide](https://lucide.dev/) and [Shields.io](https://shields.io/) — icons and badges
+- [visit count](https://hitscounter.dev/)
 
 ---
 
