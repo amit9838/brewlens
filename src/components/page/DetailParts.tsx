@@ -124,7 +124,7 @@ export function Hero({
                             type="button"
                             onClick={() => copy(item.installCmd, 'cmd')}
                             aria-label="Copy install command"
-                            className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-full border-0 bg-accent px-4 text-sm font-bold text-[#111114]"
+                            className="flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-full border-0 bg-accent px-4 text-sm font-bold text-[#111114] transition hover:bg-emerald-400 active:scale-[0.97]"
                         >
                             <Copy size={16} />{isCopied('cmd') ? 'Copied' : 'Copy'}
                         </button>

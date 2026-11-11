@@ -137,7 +137,7 @@ export default function Installation() {
                                                 type="button"
                                                 onClick={() => copy(cmd, key)}
                                                 aria-label="Copy command"
-                                                className="mt-0.5 flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-[10px] border-0 bg-[#2A2A2F] px-3.5 text-[13px] font-semibold text-white"
+                                                className="mt-0.5 flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-[10px] border-0 bg-[#2A2A2F] px-3.5 text-[13px] font-semibold text-white transition hover:bg-[#3A3A40] active:scale-[0.97]"
                                             >
                                                 {isCopied(key) ? <Check size={16} /> : <Copy size={16} />}{isCopied(key) ? 'Copied' : 'Copy'}
                                             </button>
@@ -162,7 +162,7 @@ export default function Installation() {
                                     type="button"
                                     onClick={() => copy(cmd, `g-${cmd}`)}
                                     aria-label={`Copy ${cmd}`}
-                                    className="flex cursor-pointer items-center gap-3 rounded-[14px] border-0 bg-raised px-3.5 py-3 text-left text-ink"
+                                    className="flex cursor-pointer items-center gap-3 rounded-[14px] border-0 bg-raised px-3.5 py-3 text-left text-ink transition-colors hover:bg-chip"
                                 >
                                     <span className="min-w-0 flex-1">
                                         <code className="block font-mono text-[13.5px]">{cmd}</code>
