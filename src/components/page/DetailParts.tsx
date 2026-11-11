@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Braces, Check, ChevronLeft, Copy, Share, Info } from 'lucide-react';
 import type { BrewItem } from '../../types';
 import { AppIcon } from '../ui/AppIcon';
-import { FaviconGlow } from '../ui/AppCards';
+import { FaviconGlow, StretchLink } from '../ui/AppCards';
 import { BookmarkButton } from '../ui/BookmarkButton';
 import { Chip, EmptyState, IconButton, PillLink, Card, CardTitle, Eyebrow } from '../ui/kit';
 import { useBrewData } from '../../hooks/useBrewData';
@@ -196,17 +196,27 @@ export function MoreInCategory({ item, categoryId }: { item: BrewItem; categoryI
     if (!cat || !more.length) return null;
     return (
         <Card>
-            <CardTitle>More in {cat.label}</CardTitle>
-            {more.map((m) => (
-                <div key={m.id} className="flex items-center gap-3">
-                    <AppIcon name={m.name} homepage={m.homepage} size={48} />
-                    <div className="min-w-0 flex-1">
-                        <Link to={`/${m.type}/${m.token}`} className="text-[15px] font-semibold text-ink no-underline hover:text-ink hover:underline">{m.name}</Link>
-                        <div className="truncate text-[13px] text-muted">{m.desc}</div>
+            <div className="flex items-center justify-between gap-3">
+                <CardTitle>More in {cat.label}</CardTitle>
+                <Link
+                    to={`/all?category=${cat.id}&type=${item.type}`}
+                    aria-label={`See more in ${cat.label}`}
+                    className="shrink-0 whitespace-nowrap text-sm font-semibold text-accent-ink no-underline hover:underline"
+                >
+                    See more →
+                </Link>
+            </div>
+            <div className="flex flex-col divide-y divide-line">
+                {more.map((m) => (
+                    <div key={m.id} className="relative -mx-3 flex items-center gap-3 rounded-2xl px-3 py-2.5 transition-colors hover:bg-chip">
+                        <AppIcon name={m.name} homepage={m.homepage} size={40} />
+                        <div className="min-w-0 flex-1">
+                            <StretchLink to={`/${m.type}/${m.token}`} className="block truncate text-[15px] font-semibold">{m.name}</StretchLink>
+                            <div className="truncate text-[13px] text-muted">{m.desc}</div>
+                        </div>
                     </div>
-                    <PillLink to={`/${m.type}/${m.token}`} variant="soft" className="h-10 px-4 text-sm">View</PillLink>
-                </div>
-            ))}
+                ))}
+            </div>
         </Card>
     );
 }
