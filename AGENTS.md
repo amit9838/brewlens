@@ -30,7 +30,7 @@ All package data comes from the public Homebrew API at [formulae.brew.sh](https:
 - React 19 + TypeScript (strict) + Vite 7
 - Tailwind CSS 4 (through `@tailwindcss/vite`, configured in CSS, no `tailwind.config.js`)
 - React Router 7 (`BrowserRouter` with `basename` = `/brewlens/`)
-- TanStack React Query 5 for every fetch
+- TanStack React Query 5 for every fetch, persisted to IndexedDB with `@tanstack/react-query-persist-client` + `@tanstack/query-async-storage-persister` + `idb-keyval`
 - `lucide-react` for icons, `clsx` + `tailwind-merge` (through `cn()`), `@radix-ui/react-slot`
 - ESLint 9 (flat config, `typescript-eslint`, `react-hooks`, `react-refresh`)
 - `gh-pages` for deploys, `scripts/prerender.mjs` for static HTML per route
@@ -117,8 +117,8 @@ src/
     layout/                Header, Drawer (nav, theme toggle)
     page/                  one component per route + DetailParts, skeletons, Error
     ui/                    kit.tsx primitives, AppCards, AppIcon, Modal, SearchPalette, FiltersModal, Pagination, …
-  hooks/                   useBrewData, useAnalytics, useDetailItem, useStorage, usePagination, useDocumentMeta, useTheme, useCopy, …
-  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), format, brewfile, iconTone, platform
+  hooks/                   useBrewData, useBrewItems, useAnalytics, useDetailItem, useStorage, usePagination, useDocumentMeta, useTheme, useCopy, …
+  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), queryPersister, format, brewfile, iconTone, platform
   data/                    categories.ts (taxonomy + styles), curated.ts (featured / Editor's Picks pools)
 scripts/prerender.mjs      post-build: static HTML per route + sitemap.xml
 public/                    404.html (SPA redirect), manifest, robots.txt, llms.txt, og-image, logos
@@ -201,6 +201,8 @@ When unsure, ask:
 | Number formatting | `formatCount`, `toNumber` |
 | Category of a package, its colour and icon | `getCategoryForToken`, `getCategoryStyle`, `CATEGORY_ICON_MAP` |
 | Brewfile | `buildBrewfile` |
+| A few packages by token, without waiting for the full list | `useBrewItems(type, tokens)` |
+| Single-package API URL | `itemUrl(type, token)` (`lib/utils.ts`) |
 | Detail page data | `useDetailItem(type)` (`hooks/useDetailItem.ts`) |
 | Detail page pieces | `DetailFallback`, `TopBar`, `Hero`, `InstallsCard`, `MoreInCategory`, `ExternalLinkPill` in `DetailParts.tsx` |
 | Class names | `cn(...)` |
@@ -279,7 +281,7 @@ The app should feel:
 
 | State | Where |
 | --- | --- |
-| Server data | React Query (`useBrewData`, `useAnalytics`); defaults in `App.tsx`: 10-minute `staleTime`, no refetch on focus (analytics: 1 h) |
+| Server data | React Query (`useBrewData`, `useAnalytics`); defaults in `App.tsx`: 10-minute `staleTime`, no refetch on focus (analytics: 1 h). Lists and analytics persist to IndexedDB (`lib/queryPersister.ts`); bump `CACHE_VERSION` when their shape changes |
 | Shareable view state (type, search, category) | URL search params (`useSearchParams`) |
 | Explore filters, view mode, fonts toggle | `useStorage` (sessionStorage) |
 | Bookmarks, recently viewed, theme, current page | localStorage through their context / hook |

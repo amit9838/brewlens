@@ -10,6 +10,7 @@ import {
     Rocket, Sparkles, Terminal, Trash2, Zap, type LucideIcon,
 } from 'lucide-react';
 import { useBrewData } from '../../hooks/useBrewData';
+import { useBrewItems } from '../../hooks/useBrewItems';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import { useDocumentMeta } from '../../hooks/useDocumentMeta';
 import { useBookmarks } from '../contexts/BookmarksContext';
@@ -177,10 +178,11 @@ export default function Discover() {
     const caskByToken = useMemo(() => new Map(casks.map((c) => [c.token, c])), [casks]);
     const formulaByToken = useMemo(() => new Map(formulae.map((f) => [f.token, f])), [formulae]);
 
-    const picks = useMemo(
-        () => EDITORS_PICKS_TOKENS.map((t) => caskByToken.get(t)).filter(Boolean).slice(0, 5) as BrewItem[],
-        [caskByToken],
-    );
+    // Featured and picks are fetched on their own, so they render without waiting for the full lists.
+    // Each section appears once all of its items have settled, so rows don't reorder as they arrive.
+    const featured = useBrewItems('cask', FEATURED_CASKS);
+    const pickItems = useBrewItems('cask', EDITORS_PICKS_TOKENS);
+    const picks = useMemo(() => (pickItems.isLoading ? [] : pickItems.items.slice(0, 5)), [pickItems]);
 
     const { data: caskStats } = useAnalytics('cask', '30d');
     const { data: formulaStats } = useAnalytics('formula', '30d');
@@ -200,7 +202,7 @@ export default function Discover() {
         <>
             {/* FEATURE + EDITOR'S PICKS */}
             <section id="top" className="flex flex-wrap items-stretch gap-8">
-                <Hero items={casks} />
+                <Hero items={featured.isLoading ? [] : featured.items} />
                 <aside id="picks" aria-labelledby="picks-title" className="flex min-w-0 flex-[2_1_420px] flex-col">
                     <div className="text-[15px] font-medium text-muted">Hand-picked by our editors</div>
                     <h2 id="picks-title" className="mb-1 mt-0.5 text-[30px] font-bold tracking-[-0.025em]">Editor’s Picks</h2>

@@ -27,6 +27,10 @@ const API_CONFIG = {
     formula: { url: "https://formulae.brew.sh/api/formula.json", installPrefix: "brew install" }
 };
 
+/** API URL of a single cask or formula, e.g. `https://formulae.brew.sh/api/cask/firefox.json`. */
+export const itemUrl = (type: BrewType, token: string) =>
+    `https://formulae.brew.sh/api/${type}/${token}.json`;
+
 /**
  * Normalizes a raw Homebrew API object into a typed `BrewItem`.
  *
@@ -77,7 +81,9 @@ export const normalizeItem = (rawData: RawBrewData, type: BrewType, keepRaw = tr
  */
 export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewItem[]> => {
     const full_url = url || API_CONFIG[type].url;
-    const res = await fetch(full_url);
+    // A single package is a few KB and is what the page is waiting for; the full lists are
+    // several MB. The hint lets the browser give the small requests the bandwidth first.
+    const res = await fetch(full_url, { priority: url ? 'high' : 'low' });
     if (!res.ok) throw new Error(`Failed to fetch ${type} data from ${full_url}`);
     const json: RawBrewData | RawBrewData[] = await res.json();
     // Lists come back as arrays and drop `raw`; a single package keeps it for the detail page.

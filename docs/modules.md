@@ -81,6 +81,33 @@ useBrewData(type: BrewType, url?: string)
 
 ---
 
+## `src/hooks/useBrewItems.ts`
+
+```ts
+useBrewItems(type: BrewType, tokens: string[]) // → { items: BrewItem[], isLoading: boolean }
+```
+
+A few packages by token, for Discover's featured carousel and Editor's Picks.
+
+- If the full list is cached (repeat visit), items come from it, with no extra requests
+- Otherwise each package is fetched from `/api/{type}/{token}.json`, all in parallel (a few KB each), so Discover renders long before the multi-MB lists arrive
+- Uses the same query key as the detail page (`['brew', type, itemUrl(type, token)]`), so opening one of these packages is instant
+- Unknown tokens (404) are dropped; `isLoading` stays true until every request has settled, so rows don't reorder
+- `fetchBrewData` sends single-package requests with `priority: 'high'` and the full lists with `priority: 'low'`
+
+---
+
+## `src/lib/queryPersister.ts`
+
+Persists part of the React Query cache to IndexedDB (`idb-keyval`, key `brewlens_query_cache`) through `PersistQueryClientProvider` in `App.tsx`.
+
+- Saves only successful full lists (`['brew', type]`) and analytics; detail fetches and GitHub stars stay in memory
+- `CACHE_MAX_AGE` (7 days): older data is discarded. The QueryClient's `gcTime` uses the same value, so a list isn't dropped from memory, and then from IndexedDB, while the tab is open
+- `CACHE_VERSION`: bump it when `BrewItem`, `normalizeItem` or `AnalyticsData` change shape, so old saved data is thrown away
+- If IndexedDB is unavailable, saves fail silently and the app works as before
+
+---
+
 ## `src/hooks/useDetailItem.ts`
 
 Shared logic for `CaskDetail` and `FormulaeDetail`.

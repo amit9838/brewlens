@@ -47,8 +47,9 @@ Icons for packages come from Google's favicon service; their colour is sampled t
 ## Data Flow
 
 1. `main.tsx` mounts `App` inside `BrowserRouter` (basename `import.meta.env.BASE_URL`, i.e. `/brewlens/`).
-2. `App` wraps the shell in `QueryClientProvider`, `ModalProvider`, `BookmarksProvider`, `RecentlyViewedProvider` and `SearchPaletteProvider`.
-3. A page calls `useBrewData(type)` (or `useAnalytics`), which fetches through React Query.
+2. `App` wraps the shell in `PersistQueryClientProvider` (React Query + the IndexedDB cache from `lib/queryPersister.ts`), `ModalProvider`, `BookmarksProvider`, `RecentlyViewedProvider` and `SearchPaletteProvider`.
+3. A page calls `useBrewData(type)` (or `useAnalytics`), which fetches through React Query. On a repeat visit the package lists and analytics are restored from IndexedDB first and refetched in the background once older than 10 minutes.
+   Discover's featured carousel and Editor's Picks use `useBrewItems`, which fetches just those packages in parallel, so the home page doesn't wait for the full lists.
 4. Raw API objects (`RawBrewData`) are normalized by `normalizeItem()` into `BrewItem[]`.
 5. `BrewList` reads type, search and category from the URL search params, filters with `useMemo` on the precomputed `_searchString`, and paginates with `usePagination`.
 6. `AppCard` / `AppRow` / `CompactRow` render each item; the whole card is a link to `/cask/:token` or `/formula/:token`.
@@ -65,7 +66,8 @@ Icons for packages come from Google's favicon service; their colour is sampled t
 | Recently viewed | `RecentlyViewedContext` | localStorage (with TTL) |
 | Theme | `useTheme` | localStorage (`theme`), falls back to the OS preference |
 | Modal state | `ModalContext` | None |
-| API data cache | React Query | In-memory (10 min stale, analytics 1 h); list items drop `raw` |
+| API data cache | React Query | In memory (10 min stale, analytics 1 h); list items drop `raw` |
+| Package lists + analytics between visits | `lib/queryPersister.ts` | IndexedDB (`brewlens_query_cache`, 7-day max age, versioned by `CACHE_VERSION`) |
 
 ## Routing
 
