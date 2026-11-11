@@ -1,506 +1,245 @@
 /**
  * @file BrewList.tsx
- * Clean, high-performance package search and listing page for Homebrew casks and formulae.
- * Features type toggles, search, tabbed categories (with flat icons), quick filter popover,
- * grid/list views, A-Z index drawer, bookmarks, and pagination.
+ * Explore: searchable, filterable, paginated list of every cask and formula.
+ * URL params: `type` (cask|formula), `category`, `q`.
  */
-import React, { useState, useMemo, useEffect, useCallback, useDeferredValue } from "react";
-import { useBrewData } from "../../hooks/useBrewData";
-import { useDocumentMeta } from "../../hooks/useDocumentMeta";
-import { usePagination } from "../../hooks/usePagination";
-import { useStorage } from "../../hooks/useStorage";
-import { ItemCard } from "../ItemCard";
-import { cn } from '../../lib/utils';
-import { type BrewType } from "../../types";
-import SkeletonGrid from "./SkeletonGrid";
-import ErrorState from "./Error";
-import {
-    Search,
-    X,
-    LayoutGrid,
-    List,
-    Bookmark,
-    Keyboard,
-    SlidersHorizontal,
-    Home,
-    Zap,
-    Terminal,
-    Globe,
-    Palette,
-    Film,
-    Sliders,
-    MessageSquare,
-    Shield,
-    Type,
-    Bot,
-    Gamepad2,
-    Code,
-    Database,
-    Rocket,
-    GitBranch,
-    Cpu,
-    Network,
-    Hammer,
-    Gauge,
-} from "lucide-react";
-import { Pagination } from "../ui/Pagination";
-import { Button } from "../ui/Button";
+import React, { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { ArrowDownAZ, Search, SlidersHorizontal, X } from 'lucide-react';
+import { useBrewData } from '../../hooks/useBrewData';
+import { useDocumentMeta } from '../../hooks/useDocumentMeta';
+import { usePagination } from '../../hooks/usePagination';
+import { useStorage } from '../../hooks/useStorage';
 import { useModal } from '../contexts/ModalContexts';
-import { useSearchParams } from "react-router-dom";
-
-import SearchIndexModal from "../ui/SearchIndexModal";
-import BookmarksModal from "../ui/BookmarksModal";
-import { ItemListRow } from "./ItemListRow";
-import { SectionHeader } from "../ui/SectionHeader";
-import {
-    CASK_CATEGORIES,
-    FORMULA_CATEGORIES,
-    getCategoryForToken,
-    type Category,
-} from "../../data/categories";
-import { AppleLogo } from "../ui/AppleLogo";
-
-
-
-const ICON_MAP: Record<string, React.ComponentType<any>> = {
-    Home, Zap, Terminal, Globe, Palette, Film, Sliders, MessageSquare, Shield, Type,
-    Bot, Gamepad2, Code, Database, Rocket, GitBranch, Cpu, Network, Hammer, Gauge,
-};
-
-const CategoryTabs: React.FC<{
-    categories: Category[];
-    activeId: string;
-    onChange: (id: string) => void;
-}> = ({ categories, activeId, onChange }) => (
-    <div className="relative">
-        <div className="flex gap-1 overflow-x-auto pb-1" style={{ scrollbarWidth: 'none' }}>
-            {categories.map(cat => {
-                const IconComponent = ICON_MAP[cat.icon] || Home;
-                const isActive = activeId === cat.id;
-                return (
-                    <button
-                        key={cat.id}
-                        onClick={() => onChange(cat.id)}
-                        className={cn(
-                            "flex-shrink-0 flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap",
-                            isActive
-                                ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
-                                : "bg-zinc-100 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700"
-                        )}
-                    >
-                        <IconComponent size={13} className={isActive ? "text-white" : "text-zinc-400 dark:text-zinc-500"} />
-                        <span>{cat.label}</span>
-                    </button>
-                );
-            })}
-        </div>
-        <div className="absolute right-0 top-0 bottom-1 w-8 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent pointer-events-none" />
-    </div>
-);
-
-const FilterPills: React.FC<{
-    type: BrewType;
-    activeFilters: Set<string>;
-    showFonts: boolean;
-    toggleFilter: (f: string) => void;
-    setShowFonts: (fn: (p: boolean) => boolean) => void;
-    clearFilters: () => void;
-}> = ({ type, activeFilters, showFonts, toggleFilter, setShowFonts, clearFilters }) => {
-    const [open, setOpen] = useState(false);
-    const hasActive = activeFilters.size > 0 || showFonts;
-
-    return (
-        <div className="relative">
-            <button
-                onClick={() => setOpen(o => !o)}
-                className={cn(
-                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer",
-                    hasActive
-                        ? "bg-emerald-600 text-white border-emerald-600"
-                        : "bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700"
-                )}
-            >
-                <SlidersHorizontal size={11} />
-                Filters
-                {hasActive && (
-                    <span className="bg-white/30 rounded-full px-1 text-[10px]">
-                        {activeFilters.size + (showFonts ? 1 : 0)}
-                    </span>
-                )}
-            </button>
-
-            {open && (
-                <div className="absolute right-0 top-9 z-50 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-xl p-3 min-w-[180px] flex flex-col gap-1.5">
-                    {(['oss', 'proprietary', 'active', 'inactive'] as const).map(f => (
-                        <button
-                            key={f}
-                            onClick={() => toggleFilter(f)}
-                            className={cn(
-                                "flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold text-left transition-colors cursor-pointer",
-                                activeFilters.has(f)
-                                    ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
-                                    : "hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
-                            )}
-                        >
-                            {f === 'oss' ? 'Open Source Only' : f === 'proprietary' ? 'Proprietary' : f === 'active' ? 'Active' : 'Deprecated/Disabled'}
-                            {activeFilters.has(f) && <X size={10} />}
-                        </button>
-                    ))}
-                    {type === 'cask' && (
-                        <button
-                            onClick={() => setShowFonts(p => !p)}
-                            className={cn(
-                                "flex items-center justify-between px-3 py-1.5 rounded-xl text-xs font-semibold text-left transition-colors cursor-pointer",
-                                showFonts
-                                    ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400"
-                                    : "hover:bg-zinc-50 dark:hover:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
-                            )}
-                        >
-                            Include Fonts {showFonts && <X size={10} />}
-                        </button>
-                    )}
-                    {hasActive && (
-                        <button
-                            onClick={() => { clearFilters(); setOpen(false); }}
-                            className="mt-1 text-[10px] font-bold text-red-500 hover:text-red-600 px-3 py-1 text-left cursor-pointer"
-                        >
-                            Clear all filters
-                        </button>
-                    )}
-                </div>
-            )}
-        </div>
-    );
-};
+import { AppCard, AppRow } from '../ui/AppCards';
+import { Pagination } from '../ui/Pagination';
+import SearchIndexModal from '../ui/SearchIndexModal';
+import FiltersModal from '../ui/FiltersModal';
+import { EmptyState, PillButton, Segmented } from '../ui/kit';
+import { shortcutLabel } from '../ui/SearchPalette';
+import SkeletonGrid from './SkeletonGrid';
+import ErrorState from './Error';
+import { CASK_CATEGORIES, FORMULA_CATEGORIES, getCategoryForToken } from '../../data/categories';
+import { cn } from '../../lib/utils';
+import type { BrewType } from '../../types';
 
 export const BrewList: React.FC = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const type: BrewType = (searchParams.get('type') as BrewType) === 'formula' ? 'formula' : 'cask';
-    const search = searchParams.get('q') || '';
+    const [params, setParams] = useSearchParams();
+    const type: BrewType = params.get('type') === 'formula' ? 'formula' : 'cask';
+    const search = params.get('q') || '';
+    const categoryId = params.get('category') || 'all';
 
     useDocumentMeta({
         title: type === 'formula'
-            ? "All Homebrew Formulae — CLI Tools & Libraries | BrewLens"
-            : "All Homebrew Casks — macOS Apps | BrewLens",
+            ? 'All Homebrew Formulae — CLI Tools & Libraries | BrewLens'
+            : 'All Homebrew Casks — macOS Apps | BrewLens',
         description: type === 'formula'
-            ? "Browse and search every Homebrew formula — command-line tools and libraries for macOS, Linux, and WSL. See versions, install commands, and dependencies."
-            : "Browse and search every Homebrew cask — GUI apps for macOS. See versions, install commands, download URLs, and checksums.",
+            ? 'Browse and search every Homebrew formula — command-line tools and libraries for macOS, Linux, and WSL. See versions, install commands, and dependencies.'
+            : 'Browse and search every Homebrew cask — GUI apps for macOS. See versions, install commands, download URLs, and checksums.',
     });
-    const setSearch = useCallback((val: string) => {
-        const newParams = new URLSearchParams(searchParams);
-        if (val) {
-            newParams.set('q', val);
-        } else {
-            newParams.delete('q');
-        }
-        setSearchParams(newParams);
-    }, [searchParams, setSearchParams]);
-
-    const [itemsPerPage, setItemsPerPage] = useState(48);
-    const [newChar, setNewChar] = useState<string | null>(null);
-    const [filterArr, setFilterArr] = useStorage<string[]>('brewlist_filters', ['active']);
-    const activeFilters = new Set(filterArr);
-    const setActiveFilters = (fn: Set<string> | ((prev: Set<string>) => Set<string>)) => {
-        setFilterArr(prev => {
-            const next = typeof fn === 'function' ? fn(new Set(prev)) : fn;
-            return [...next];
-        });
-    };
-    const [showFonts, setShowFonts] = useStorage<boolean>('brewlist_showFonts', false);
-    const [viewMode, setViewMode] = useStorage<'grid' | 'list'>('brewlist_viewMode', 'grid');
-
-    const activeCategoryId = searchParams.get('category') || 'all';
 
     const { openModal, closeModal } = useModal();
+    const [itemsPerPage, setItemsPerPage] = useState(48);
+    const [filterArr, setFilterArr] = useStorage<string[]>('brewlist_filters', ['active']);
+    const [showFonts, setShowFonts] = useStorage<boolean>('brewlist_showFonts', false);
+    const [viewMode, setViewMode] = useStorage<'grid' | 'list'>('brewlist_viewMode', 'grid');
+    const activeFilters = useMemo(() => new Set(filterArr), [filterArr]);
 
     const categories = type === 'cask' ? CASK_CATEGORIES : FORMULA_CATEGORIES;
-
     const { data = [], isLoading, error } = useBrewData(type);
+    const deferredSearch = useDeferredValue(search);
 
-    // Precompute token→category mapping once when data/categories change,
-    // avoiding O(n × categories) scanning on every category tab switch.
+    const setParam = useCallback((key: string, value: string | null) => {
+        const next = new URLSearchParams(params);
+        if (value) next.set(key, value); else next.delete(key);
+        setParams(next, { replace: key === 'q' });
+    }, [params, setParams]);
+
+    // token → category id, computed once per dataset.
     const catIndex = useMemo(() => {
         const map = new Map<string, string>();
-        for (const item of data) {
-            map.set(item.token, getCategoryForToken(item, categories));
-        }
+        for (const item of data) map.set(item.token, getCategoryForToken(item, categories));
         return map;
     }, [data, categories]);
 
-    const deferredSearch = useDeferredValue(search);
-
-    const groups: Record<string, string[]> = {
-        foss: ['oss', 'proprietary'],
-        status: ['active', 'inactive'],
-    };
-
-    const toggleFilter = (f: string) =>
-        setActiveFilters(prev => {
-            const next = new Set(prev);
-            if (next.has(f)) {
-                next.delete(f);
-            } else {
-                const siblings = Object.values(groups).find(g => g.includes(f)) ?? [];
-                siblings.forEach(s => next.delete(s));
-                next.add(f);
-            }
-            return next;
-        });
-
-    const clearFilters = () => setActiveFilters(new Set());
-
-    const baseFiltered = useMemo(() => {
-        data.sort((a, b) => a.name.localeCompare(b.name));
-        let result = data;
-        if (deferredSearch) {
-            const keywords = deferredSearch.toLowerCase().split(/[\s,]+/).filter(Boolean);
-            if (keywords.length > 0) {
-                result = result.filter(item =>
-                    keywords.some(kw => item._searchString.includes(kw))
-                );
-            }
-        }
-        if (activeFilters.has('oss')) result = result.filter(i => i.package.isFoss);
-        if (activeFilters.has('proprietary')) result = result.filter(i => !i.package.isFoss);
-        if (activeFilters.has('active')) result = result.filter(i => !i.deprecated && !i.disabled);
-        if (activeFilters.has('inactive')) result = result.filter(i => i.deprecated || i.disabled);
-        if (!showFonts) result = result.filter(i => !i.token.startsWith('font-'));
-        return result;
-    }, [data, deferredSearch, activeFilters, showFonts]);
+    const sorted = useMemo(() => [...data].sort((a, b) => a.name.localeCompare(b.name)), [data]);
 
     const filtered = useMemo(() => {
-        if (activeCategoryId === 'all') return baseFiltered;
-        return baseFiltered.filter(i => (catIndex.get(i.token) || 'all') === activeCategoryId);
-    }, [baseFiltered, activeCategoryId, catIndex]);
+        let result = sorted;
+        const kws = deferredSearch.toLowerCase().split(/[\s,]+/).filter(Boolean);
+        if (kws.length) result = result.filter((i) => kws.some((k) => i._searchString.includes(k)));
+        if (activeFilters.has('oss')) result = result.filter((i) => i.package.isFoss);
+        if (activeFilters.has('proprietary')) result = result.filter((i) => !i.package.isFoss);
+        if (activeFilters.has('active')) result = result.filter((i) => !i.deprecated && !i.disabled);
+        if (activeFilters.has('inactive')) result = result.filter((i) => i.deprecated || i.disabled);
+        if (!showFonts) result = result.filter((i) => !i.token.startsWith('font-'));
+        if (categoryId !== 'all') result = result.filter((i) => (catIndex.get(i.token) || 'all') === categoryId);
+        return result;
+    }, [sorted, deferredSearch, activeFilters, showFonts, categoryId, catIndex]);
 
     const pagination = usePagination(filtered, itemsPerPage, `cp_${type}`);
-    const { currentData, setCurrentPage, totalPages } = pagination;
+    const { currentData, currentPage, setCurrentPage, totalPages } = pagination;
+
+    // Any change to what's being listed goes back to page 1 (but not on first mount,
+    // so a restored page survives navigating away and back).
+    const firstRun = useRef(true);
+    useEffect(() => {
+        if (firstRun.current) { firstRun.current = false; return; }
+        setCurrentPage(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [deferredSearch, categoryId, filterArr, showFonts, type, itemsPerPage]);
+
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && search) setParam('q', null);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [search, setParam]);
+
+    const clearFilters = () => { setFilterArr([]); setShowFonts(false); };
+    const filterCount = activeFilters.size + (showFonts ? 1 : 0);
 
     const changeType = (t: BrewType) => {
-        const newParams = new URLSearchParams(searchParams);
-        newParams.set('type', t);
-        newParams.delete('category');
-        newParams.delete('q');
-        setSearchParams(newParams);
-        setCurrentPage(1);
-        clearFilters();
+        const next = new URLSearchParams(params);
+        next.set('type', t);
+        next.delete('category');
+        next.delete('q');
+        setParams(next);
+        setFilterArr(['active']);
     };
 
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') setSearch("");
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [setSearch]);
-
-    useEffect(() => {
-        if (!newChar || newChar === '#') {
-            if (newChar === '#') setCurrentPage(1);
-            return;
+    const jumpToLetter = (ch: string) => {
+        if (ch === '#') setCurrentPage(1);
+        else {
+            const idx = filtered.findIndex((i) => i.name.toLowerCase().startsWith(ch.toLowerCase()));
+            if (idx !== -1) setCurrentPage(Math.ceil((idx + 1) / itemsPerPage));
         }
-        const index = filtered.findIndex(i => i.name.toLowerCase().startsWith(newChar.toLowerCase()));
-        if (index === -1) return;
-        const page = Math.ceil((index + 1) / itemsPerPage);
-        setCurrentPage(page);
-        setTimeout(() => closeModal(), 100);
-    }, [newChar, itemsPerPage]);
+        closeModal();
+    };
 
-    const handleOpenIndexSearch = () =>
-        openModal(() => <SearchIndexModal setNewChar={setNewChar} />, { size: 'lg', closeOnBackdropClick: true });
+    const activeCat = categories.find((c) => c.id === categoryId);
+    const resultTitle = categoryId === 'all' ? (type === 'cask' ? 'All Casks' : 'All Formulae') : activeCat?.label ?? 'Results';
 
-    const handleBookmarkView = useCallback(() =>
-        openModal(() => <BookmarksModal />, { closeOnBackdropClick: true, size: 'lg' }),
-        []);
-
-    const activeCategory = categories.find(c => c.id === activeCategoryId);
-    const ActiveCatIcon = activeCategory ? (ICON_MAP[activeCategory.icon] || Home) : Home;
+    const openFilters = () =>
+        openModal(() => (
+            <FiltersModal
+                type={type}
+                initial={{ filters: filterArr, showFonts, view: viewMode }}
+                onChange={(next) => { setFilterArr(next.filters); setShowFonts(next.showFonts); setViewMode(next.view); }}
+            />
+        ), { size: 'md' });
 
     return (
-        <div className="container max-w-[1400px] mx-auto px-0 py-2 space-y-5">
+        <>
+            <section aria-labelledby="ex-title" className="flex flex-col gap-5">
+                <h1 id="ex-title" className="sr-only">Explore</h1>
 
-            <div className="flex w-full flex-wrap justify-between items-center gap-3 px-1 py-1">
-                <div className="flex items-center gap-3">
-                    <div className="bg-gray-100 dark:bg-zinc-800/80 p-0.5 rounded-xl flex shadow-inner border border-zinc-200/30 dark:border-zinc-700/30">
-                        {(['cask', 'formula'] as const).map(t => (
-                            <button
-                                key={t}
-                                onClick={() => changeType(t)}
-                                className={cn(
-                                    "px-3.5 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all duration-300 cursor-pointer",
-                                    type === t
-                                        ? "bg-white dark:bg-zinc-700 shadow-sm text-green-600 dark:text-green-400 font-bold"
-                                        : "text-gray-500 hover:text-gray-700 dark:hover:text-zinc-300"
-                                )}
-                            >
-                                <div className="flex gap-1 items-center">
+                <div className="flex flex-wrap items-center gap-2.5">
+                    <label className="flex h-[52px] min-w-[240px] max-w-[560px] flex-[1_1_360px] items-center gap-2.5 rounded-[10px] bg-chip px-4 focus-within:ring-2 focus-within:ring-accent">
+                        <Search size={22} strokeWidth={2.2} className="shrink-0 text-muted" />
+                        <span className="sr-only">Search packages</span>
+                        <input
+                            id="explore-search"
+                            type="search"
+                            value={search}
+                            onChange={(e) => setParam('q', e.target.value)}
+                            placeholder={type === 'cask' ? 'Search casks — e.g. “browser”, “figma”' : 'Search formulae — e.g. “postgres”, “git”'}
+                            className="min-w-0 flex-1 border-0 bg-transparent text-base text-ink outline-none [&::-webkit-search-cancel-button]:hidden"
+                        />
+                        {search ? (
+                            <button type="button" aria-label="Clear search" onClick={() => setParam('q', null)} className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border-0 bg-raised text-muted"><X size={14} /></button>
+                        ) : (
+                            <span className="hidden rounded-md bg-raised px-2 py-1 font-mono text-xs text-ink-soft sm:block">{shortcutLabel}</span>
+                        )}
+                    </label>
+                    <PillButton variant="outline" className="h-[52px] rounded-[10px] px-4 text-sm" onClick={() => openModal(() => <SearchIndexModal setNewChar={jumpToLetter} />, { size: 'lg' })} aria-label="Jump to letter">
+                        <ArrowDownAZ size={20} className="sm:hidden" /><span className="hidden sm:inline">A–Z</span>
+                    </PillButton>
+                    <button
+                        type="button"
+                        aria-haspopup="dialog"
+                        aria-label={filterCount > 0 ? `Filters and view, ${filterCount} active` : 'Filters and view'}
+                        title="Filters & view"
+                        onClick={openFilters}
+                        className="relative flex h-[52px] w-[52px] cursor-pointer items-center justify-center rounded-[10px] border border-line-strong bg-raised text-ink transition-colors hover:bg-surface"
+                    >
+                        <SlidersHorizontal size={20} strokeWidth={2.2} />
+                        {filterCount > 0 && (
+                            <span className="absolute -right-1.5 -top-1.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1 text-xs font-extrabold text-[#111114]">{filterCount}</span>
+                        )}
+                    </button>
+                    <Segmented
+                        size="lg"
+                        label="Package type"
+                        value={type}
+                        onChange={changeType}
+                        className="ml-auto"
+                        options={[{ value: 'cask', label: 'Casks' }, { value: 'formula', label: 'Formulae' }]}
+                    />
+                </div>
 
-                                    {t == 'cask' ? <AppleLogo className="w-3 h-3" /> : ""}{t}s
-                                </div>
-                            </button>
-                        ))}
+                <div className="flex items-start gap-3">
+                    <div className="no-scrollbar flex min-w-0 flex-1 flex-nowrap gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible">
+                        {categories.map((c) => {
+                            const on = categoryId === c.id;
+                            return (
+                                <button
+                                    key={c.id}
+                                    type="button"
+                                    aria-pressed={on}
+                                    onClick={() => setParam('category', c.id === 'all' ? null : c.id)}
+                                    className={cn(
+                                        'h-10 shrink-0 cursor-pointer whitespace-nowrap rounded-full border px-4 text-sm font-semibold',
+                                        on ? 'border-invert bg-invert text-on-invert' : 'border-line-strong bg-raised text-ink hover:bg-surface',
+                                    )}
+                                >
+                                    {c.label}
+                                </button>
+                            );
+                        })}
                     </div>
-                    <span className="text-xs text-zinc-400 font-medium hidden sm:inline">
-                        <span className="text-green-600 dark:text-green-400 font-semibold">{filtered.length}</span> of {data.length}
+                </div>
+            </section>
+
+            <section aria-labelledby="res-title" className="flex flex-col gap-4">
+                <div className="flex items-baseline justify-between gap-3">
+                    <h2 id="res-title" className="m-0 text-2xl font-bold tracking-[-0.02em]">{resultTitle}</h2>
+                    <span className="text-sm text-muted" aria-live="polite">
+                        {isLoading ? 'Loading…' : `${filtered.length.toLocaleString()} ${filtered.length === 1 ? 'package' : 'packages'}${totalPages > 1 ? ` · page ${currentPage} of ${totalPages}` : ''}`}
                     </span>
                 </div>
 
-                <div className="flex items-center gap-2 ml-auto">
-                    <Button
-                        onClick={handleBookmarkView}
-                        variant="secondary"
-                        size="sm"
-                        className="flex items-center gap-1 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 cursor-pointer h-7 text-[11px] font-semibold px-2 rounded-lg shrink-0 shadow-xs"
-                    >
-                        <Bookmark size={12} />
-                        <span className="hidden sm:inline">Bookmarks</span>
-                    </Button>
+                {isLoading && <SkeletonGrid count={itemsPerPage} />}
+                {error && <ErrorState error={error} />}
 
-                    <Button
-                        onClick={handleOpenIndexSearch}
-                        variant="secondary"
-                        size="sm"
-                        className="font-bold border border-zinc-200 dark:border-zinc-700 cursor-pointer h-7 text-[11px] px-2.5 rounded-lg shrink-0 shadow-xs"
-                    >
-                        <span>A-Z</span>
-                    </Button>
-
-                    <div className="h-4 w-px bg-zinc-200 dark:bg-zinc-800 mx-0.5" />
-
-                    <div className="flex items-center bg-gray-100 dark:bg-zinc-800 p-0.5 rounded-lg border border-zinc-200/50 dark:border-zinc-700/50">
-                        <button
-                            onClick={() => setViewMode('grid')}
-                            title="Grid view"
-                            className={cn(
-                                "p-1 rounded transition-all cursor-pointer",
-                                viewMode === 'grid'
-                                    ? "bg-white dark:bg-zinc-700 shadow-xs text-green-600 dark:text-green-400"
-                                    : "text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300"
-                            )}
-                        >
-                            <LayoutGrid size={13} />
-                        </button>
-                        <button
-                            onClick={() => setViewMode('list')}
-                            title="List view"
-                            className={cn(
-                                "p-1 rounded transition-all cursor-pointer",
-                                viewMode === 'list'
-                                    ? "bg-white dark:bg-zinc-700 shadow-xs text-green-600 dark:text-green-400"
-                                    : "text-gray-400 hover:text-gray-600 dark:hover:text-zinc-300"
-                            )}
-                        >
-                            <List size={13} />
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-                <div className="flex-1 min-w-0">
-                    <CategoryTabs
-                        categories={categories}
-                        activeId={activeCategoryId}
-                        onChange={id => {
-                            const newParams = new URLSearchParams(searchParams);
-                            if (id === 'all') {
-                                newParams.delete('category');
-                            } else {
-                                newParams.set('category', id);
-                            }
-                            setSearchParams(newParams);
-                            setCurrentPage(1);
-                        }}
-                    />
-                </div>
-                <div className="shrink-0">
-                    <FilterPills
-                        type={type}
-                        activeFilters={activeFilters}
-                        showFonts={showFonts}
-                        toggleFilter={toggleFilter}
-                        setShowFonts={setShowFonts}
-                        clearFilters={clearFilters}
-                    />
-                </div>
-            </div>
-
-            {isLoading && <SkeletonGrid count={48} />}
-            {error && <ErrorState error={error} />}
-
-            {!isLoading && !error && <>
-                {search && (
-                    <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-emerald-500/5 via-green-500/5 to-transparent border border-emerald-500/15 rounded-2xl">
-                        <div className="flex items-center gap-2 text-sm text-emerald-800 dark:text-emerald-400">
-                            <Search size={16} />
-                            <span>
-                                Showing results for <span className="font-bold">"{search}"</span>
-                                <span className="text-xs text-zinc-500 dark:text-zinc-400 ml-1">
-                                    ({filtered.length} {filtered.length === 1 ? 'match' : 'matches'})
-                                </span>
-                            </span>
-                        </div>
-                        <button
-                            onClick={() => setSearch("")}
-                            className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 underline underline-offset-2 flex items-center gap-1 cursor-pointer"
-                        >
-                            Clear Search
-                        </button>
-                    </div>
-                )}
-
-                {activeCategoryId === 'all' ? (
-                    <SectionHeader
-                        title={`All ${type === 'cask' ? 'Casks' : 'Formulae'}`}
-                        subtitle={`${filtered.length} packages available`}
-                    />
-                ) : (
-                    <div className="flex items-center gap-2 pt-2 px-1 text-zinc-900 dark:text-zinc-100">
-                        <div className="flex items-center justify-center p-2 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-xs">
-                            <ActiveCatIcon size={18} />
-                        </div>
-                        <div>
-                            <h2 className="text-lg font-bold tracking-tight">{activeCategory?.label}</h2>
-                            <p className="text-xs text-zinc-400 font-medium">{filtered.length} packages in this category</p>
-                        </div>
-                    </div>
-                )}
-
-                {currentData.length > 0 && (
-                    viewMode === 'grid' ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-                            {currentData.map(item => (
-                                <ItemCard key={item.id} item={item} enableBackground />
-                            ))}
+                {!isLoading && !error && (
+                    currentData.length === 0 ? (
+                        <EmptyState
+                            icon={<Search size={24} />}
+                            title="No packages found"
+                            text={search ? `Nothing matches “${search}”. Try a different search or category.` : 'Try a different category or clear your filters.'}
+                            action={(search || filterCount > 0) ? <PillButton variant="outline" className="text-sm" onClick={() => { setParam('q', null); clearFilters(); }}>Clear search & filters</PillButton> : undefined}
+                        />
+                    ) : viewMode === 'grid' ? (
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-4">
+                            {currentData.map((item) => <AppCard key={item.id} item={item} />)}
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-1.5">
-                            {currentData.map(item => (
-                                <ItemListRow key={item.id} item={item} />
-                            ))}
+                        <div className="flex flex-col">
+                            {currentData.map((item) => <AppRow key={item.id} item={item} />)}
                         </div>
                     )
                 )}
 
-                {currentData.length === 0 && (
-                    <div className="h-60 flex flex-col items-center justify-center p-20 text-gray-500">
-                        <Search className="mb-4 h-12 w-12 opacity-30" />
-                        <p className="text-base font-medium">No packages found</p>
-                        <p className="text-sm opacity-60 mt-1">Try a different search or category</p>
-                    </div>
-                )}
-
-                {totalPages > 1 && (
+                {!isLoading && !error && totalPages > 1 && (
                     <Pagination pagination={pagination} itemsPerPage={itemsPerPage} setItemsPerPage={setItemsPerPage} />
                 )}
-            </>}
 
-            <div className="flex items-center justify-center gap-2 pt-4 pb-2 text-xs text-zinc-400 dark:text-zinc-500 select-none">
-                <Keyboard size={14} className="opacity-70" />
-                <span>
-                    Press <kbd className="px-1.5 py-0.5 text-[10px] font-mono border border-zinc-200 dark:border-zinc-700 rounded bg-zinc-50 dark:bg-zinc-800">⌘K</kbd> to search · <kbd className="px-1.5 py-0.5 text-[10px] font-mono border border-zinc-200 dark:border-zinc-700 rounded bg-zinc-50 dark:bg-zinc-800">ESC</kbd> to clear
-                </span>
-            </div>
-        </div>
+                <p className="m-0 text-center text-[13px] text-muted">
+                    Press <kbd className="rounded-md bg-chip px-1.5 py-0.5 font-mono">{shortcutLabel}</kbd> to search · <kbd className="rounded-md bg-chip px-1.5 py-0.5 font-mono">ESC</kbd> to clear
+                </p>
+            </section>
+        </>
     );
 };

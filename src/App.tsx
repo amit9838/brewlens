@@ -1,62 +1,66 @@
-import './App.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Modal } from './components/ui/Modal';
 import { ModalProvider } from './components/contexts/ModalContexts';
 import { BookmarksProvider } from './components/contexts/BookmarksContext';
 import { RecentlyViewedProvider } from './components/contexts/RecentlyViewedContext';
+import { SearchPaletteProvider } from './components/ui/SearchPalette';
 import { NavDrawer } from './components/layout/Drawer';
 import { Header } from './components/layout/Header';
-import { Footer } from './components/layout/Footer';
 import { BrewList } from './components/page/BrewList';
-import { Routes, Route } from 'react-router-dom';
 import { CaskDetail } from './components/page/CaskDetail';
 import Installation from './components/page/Installation';
 import FormulaeDetail from './components/page/FormulaeDetail';
 import About from './components/page/About';
 import Analytics from './components/page/Analytics';
-import Dashboard from './components/page/Explore';
+import Discover from './components/page/Discover';
 
 const queryClient = new QueryClient();
 
-function HomebrewExplorer() {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+function Shell() {
+    const [isOpen, setIsOpen] = useState(false);
+    const { pathname } = useLocation();
 
-  return (
-    <div className="min-h-screen bg-gray-300/50 dark:bg-[#111] text-gray-900 dark:text-gray-100 p-4 sm:p-8 transition-colors">
-      <div className="max-w-7xl mx-auto space-y-8">
-        <NavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
+    // Start each page at the top.
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
 
-        {/* HEADER */}
-        <Header setIsOpen={setIsOpen} isOpen={isOpen} />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/all" element={<BrewList />} />
-          <Route path="/installation" element={<Installation />} />
-          <Route path="/cask/:token" element={<CaskDetail />} />
-          <Route path="/formula/:token" element={<FormulaeDetail />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/analytics" element={<Analytics />} />
-        </Routes>
-
-        {/* Footer */}
-        <Footer />
-      </div>
-    </div>
-  );
+    return (
+        <div className="min-h-screen bg-canvas font-sans text-ink">
+            <div className="mx-auto flex max-w-[1506px] flex-col gap-12 px-[clamp(16px,3vw,48px)] pb-12 pt-6">
+                <NavDrawer isOpen={isOpen} onClose={() => setIsOpen(false)} />
+                <Header setIsOpen={setIsOpen} isOpen={isOpen} />
+                <main className="flex flex-col gap-12">
+                    <Routes>
+                        <Route path="/" element={<Discover />} />
+                        <Route path="/all" element={<BrewList />} />
+                        <Route path="/installation" element={<Installation />} />
+                        <Route path="/cask/:token" element={<CaskDetail />} />
+                        <Route path="/formula/:token" element={<FormulaeDetail />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/analytics" element={<Analytics />} />
+                    </Routes>
+                </main>
+            </div>
+        </div>
+    );
 }
 
 export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ModalProvider>
-        <BookmarksProvider>
-          <RecentlyViewedProvider>
-            <HomebrewExplorer />
-            <Modal />
-          </RecentlyViewedProvider>
-        </BookmarksProvider>
-      </ModalProvider>
-    </QueryClientProvider>
-  );
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ModalProvider>
+                <BookmarksProvider>
+                    <RecentlyViewedProvider>
+                        <SearchPaletteProvider>
+                            <Shell />
+                            <Modal />
+                        </SearchPaletteProvider>
+                    </RecentlyViewedProvider>
+                </BookmarksProvider>
+            </ModalProvider>
+        </QueryClientProvider>
+    );
 }
