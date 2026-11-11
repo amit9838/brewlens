@@ -21,8 +21,8 @@ import { AppIcon } from '../ui/AppIcon';
 import { AppCard, CompactRow, CompactRowSkeleton, InstallsChip, StretchLink } from '../ui/AppCards';
 import { Chip, EmptyState, PillButton, Segmented, SectionHead } from '../ui/kit';
 import { EDITORS_PICKS_TOKENS, FEATURED_CASKS } from '../../data/curated';
-import { CASK_CATEGORIES, getCategoryForToken } from '../../data/categories';
-import { formatCount, tileColor, toNumber } from '../../lib/format';
+import { CASK_CATEGORIES, getCategoryForToken, getCategoryStyle } from '../../data/categories';
+import { formatCount, toNumber } from '../../lib/format';
 import type { BrewItem } from '../../types';
 
 const CATEGORIES: { id: string; label: string; desc: string; icon: LucideIcon; ink: string; type: 'cask' | 'formula' }[] = [
@@ -44,6 +44,18 @@ const CATEGORIES: { id: string; label: string; desc: string; icon: LucideIcon; i
 const tint = (ink: string) =>
     ({ '--c': ink } as React.CSSProperties);
 const tintClass = 'bg-[color-mix(in_srgb,var(--c)_14%,transparent)] text-[var(--c)] dark:text-[color-mix(in_srgb,var(--c)_55%,white)]';
+
+/**
+ * Category colour washed in from the top-right corner of the featured card, over the
+ * theme's secondary surface. Literal class names so Tailwind generates them (same
+ * families as categories.ts).
+ */
+const FEATURED_TINT: Record<string, string> = {
+    amber: 'from-amber-500/25', blue: 'from-blue-500/25', cyan: 'from-cyan-500/25', emerald: 'from-emerald-500/25',
+    indigo: 'from-indigo-500/25', lime: 'from-lime-500/25', orange: 'from-orange-500/25', pink: 'from-pink-500/25',
+    purple: 'from-purple-500/25', rose: 'from-rose-500/25', sky: 'from-sky-500/25', slate: 'from-slate-500/25',
+    teal: 'from-teal-500/25', violet: 'from-violet-500/25', zinc: 'from-zinc-500/15',
+};
 
 /** Still installable: not deprecated or disabled by Homebrew. */
 const isAvailable = (item: BrewItem) => !item.deprecated && !item.disabled;
@@ -86,11 +98,11 @@ function Hero({ items }: { items: BrewItem[] }) {
         );
     }
 
-    const base = tileColor(item.name);
     const catId = getCategoryForToken(item, CASK_CATEGORIES);
-    const catLabel = CASK_CATEGORIES.find((c) => c.id === catId)?.label ?? 'Featured';
+    const cat = catId === 'all' ? undefined : CASK_CATEGORIES.find((c) => c.id === catId);
+    const catStyle = getCategoryStyle(cat?.color ?? 'zinc');
     const step = (d: number) => setActive((a) => (a + d + total) % total);
-    const ctl = 'relative z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-[rgba(17,17,20,0.55)] text-white backdrop-blur-md';
+    const ctl = 'relative z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-line bg-raised/70 text-ink backdrop-blur-md hover:bg-raised';
 
     return (
         <article
@@ -98,20 +110,18 @@ function Hero({ items }: { items: BrewItem[] }) {
             aria-label={`Featured app: ${item.name}`}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
-            className={`relative ${wrap} overflow-hidden rounded-[28px] border border-line transition-transform hover:scale-[1.005]`}
-            style={{ background: `linear-gradient(135deg, ${base} 0%, color-mix(in srgb, ${base} 55%, #000) 100%)` }}
+            className={`relative isolate ${wrap} overflow-hidden rounded-[28px] border border-line bg-chip bg-radial-[at_85%_15%] to-chip to-70% transition-transform hover:scale-[1.005] ${FEATURED_TINT[cat?.color ?? 'zinc'] ?? FEATURED_TINT.zinc}`}
         >
             {item.homepage && (
                 <img
                     src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(item.homepage)}&sz=128`}
                     alt=""
                     aria-hidden="true"
-                    className="pointer-events-none absolute -right-8 -top-8 h-[300px] w-[300px] object-contain opacity-30 blur-[70px] saturate-150"
+                    className="pointer-events-none absolute -right-8 -top-8 -z-10 h-[300px] w-[300px] object-contain opacity-30 blur-[70px] saturate-150"
                 />
             )}
-            <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
 
-            <div className="absolute left-4 top-4 flex h-8 items-center gap-2 rounded-full bg-[rgba(17,17,20,0.55)] px-3 text-[13px] font-semibold text-white backdrop-blur-md">
+            <div className="absolute left-4 top-4 flex h-8 items-center gap-2 rounded-full border border-line bg-raised/70 px-3 text-[13px] font-semibold text-ink backdrop-blur-md">
                 <Sparkles size={14} fill="#FFB547" stroke="#FFB547" />Featured app
             </div>
             <div className="absolute right-4 top-4 flex gap-2">
@@ -122,36 +132,23 @@ function Hero({ items }: { items: BrewItem[] }) {
             <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 px-4 pb-4">
                 <div className="flex flex-col gap-2.5 px-2">
                     <div className="flex flex-wrap gap-2">
-                        <span className="flex h-8 items-center rounded-full border border-white/25 bg-[rgba(17,17,20,0.5)] px-3 text-[13px] font-semibold text-white">{catLabel}</span>
-                        <span className="flex h-8 items-center rounded-full border border-white/25 bg-[rgba(17,17,20,0.5)] px-3 font-mono text-[13px] font-semibold text-white">{item.installCmd}</span>
+                        <span className={`flex h-8 items-center rounded-full px-3 text-[13px] font-semibold ${catStyle.badgeBg} ${catStyle.badgeColor}`}>{cat?.label ?? 'Featured'}</span>
                         {item.package.isFoss && (
-                            <span className="flex h-8 items-center rounded-full border border-emerald-300/50 bg-emerald-400/20 px-3 text-[13px] font-semibold text-emerald-100">Open Source</span>
+                            <span className="flex h-8 items-center rounded-full bg-accent-soft px-3 text-[13px] font-semibold text-accent-ink">Open Source</span>
                         )}
+                        <span className="flex h-8 items-center rounded-full border border-line bg-raised/70 px-3 font-mono text-[13px] font-semibold text-ink">{item.installCmd}</span>
                     </div>
-                    <h2 className="m-0 line-clamp-2 text-[clamp(22px,2.6vw,30px)] font-extrabold leading-[1.1] tracking-[-0.03em] text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
+                    <h2 className="m-0 line-clamp-2 text-[clamp(22px,2.6vw,30px)] font-extrabold leading-[1.1] tracking-[-0.03em] text-ink">
                         {item.desc}
                     </h2>
                 </div>
-                <div className="relative isolate flex items-center gap-3.5 rounded-[20px] bg-[rgba(17,17,20,0.55)] px-4 py-3.5 backdrop-blur-xl">
-                    {item.homepage && (
-                        // The app's icon, scaled up and blurred across the left third of the bar.
-                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]">
-                            <img
-                                key={item.token}
-                                src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(item.homepage)}&sz=128`}
-                                alt=""
-                                decoding="async"
-                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                                className="absolute left-0 top-1/2 aspect-square w-1/3 -translate-y-1/2 object-contain opacity-30 blur-[48px] saturate-150"
-                            />
-                        </div>
-                    )}
-                    <AppIcon name={item.name} homepage={item.homepage} size={56} />
+                <div className="flex items-center gap-3.5 rounded-[20px] border border-line bg-raised/70 px-4 py-3.5 backdrop-blur-xl">
+                    <AppIcon name={item.name} homepage={item.homepage} size={56} blend />
                     <div className="min-w-0 flex-1">
-                        <StretchLink to={`/cask/${item.token}`} className="block truncate text-[17px] font-bold !text-white hover:!text-white">{item.name}</StretchLink>
-                        <div className="truncate font-mono text-[13px] text-zinc-300">v{item.version}</div>
+                        <StretchLink to={`/cask/${item.token}`} className="block truncate text-[17px] font-bold">{item.name}</StretchLink>
+                        <div className="truncate font-mono text-[13px] text-muted">v{item.version}</div>
                     </div>
-                    <ChevronRight size={20} className="text-white/80" />
+                    <ChevronRight size={20} className="text-muted" />
                 </div>
                 <div className="relative z-10 flex justify-center gap-1.5" role="tablist" aria-label="Featured apps">
                     {slides.map((s, i) => (
@@ -162,7 +159,7 @@ function Hero({ items }: { items: BrewItem[] }) {
                             aria-selected={i === active}
                             aria-label={`Show ${s.name}`}
                             onClick={() => setActive(i)}
-                            className={`h-1.5 cursor-pointer rounded-full border-0 transition-all ${i === active ? 'w-5 bg-white' : 'w-1.5 bg-white/45'}`}
+                            className={`h-1.5 cursor-pointer rounded-full border-0 transition-all ${i === active ? 'w-5 bg-ink' : 'w-1.5 bg-ink/25'}`}
                         />
                     ))}
                 </div>
