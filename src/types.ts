@@ -12,9 +12,9 @@ export type BrewType = 'cask' | 'formula';
  * Computed by `getSourceCodeStatus()` during data normalization.
  */
 export interface BrewPackage {
-    /** Whether a source code URL was found and verified */
+    /** Whether a source repository URL was found (`fossUrl` is set) */
     verified: boolean;
-    /** Whether the source is hosted on a known OSS platform */
+    /** Whether the package is open source (formula license, repository homepage or `OPEN_SOURCE_CASKS`) */
     isFoss: boolean;
     /** Direct URL to the source repository, or empty string if not found */
     fossUrl: string | null;
@@ -43,7 +43,6 @@ export interface RawBrewData {
     /** Cask download URL and checksum */
     url?: string;
     sha256?: string;
-    url_specs?: Record<string, string>;
     artifacts?: unknown[];
     depends_on?: { macos?: unknown };
     /** Formula source URLs */

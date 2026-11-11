@@ -7,6 +7,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { BrewItem, BrewType, BrewPackage, RawBrewData } from "../types";
+import { OPEN_SOURCE_CASKS } from "../data/curated";
 
 /**
  * Merges Tailwind CSS class names, resolving conflicts via tailwind-merge.
@@ -92,48 +93,59 @@ export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewI
 };
 
 
+const SOURCE_HOSTS = ['github.com', 'gitlab.com', 'bitbucket.org', 'codeberg.org'];
+
 /**
- * Determines the open-source status of a Homebrew package by scanning
- * its URL fields for known OSS hosting domains.
+ * The repository page a URL points into, on a known source host, or `null`.
+ * `https://github.com/rxhanson/Rectangle/releases/download/v2/x.dmg` → `https://github.com/rxhanson/Rectangle`.
+ * A bare owner page (`github.com/mozilla`) is not a repository.
+ */
+export function repoUrl(url: string | null | undefined): string | null {
+    if (!url) return null;
+    let parsed: URL;
+    try {
+        parsed = new URL(url);
+    } catch {
+        return null;
+    }
+    const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+    if (!SOURCE_HOSTS.includes(host)) return null;
+    // GitLab allows nested groups and puts its own pages after `/-/`; the other hosts are owner/repo.
+    const path = parsed.pathname.split('/-/')[0].split('/').filter(Boolean);
+    const parts = host === 'gitlab.com' ? path : path.slice(0, 2);
+    if (parts.length < 2) return null;
+    parts[parts.length - 1] = parts[parts.length - 1].replace(/\.git$/, '');
+    return `https://${host}/${parts.join('/')}`;
+}
+
+/**
+ * Decides whether a package is open source and where its source lives.
  *
- * Checks: github.com, gitlab.com, bitbucket.org, codeberg.org
- *
- * For casks: inspects `url_specs` values and `homepage`
- * For formulae: additionally inspects `urls.head.url`
+ * - Formulae: open source when the API gives a `license` (homebrew/core only accepts
+ *   open-source software, so in practice every formula). The source link is the first
+ *   repository found in the `head` URL, the homepage or the `stable` download URL.
+ * - Casks: the API has no license, so a cask counts only when its homepage is a
+ *   repository page, or when it is in the hand-picked `OPEN_SOURCE_CASKS`. For listed
+ *   casks the download URL may also give the source link (GitHub releases). A GitHub
+ *   download alone proves nothing: many closed-source apps ship from release-only repos.
  *
  * @param rawData - Raw API response object (not a normalized BrewItem)
  * @param type - 'cask' or 'formula'
- * @returns A `BrewPackage` with `isFoss`, `verified`, and `fossUrl`
+ * @returns A `BrewPackage`: `isFoss`, `fossUrl` (repository page or ''), and
+ *   `verified` (true when `fossUrl` is set)
  */
 export const getSourceCodeStatus = (rawData: RawBrewData, type: BrewType): BrewPackage => {
-    const isCask = type === 'cask';
-    const urlSpecsValues = Object.values(rawData.url_specs ?? {});
-    const websiteUrl = rawData.homepage || "";
+    let isFoss: boolean;
+    let source: string | null;
 
-    let allTextToSearch = [...urlSpecsValues, websiteUrl].join(" ").toLowerCase();
-
-    if (!isCask) {
-        allTextToSearch += " " + (rawData.urls?.head?.url || "");
+    if (type === 'formula') {
+        isFoss = !!rawData.license;
+        source = repoUrl(rawData.urls?.head?.url) ?? repoUrl(rawData.homepage) ?? repoUrl(rawData.urls?.stable?.url);
+    } else {
+        const listed = OPEN_SOURCE_CASKS.has(rawData.full_token ?? '');
+        source = repoUrl(rawData.homepage) ?? (listed ? repoUrl(rawData.url) : null);
+        isFoss = listed || !!source;
     }
 
-    const osDomains = ["github.com", "gitlab.com", "bitbucket.org", "codeberg.org"];
-    const isFoss = osDomains.some(domain => allTextToSearch.includes(domain));
-
-    if (!isCask) {
-        return {
-            verified: !!rawData.urls?.head?.url,
-            isFoss,
-            fossUrl: rawData.urls?.head?.url || "",
-        };
-    }
-
-    if (urlSpecsValues.length === 0) {
-        return { verified: false, isFoss, fossUrl: "" };
-    }
-
-    return {
-        verified: true,
-        isFoss,
-        fossUrl: `http://${urlSpecsValues[0]}`,
-    };
+    return { verified: !!source, isFoss, fossUrl: source ?? '' };
 };

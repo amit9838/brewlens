@@ -320,8 +320,8 @@ The app should feel:
 
 - `formulae.brew.sh` is the only package data source: `/api/cask.json`, `/api/formula.json`, `/api/{cask|formula}/:token.json`, `/api/analytics/...`. It needs no API key; never add one.
 - Casks are identified by `token`, formulae by `name`; `normalizeItem` handles this. Install commands are `brew install --cask <token>` / `brew install <name>` through `installCommand`.
-- Open-source detection is `getSourceCodeStatus` (known hosts: GitHub, GitLab, Bitbucket, Codeberg). Extend it there, not in components.
-- Category assignment lives in `data/categories.ts` (exact `tokens` first, then `keywords`). Curated lists live in `data/curated.ts`; only use tokens that exist in the API.
+- Open-source detection is `getSourceCodeStatus` (formulae: `license`; casks: a repository homepage on GitHub, GitLab, Bitbucket or Codeberg, or the hand-picked `OPEN_SOURCE_CASKS` in `data/curated.ts`). Extend it there, not in components. To mark a cask whose homepage is its own website, add its token to `OPEN_SOURCE_CASKS`.
+- Category assignment lives in `data/categories.ts` (exact `tokens` first, then `keywords`). Curated lists (featured, Editor's Picks, open-source casks) live in `data/curated.ts`; only use tokens that exist in the API.
 - Don't send anything about the user to any service. No analytics or tracking scripts without user approval.
 
 ---

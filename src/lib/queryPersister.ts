@@ -16,7 +16,7 @@ export const CACHE_MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 7 days
  * Bump this whenever the shape of a saved query changes (`BrewItem`, `normalizeItem`,
  * `AnalyticsData`), so old data is discarded rather than read with the wrong shape.
  */
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2'; // v2: new open-source detection (getSourceCodeStatus)
 
 /** Only the full lists (`['brew', type]`, no URL) and analytics are worth saving. */
 function shouldPersist(query: Query): boolean {

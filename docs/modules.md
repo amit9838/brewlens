@@ -15,7 +15,7 @@ Discriminates between Homebrew GUI apps (casks) and CLI tools (formulae).
 ```ts
 interface BrewPackage {
   verified: boolean   // Whether a source URL was found
-  isFoss: boolean     // Whether the source is on a known OSS host
+  isFoss: boolean     // Whether the package is open source (see getSourceCodeStatus)
   fossUrl: string | null  // Direct link to source repository
 }
 ```
@@ -60,10 +60,12 @@ Transforms a raw Homebrew API object into a typed `BrewItem`. Called for every i
 Fetches and normalizes Homebrew data. Handles both list endpoints (returns array) and individual item endpoints (returns single object wrapped in array).
 
 ### `getSourceCodeStatus(rawData, type)`
-Determines open-source status by scanning URL fields for known OSS hosting domains (`github.com`, `gitlab.com`, `bitbucket.org`, `codeberg.org`).
+Decides whether a package is open source and finds its source repository on a known host (`github.com`, `gitlab.com`, `bitbucket.org`, `codeberg.org`). URLs are parsed with `repoUrl()`, which returns the repository page (`https://github.com/owner/repo`) or `null`; a bare owner page doesn't count.
 
-- For casks: checks `url_specs` values and `homepage`
-- For formulae: additionally checks `urls.head.url`
+- **Formulae:** open source when the API gives a `license` (homebrew/core only accepts open-source software). Source link: the first repository in `urls.head.url`, `homepage` or `urls.stable.url`
+- **Casks:** the API has no license, so a cask is open source when its `homepage` is a repository page, or when its token is in `OPEN_SOURCE_CASKS` (`data/curated.ts`). For listed casks the download `url` can also give the source link. A GitHub release download alone is not enough: many closed-source apps ship from release-only repositories
+- `verified` is true when a source link was found (`fossUrl`)
+- Changing the result changes the cached lists: bump `CACHE_VERSION` in `lib/queryPersister.ts`
 
 ---
 

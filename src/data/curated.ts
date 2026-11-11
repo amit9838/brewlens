@@ -1,6 +1,7 @@
 /**
  * @file curated.ts
- * Curated pools for Featured Carousel & Editor's Picks on the Discover page.
+ * Curated pools for Featured Carousel & Editor's Picks on the Discover page,
+ * and the hand-picked list of open-source casks (`OPEN_SOURCE_CASKS`).
  * Extracted from categories.ts to keep category definitions lean and focused
  * solely on taxonomy.
  *
@@ -134,3 +135,30 @@ const EDITORS_PICKS_POOL = [
 // shows a fresh, randomized set drawn from every category.
 export const FEATURED_CASKS = shuffle(FEATURED_POOL).slice(0, 5);
 export const EDITORS_PICKS_TOKENS = shuffle(EDITORS_PICKS_POOL).slice(0, 10);
+
+// ─── Open-source casks ───────────────────────────────────────────────────────
+
+/**
+ * Casks we know are open source but that `getSourceCodeStatus` can't detect on
+ * its own: the Homebrew API has no license for casks, so it only trusts a
+ * homepage that is a repository page (github.com/owner/repo, …).
+ *
+ * Add an app here when its homepage is its own website. Only use tokens that
+ * exist in the API. Casks whose homepage is already a repository don't need
+ * listing.
+ */
+export const OPEN_SOURCE_CASKS: ReadonlySet<string> = new Set([
+    // ── Browsers & internet ──
+    'brave-browser', 'chromium', 'firefox', 'librewolf', 'thunderbird', 'tor-browser',
+    'element', 'signal', 'telegram-desktop', 'localsend', 'transmission', 'qbittorrent', 'syncthing-app',
+    // ── Developer tools & terminals ──
+    'ghostty', 'iterm2', 'wezterm', 'zed', 'utm', 'podman-desktop', 'rancher', 'godot',
+    // ── Productivity & utilities ──
+    'alt-tab', 'hammerspoon', 'karabiner-elements', 'maccy', 'rectangle', 'lulu',
+    'bitwarden', 'keepassxc', 'joplin', 'standard-notes', 'netnewswire', 'anki', 'calibre', 'libreoffice',
+    // ── Media & design ──
+    'vlc', 'iina', 'obs', 'audacity', 'shotcut', 'kdenlive', 'musescore',
+    'blender', 'gimp', 'inkscape', 'krita', 'darktable', 'freecad', 'kicad',
+    // ── AI ──
+    'jan',
+]);
