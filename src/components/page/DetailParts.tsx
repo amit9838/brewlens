@@ -2,17 +2,16 @@
  * @file DetailParts.tsx
  * Pieces shared by the cask and formula detail pages.
  */
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useMemo, useState, type ReactNode } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Braces, Check, ChevronLeft, Copy, Share, Info } from 'lucide-react';
-import type { BrewItem, BrewType } from '../../types';
+import type { BrewItem } from '../../types';
 import { AppIcon } from '../ui/AppIcon';
 import { FaviconGlow } from '../ui/AppCards';
 import { BookmarkButton } from '../ui/BookmarkButton';
 import { Chip, EmptyState, IconButton, PillLink, Card, CardTitle, Eyebrow } from '../ui/kit';
 import { useBrewData } from '../../hooks/useBrewData';
 import { useCopy } from '../../hooks/useCopy';
-import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
 import { formatCount } from '../../lib/format';
 import { getCategoryForToken, getCategoryStyle, CASK_CATEGORIES, FORMULA_CATEGORIES } from '../../data/categories';
 import { cn } from '../../lib/utils';
@@ -22,24 +21,6 @@ function hashString(str: string): number {
     let h = 0;
     for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
     return h;
-}
-
-/** Resolves the route, fetches the single package and records the view. */
-export function useDetailItem(expected: BrewType) {
-    const { pathname } = useLocation();
-    const parts = pathname.split('/').filter(Boolean);
-    const token = decodeURIComponent(parts[parts.length - 1] ?? '');
-    const apiUrl = `https://formulae.brew.sh/api/${expected}/${token}.json`;
-    const { data = [], isLoading, error } = useBrewData(expected, apiUrl);
-    const item: BrewItem | undefined = data[0];
-    const { trackView } = useRecentlyViewed();
-
-    useEffect(() => {
-        if (item) trackView(item);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [item?.id]);
-
-    return { token, apiUrl, item, isLoading, error };
 }
 
 export function DetailFallback({ isLoading, error, token }: { isLoading: boolean; error: unknown; token: string }) {

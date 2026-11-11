@@ -16,7 +16,7 @@ import { Pagination } from '../ui/Pagination';
 import SearchIndexModal from '../ui/SearchIndexModal';
 import FiltersModal from '../ui/FiltersModal';
 import { EmptyState, PillButton, Segmented } from '../ui/kit';
-import { shortcutLabel } from '../ui/SearchPalette';
+import { shortcutLabel } from '../../lib/platform';
 import SkeletonGrid from './SkeletonGrid';
 import ErrorState from './Error';
 import { CASK_CATEGORIES, FORMULA_CATEGORIES, getCategoryForToken } from '../../data/categories';

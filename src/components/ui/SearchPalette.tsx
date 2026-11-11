@@ -10,6 +10,7 @@ import { Loader2, Search } from 'lucide-react';
 import { useBrewData } from '../../hooks/useBrewData';
 import { AppIcon } from './AppIcon';
 import { cn } from '../../lib/utils';
+import { isMac } from '../../lib/platform';
 
 interface PaletteCtx {
     open: () => void;
@@ -21,9 +22,6 @@ export function useSearchPalette() {
     if (!c) throw new Error('useSearchPalette must be used inside SearchPaletteProvider');
     return c;
 }
-
-export const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
-export const shortcutLabel = isMac ? '⌘K' : 'Ctrl K';
 
 export function SearchPaletteProvider({ children }: { children: ReactNode }) {
     const [isOpen, setOpen] = useState(false);

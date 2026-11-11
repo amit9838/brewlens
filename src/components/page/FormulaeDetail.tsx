@@ -1,11 +1,12 @@
 import { Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useDocumentMeta } from '../../hooks/useDocumentMeta';
+import { useDetailItem } from '../../hooks/useDetailItem';
 import { getCategoryForToken, FORMULA_CATEGORIES } from '../../data/categories';
 import { getSourceCodeStatus } from '../../lib/utils';
 import { Card, CardTitle, Chip, Eyebrow, PillLink } from '../ui/kit';
 import {
-    DetailFallback, ExternalLinkPill, Hero, InstallsCard, MoreInCategory, TopBar, useDetailItem,
+    DetailFallback, ExternalLinkPill, Hero, InstallsCard, MoreInCategory, TopBar,
 } from './DetailParts';
 
 const DepChips = ({ deps }: { deps: string[] }) =>

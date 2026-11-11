@@ -94,7 +94,7 @@ const PILL: Record<PillVariant, string> = {
     danger: 'bg-transparent text-danger hover:bg-chip',
 };
 
-export function pillClass(variant: PillVariant = 'outline', className?: string) {
+function pillClass(variant: PillVariant = 'outline', className?: string) {
     return cn(
         'inline-flex h-11 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-full px-5 text-[15px] font-bold transition-colors',
         'disabled:pointer-events-none disabled:opacity-50',

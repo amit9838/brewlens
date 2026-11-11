@@ -1,10 +1,11 @@
 import { Box, Download, Trash2, Terminal, Zap } from 'lucide-react';
 import { useDocumentMeta } from '../../hooks/useDocumentMeta';
+import { useDetailItem } from '../../hooks/useDetailItem';
 import { getCategoryForToken, CASK_CATEGORIES } from '../../data/categories';
 import { getSourceCodeStatus } from '../../lib/utils';
 import { Card, CardTitle, Chip, Eyebrow, PillLink } from '../ui/kit';
 import {
-    DetailFallback, ExternalLinkPill, Hero, InstallsCard, MoreInCategory, TopBar, useDetailItem,
+    DetailFallback, ExternalLinkPill, Hero, InstallsCard, MoreInCategory, TopBar,
 } from './DetailParts';
 
 /** Flattens Homebrew's nested artifact values into readable strings. */
