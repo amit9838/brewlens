@@ -146,7 +146,7 @@ export const BrewList: React.FC = () => {
                             type="search"
                             value={search}
                             onChange={(e) => setParam('q', e.target.value)}
-                            placeholder={type === 'cask' ? 'Search casks — e.g. “browser”, “figma”' : 'Search formulae — e.g. “postgres”, “git”'}
+                            placeholder={type === 'cask' ? 'Search casks — e.g. browser, figma' : 'Search formulae — e.g. postgres, git'}
                             className="min-w-0 flex-1 border-0 bg-transparent text-base text-ink outline-none [&::-webkit-search-cancel-button]:hidden"
                         />
                         {search ? (
