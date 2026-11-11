@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 test*
 .kiro
+# Local plan documents
+*-plan.md
