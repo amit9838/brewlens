@@ -67,7 +67,7 @@ function Hero({ items }: { items: BrewItem[] }) {
         return () => clearInterval(t);
     }, [paused, total]);
 
-    const wrap = 'min-h-[360px] flex-[1_1_100%] lg:flex-[0_0_65%]';
+    const wrap = 'min-h-[300px] flex-[1_1_100%] lg:flex-[0_0_65%]';
     const item = slides[active];
     if (!item) {
         return (
@@ -76,10 +76,10 @@ function Hero({ items }: { items: BrewItem[] }) {
                 <div className="absolute right-4 top-4 flex gap-2"><div className="h-9 w-9 animate-pulse rounded-full bg-line-strong" /><div className="h-9 w-9 animate-pulse rounded-full bg-line-strong" /></div>
                 <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 px-4 pb-4">
                     <div className="flex flex-col gap-2.5 px-2">
-                        <div className="flex gap-2"><div className="h-7 w-24 animate-pulse rounded-full bg-line-strong" /><div className="h-7 w-44 animate-pulse rounded-full bg-line-strong" /></div>
+                        <div className="flex gap-2"><div className="h-8 w-24 animate-pulse rounded-full bg-line-strong" /><div className="h-8 w-48 animate-pulse rounded-full bg-line-strong" /></div>
                         <div className="h-[30px] w-3/5 animate-pulse rounded-lg bg-line-strong" />
                     </div>
-                    <div className="h-[68px] animate-pulse rounded-[18px] bg-line-strong" />
+                    <div className="h-[84px] animate-pulse rounded-[20px] bg-line-strong" />
                     <div className="flex justify-center gap-1.5">{Array.from({ length: 5 }).map((_, i) => <div key={i} className="h-1.5 w-1.5 rounded-full bg-line-strong" />)}</div>
                 </div>
             </div>
@@ -106,7 +106,7 @@ function Hero({ items }: { items: BrewItem[] }) {
                     src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(item.homepage)}&sz=128`}
                     alt=""
                     aria-hidden="true"
-                    className="pointer-events-none absolute -right-8 -top-8 h-[300px] w-[300px] object-contain opacity-50 blur-[70px] saturate-150"
+                    className="pointer-events-none absolute -right-8 -top-8 h-[300px] w-[300px] object-contain opacity-30 blur-[70px] saturate-150"
                 />
             )}
             <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.22),transparent_55%)]" />
@@ -122,21 +122,34 @@ function Hero({ items }: { items: BrewItem[] }) {
             <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 px-4 pb-4">
                 <div className="flex flex-col gap-2.5 px-2">
                     <div className="flex flex-wrap gap-2">
-                        <span className="flex h-7 items-center rounded-full border border-white/25 bg-[rgba(17,17,20,0.5)] px-2.5 text-xs font-semibold text-white">{catLabel}</span>
+                        <span className="flex h-8 items-center rounded-full border border-white/25 bg-[rgba(17,17,20,0.5)] px-3 text-[13px] font-semibold text-white">{catLabel}</span>
+                        <span className="flex h-8 items-center rounded-full border border-white/25 bg-[rgba(17,17,20,0.5)] px-3 font-mono text-[13px] font-semibold text-white">{item.installCmd}</span>
                         {item.package.isFoss && (
-                            <span className="flex h-7 items-center rounded-full border border-emerald-300/50 bg-emerald-400/20 px-2.5 text-xs font-semibold text-emerald-100">Open Source</span>
+                            <span className="flex h-8 items-center rounded-full border border-emerald-300/50 bg-emerald-400/20 px-3 text-[13px] font-semibold text-emerald-100">Open Source</span>
                         )}
-                        <span className="flex h-7 items-center rounded-full border border-white/25 bg-[rgba(17,17,20,0.5)] px-2.5 font-mono text-xs font-semibold text-white">{item.installCmd}</span>
                     </div>
                     <h2 className="m-0 line-clamp-2 text-[clamp(22px,2.6vw,30px)] font-extrabold leading-[1.1] tracking-[-0.03em] text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.45)]">
                         {item.desc}
                     </h2>
                 </div>
-                <div className="flex items-center gap-3 rounded-[18px] bg-[rgba(17,17,20,0.55)] px-3.5 py-3 backdrop-blur-xl">
-                    <AppIcon name={item.name} homepage={item.homepage} size={44} />
+                <div className="relative isolate flex items-center gap-3.5 rounded-[20px] bg-[rgba(17,17,20,0.55)] px-4 py-3.5 backdrop-blur-xl">
+                    {item.homepage && (
+                        // The app's icon, scaled up and blurred across the left third of the bar.
+                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[inherit]">
+                            <img
+                                key={item.token}
+                                src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(item.homepage)}&sz=128`}
+                                alt=""
+                                decoding="async"
+                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                className="absolute left-0 top-1/2 aspect-square w-1/3 -translate-y-1/2 object-contain opacity-30 blur-[48px] saturate-150"
+                            />
+                        </div>
+                    )}
+                    <AppIcon name={item.name} homepage={item.homepage} size={56} />
                     <div className="min-w-0 flex-1">
-                        <StretchLink to={`/cask/${item.token}`} className="block truncate text-base font-bold !text-white hover:!text-white">{item.name}</StretchLink>
-                        <div className="truncate font-mono text-xs text-zinc-300">v{item.version}</div>
+                        <StretchLink to={`/cask/${item.token}`} className="block truncate text-[17px] font-bold !text-white hover:!text-white">{item.name}</StretchLink>
+                        <div className="truncate font-mono text-[13px] text-zinc-300">v{item.version}</div>
                     </div>
                     <ChevronRight size={20} className="text-white/80" />
                 </div>
@@ -187,7 +200,7 @@ export default function Discover() {
     const featured = useBrewItems('cask', FEATURED_CASKS);
     const pickItems = useBrewItems('cask', EDITORS_PICKS_TOKENS);
     const slides = useMemo(() => (featured.isLoading ? [] : featured.items.filter(isAvailable).slice(0, 5)), [featured]);
-    const picks = useMemo(() => (pickItems.isLoading ? [] : pickItems.items.filter(isAvailable).slice(0, 5)), [pickItems]);
+    const picks = useMemo(() => (pickItems.isLoading ? [] : pickItems.items.filter(isAvailable).slice(0, 4)), [pickItems]);
 
     const { data: caskStats } = useAnalytics('cask', '30d');
     const { data: formulaStats } = useAnalytics('formula', '30d');
@@ -212,7 +225,7 @@ export default function Discover() {
                     <div className="text-[15px] font-medium text-muted">Hand-picked by our editors</div>
                     <h2 id="picks-title" className="mb-1 mt-0.5 text-[30px] font-bold tracking-[-0.025em]">Editor’s Picks</h2>
                     <div className="flex flex-1 flex-col">
-                    {picks.length === 0 && Array.from({ length: 5 }).map((_, i) => <CompactRowSkeleton key={i} iconSize={56} className="flex-1" />)}
+                    {picks.length === 0 && Array.from({ length: 4 }).map((_, i) => <CompactRowSkeleton key={i} iconSize={56} className="flex-1" />)}
                     {picks.map((p) => (
                         <CompactRow
                             key={p.id}

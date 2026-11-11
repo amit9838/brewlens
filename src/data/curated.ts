@@ -133,7 +133,7 @@ const EDITORS_PICKS_POOL = [
 
 // Dynamically generate on load — shuffled at import time so each page visit
 // shows a fresh, randomized set drawn from every category. Both draw more than
-// Discover shows (5 each), so deprecated or disabled casks can be dropped.
+// Discover shows (5 featured, 4 picks), so deprecated or disabled casks can be dropped.
 export const FEATURED_CASKS = shuffle(FEATURED_POOL).slice(0, 8);
 export const EDITORS_PICKS_TOKENS = shuffle(EDITORS_PICKS_POOL).slice(0, 10);
 
