@@ -57,6 +57,9 @@ const FEATURED_TINT: Record<string, string> = {
     teal: 'from-teal-500/25', violet: 'from-violet-500/25', zinc: 'from-zinc-500/15',
 };
 
+/** Apps shown per My Shelf tab (bookmarks, recently viewed). All bookmarks stay in the Bookmarks dialog. */
+const SHELF_LIMIT = 10;
+
 /** Still installable: not deprecated or disabled by Homebrew. */
 const isAvailable = (item: BrewItem) => !item.deprecated && !item.disabled;
 
@@ -261,14 +264,14 @@ export default function Discover() {
                 {shelf === 'bm' ? (
                     bookmarks.length ? (
                         <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3">
-                            {bookmarks.slice(0, 8).map((b) => <AppCard key={b.id} item={b} />)}
+                            {bookmarks.slice(0, SHELF_LIMIT).map((b) => <AppCard key={b.id} item={b} />)}
                         </div>
                     ) : (
                         <div className="rounded-[20px] bg-surface"><EmptyState icon={<Sparkles size={22} />} title="No bookmarks yet" text="Tap the bookmark on any app to keep it on your shelf." /></div>
                     )
                 ) : recentItems.length ? (
                     <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3">
-                        {recentItems.slice(0, 12).map((r) => (
+                        {recentItems.slice(0, SHELF_LIMIT).map((r) => (
                             <div key={r.id} className="relative flex items-center gap-3.5 rounded-[18px] bg-surface p-3.5 transition-colors hover:bg-chip">
                                 <AppIcon name={r.name} homepage={r.homepage} size={56} />
                                 <div className="min-w-0 flex-1">
