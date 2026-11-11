@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Modal } from './components/ui/Modal';
 import { ModalProvider } from './components/contexts/ModalContexts';
@@ -15,13 +16,17 @@ import FormulaeDetail from './components/page/FormulaeDetail';
 import About from './components/page/About';
 import Analytics from './components/page/Analytics';
 import Discover from './components/page/Discover';
+import { CACHE_MAX_AGE, persistOptions } from './lib/queryPersister';
 
 // Shared defaults for every query: the Homebrew API itself caches for 10 minutes
 // (`cache-control: max-age=600`), so refetching sooner gains nothing.
+// `gcTime` matches the persisted cache's max age: a query dropped from memory would
+// also be dropped from IndexedDB on the next save.
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             staleTime: 1000 * 60 * 10,
+            gcTime: CACHE_MAX_AGE,
             refetchOnWindowFocus: false,
         },
     },
@@ -59,7 +64,7 @@ function Shell() {
 
 export default function App() {
     return (
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
             <ModalProvider>
                 <BookmarksProvider>
                     <RecentlyViewedProvider>
@@ -70,6 +75,6 @@ export default function App() {
                     </RecentlyViewedProvider>
                 </BookmarksProvider>
             </ModalProvider>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
     );
 }
