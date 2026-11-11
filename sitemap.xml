@@ -101,8 +101,8 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/affinity-publisher@1</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/after-dark-classic</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/afterglow</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/agent-orchestrator</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/agent-tars</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/agentide</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/agentiloop-agent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/agentkube</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/agentsmesh</loc></url>
@@ -116,6 +116,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/aionui</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/air-video-server-hd</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/airbuddy</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/airbuild</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/aircall</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/airdash</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/airdroid</loc></url>
@@ -209,6 +210,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/ankerwork</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anki</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/annotate</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/anomaly-hex</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/another-redis-desktop-manager</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/antconc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/antigravity</loc></url>
@@ -218,13 +220,13 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/anybar</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anydesk</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anydo</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/anydrag</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anylist</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anypointstudio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anythingllm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anytype</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anytype@alpha</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/anytype@beta</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/ao</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/apache-couchdb</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/apache-directory-studio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ape</loc></url>
@@ -252,7 +254,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/applite</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/approf</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/apptivate</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/apptrap</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/appvolume</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/appzapper</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/aptakube</loc></url>
@@ -327,6 +328,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/audiogridder-plugin</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/audiogridder-server</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/audiorelay</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/audioroute</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/audirvana</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/audius</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/augur</loc></url>
@@ -372,7 +374,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/backblaze-restore</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/backdrop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/background-music</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/backlog</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/backuploupe</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/backyard-ai</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/badgeify</loc></url>
@@ -386,6 +387,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/balsamiq-wireframes</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bambu-connect</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bambu-studio</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/bambu-studio@beta</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/banana-cake-pop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bandage</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bankid</loc></url>
@@ -420,6 +422,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/bean</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/beardie</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/beast2</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/beat-link-trigger</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/beatunes</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/beaver-notes</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/beekeeper-studio</loc></url>
@@ -495,6 +498,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/blender@lts</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bleunlock</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/blheli-configurator</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/blick</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/blink1control</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/blip</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/blisk</loc></url>
@@ -546,9 +550,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/bootstrap-studio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bose-updater</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/boss</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/bossa-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bot-framework-emulator</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/bowtie</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/box-drive</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/box-tools</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/boxcryptor</loc></url>
@@ -562,7 +564,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/brave-origin@beta</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/brave-origin@nightly</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/breaktimer</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/breitbandmessung</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/brewlet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/brewservicesmenubar</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/brewtarget</loc></url>
@@ -606,6 +607,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/butterkit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/buzz</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bwana</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/bytemail</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/bzflag</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/c0re100-qbittorrent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/cabal</loc></url>
@@ -704,7 +706,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/chatty</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/chatwise</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/chatwork</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/cheatsheet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/checkra1n</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/cheetah3d</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/chef-workstation</loc></url>
@@ -834,6 +835,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/codebolt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/codebuddy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/codebuddy-cn</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/codeburn-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/codeedit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/codeexpander</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/codekit</loc></url>
@@ -910,7 +912,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/core-tunnel</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/corelocationcli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/cork</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/cornercal</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/cornerstone</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/corona-tracker</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/corretto</loc></url>
@@ -944,7 +945,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/crosspaste</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/crunch-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/crushftp</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/crypter</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/crypto-native-app-ng</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/cryptomator</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/crystaldiffract</loc></url>
@@ -1067,6 +1067,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/desmume</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/detectx-swift</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/detexify</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/deutschlandgpt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/devcleaner</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/developerexcuses</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/deviceshelf</loc></url>
@@ -1100,6 +1101,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/dingtalk</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/dintch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/direqual</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/diri</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/discord</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/discord@canary</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/discord@development</loc></url>
@@ -1193,7 +1195,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/droidcam-obs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/dropbox</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/dropbox-dash</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/dropbox-passwords</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/dropbox@beta</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/dropdmg</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/droplr</loc></url>
@@ -1283,7 +1284,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/electrumsv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/elegoo-slicer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/elektron-overbridge</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/elektron-transfer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/element</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/elemental</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/elemental@6</loc></url>
@@ -1311,6 +1311,8 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/emclient</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/emclient@beta</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/emdash</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/emeet-studio</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/emeetlink</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/emmetapp</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/emojipedia</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/empoche</loc></url>
@@ -1373,6 +1375,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/expandrive</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/explorer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/expo-orbit</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/expose</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/expressions</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/expressscribe</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/expressvpn</loc></url>
@@ -1421,6 +1424,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/ferdium</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ferdium@nightly</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fertigt-slate</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/festnetz-check</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fetch-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ff-works</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fidelity-trader+</loc></url>
@@ -1491,7 +1495,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/flixtools</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/flock-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/floorp</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/flow-desktop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/flow5</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/flowdown</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/flowvision</loc></url>
@@ -1528,7 +1531,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/folder-preview-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/folding-at-home</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/folding-at-home@beta</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/foldingtext</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/foldit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/folo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/folx</loc></url>
@@ -1565,6 +1567,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/font-agave-nerd-font</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-agbalumo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-agdasima</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/font-agrave-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-agu-display</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-aguafina-script</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-ahuramzda</loc></url>
@@ -1872,7 +1875,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/font-bree-serif</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-bricolage-grotesque</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-briem-hand</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/font-brill</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-bruno-ace</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-bruno-ace-sc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-brygada-1918</loc></url>
@@ -2276,6 +2278,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/font-geist-mono</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-geist-mono-nerd-font</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-geist-pixel</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/font-geist-serif</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-gelasio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-gemunu-libre</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-genjyuugothic</loc></url>
@@ -2805,6 +2808,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/font-macondo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-macondo-swash-caps</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-mada</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/font-madhuban</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-madimi-one</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-magra</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/font-maiden-orange</loc></url>
@@ -4156,6 +4160,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/fontsmoothingadjuster</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fontstand</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/foobar2000</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/fore-studio-vitals</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/forecast</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/forel</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fork</loc></url>
@@ -4189,6 +4194,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/freefilesync</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/freelens</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/freelens@nightly</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/freellmapi</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/freeorion</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/freepdf</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/freeplane</loc></url>
@@ -4209,8 +4215,8 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/fsmonitor</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fsnotes</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fspy</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/fstream</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ftdi-vcp-driver</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/ftop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fujifilm-tether-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/fujifilm-x-raw-studio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/funter</loc></url>
@@ -4278,7 +4284,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/get-api</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/get-backup-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/get-iplayer-automator</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/get-lyrical</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/getoutline</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gfxcardstatus</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gg</loc></url>
@@ -4325,11 +4330,10 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/glide</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/glide-browser</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/glkvm</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/gloomberb</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/gloom</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gltfquicklook</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gluemotion</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/glyphs</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/gmvault</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gnome</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gns3</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gnucash</loc></url>
@@ -4417,7 +4421,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/gstreamer-development</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gstreamer-runtime</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/gswitch</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/gtkwave</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/guijs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/guilded</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/guitar-pro</loc></url>
@@ -4460,7 +4463,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/heaven</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/hedgewars</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/hedy</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/height</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/heimdall-suite</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/helio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/helium</loc></url>
@@ -4469,6 +4471,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/helpwire-operator</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/heptabase</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/herd</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/herdr-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/hermes-desktop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/hermit-crab</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/heroic</loc></url>
@@ -4517,7 +4520,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/httpie-desktop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/hubstaff</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/huggingchat</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/hugin</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/huly</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/hummingbird</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/hush</loc></url>
@@ -4577,6 +4579,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/ilok-license-manager</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ilspy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ilya-birman-typography-layout</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/image-optimizer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/image2icon</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/imagej</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/imageoptim</loc></url>
@@ -4644,8 +4647,8 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/ipvanish-vpn</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ipynb-quicklook</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/iqmol</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/irbis-zen</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ireal-pro</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/iridium</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/iris</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/iriunwebcam</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/irpf2023</loc></url>
@@ -4708,7 +4711,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/jclasslib-bytecode-viewer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jcryptool</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jd-gui</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/jdiskreport</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jdk-mission-control</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jdownloader</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jedit</loc></url>
@@ -4732,7 +4734,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/jitsi-meet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jlcone</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jlutil</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/jmc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jollysfastvnc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/joplin</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jordanbaird-ice</loc></url>
@@ -4761,6 +4762,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/jumpcloud-password-manager</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jumpcut</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jumpshare</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/junie</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jupyter-notebook-ql</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jupyter-notebook-viewer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/jupyterlab-app</loc></url>
@@ -4802,6 +4804,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/keka@beta</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kekaexternalhelper</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kern</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/kero</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kext-updater</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kextviewr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/key-codes</loc></url>
@@ -4811,6 +4814,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/keyboard-maestro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/keyboardcleantool</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/keyboardholder</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/keyboop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/keycastr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/keychron-assistant</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/keyclu</loc></url>
@@ -4842,7 +4846,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/kiro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kiro-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kirocrew</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/kitlangton-hex</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kitty</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kitty@nightly</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kiwi-for-gmail</loc></url>
@@ -4882,6 +4885,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/kubecontext</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kubernetic</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kubeterm</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/kugelblitz</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kui</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kunkun</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kvirc</loc></url>
@@ -4967,7 +4971,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/linear</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/linearmouse</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/linearmouse@beta</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/lingon-x</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/lingon-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/linguax</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/linkandroid</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/linkliar</loc></url>
@@ -4987,7 +4991,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/live-home-3d</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/livebook</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/livebook@nightly</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/livetail</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/liviable</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/llama-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/llamachat</loc></url>
@@ -5086,6 +5089,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/macbreakz</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/maccleaner-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/maccy</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/macdirstat</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/macdive</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/macdown</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/macdown-3000</loc></url>
@@ -5123,6 +5127,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/mactex</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mactex-no-gui</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mactools</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/mactoy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mactracker</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/macupdater</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/macusb</loc></url>
@@ -5140,6 +5145,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/magicavoxel</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/magicplot</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/magicquit</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/magpie</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mail-assistant</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mailbird</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mailbutler</loc></url>
@@ -5169,7 +5175,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/marathon</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/marathon-2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/marathon-infinity</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/marble</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/marginnote</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mark-text</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/markdown-preview</loc></url>
@@ -5252,8 +5257,8 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/meshlab</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/messenger</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/meta</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/meta-quest-developer-hub</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/meta-quest-remote-desktop</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/meta-vr-developer-hub</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/metaimage</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/metamer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/metarename</loc></url>
@@ -5339,7 +5344,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/missive</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mist</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mister-plimsoll</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/mit-app-inventor</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mitmproxy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mitti</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/mixed-in-key</loc></url>
@@ -5527,6 +5531,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/ndi-tools</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/neat</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/neat-reader</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/nebius</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/neo-network-utility</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/neo4j-desktop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/neodisk</loc></url>
@@ -5572,6 +5577,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/nitro-pdf-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nkoda</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/no-ip-duc</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/nod</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nodebox</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nodeterm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nomachine</loc></url>
@@ -5587,6 +5593,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/nosqlbooster-for-mongodb</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nostalgiapp</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nota</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/notational-velocity</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/notchi</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/notebooks</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/notepadexe</loc></url>
@@ -5626,6 +5633,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/numi</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nuphyio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nutstore</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/nvalt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nvidia-geforce-now</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nvidia-nsight-compute</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nvidia-nsight-systems</loc></url>
@@ -5634,14 +5642,13 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/nvs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nwjs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/nx-studio</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/nzbvortex</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ob-xf</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/obelisk</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/objectivesharpie</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/objektiv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/obs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/obs-advanced-scene-switcher</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/obs-backgroundremoval</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/obs-websocket</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/obs@beta</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/obscura-vpn</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/obsidian</loc></url>
@@ -5658,6 +5665,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/okta-advanced-server-access</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/okta-verify</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/old-school-runescape</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/oleafly</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/olive</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ollama-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ollama-binary</loc></url>
@@ -5673,6 +5681,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/omnipresence</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/omnissa-horizon-client</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/omniwm</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/omniwm@canary</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ondesoft-audiobook-converter</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/one-switch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/onecast</loc></url>
@@ -5708,6 +5717,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/openclip</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/opencloud</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/opencode-desktop</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/opencodex</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/opencomic</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/opencore-configurator</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/opencore-patcher</loc></url>
@@ -5719,6 +5729,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/openemu</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openemu@experimental</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openforis-collect</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/openframe-console</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openframeworks</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openhuman</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openhv</loc></url>
@@ -5747,6 +5758,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/opensc-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openscad</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openscad@snapshot</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/openscreen</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/opensesame</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openshot-video-editor</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/openshot-video-editor@daily</loc></url>
@@ -5779,7 +5791,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/oracle-jdk-javadoc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/oracle-jdk-javadoc@21</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/oracle-jdk-javadoc@25</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/oracle-jdk@17</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/oracle-jdk@21</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/oracle-jdk@25</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/orange</loc></url>
@@ -5824,7 +5835,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/overlayed</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/oversight</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/overt</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/overtone-analyzer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/overview</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ovice</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ovito</loc></url>
@@ -5914,6 +5924,8 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/pdl</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pearcleaner</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pecunia</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/peel</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/pen</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/penc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pencil</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pencil2d</loc></url>
@@ -5980,7 +5992,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/pitch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pivy-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pixcake</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/pixel-check</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pixel-picker</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pixel-shift-combiner</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pixelorama</loc></url>
@@ -6141,6 +6152,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/proxyman</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/prudent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/prusaslicer</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/prusaslicer@preview</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/psi</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/psi-plus</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/psiphon-conduit</loc></url>
@@ -6206,6 +6218,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/qmoji</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/qobuz</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/qobuz-downloader</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/qoder</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/qownnotes</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/qq</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/qqlive</loc></url>
@@ -6293,6 +6306,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/react-proto</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/react-studio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/reactotron</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/read-ai</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/readdle-spark</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/reader</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/readest</loc></url>
@@ -6337,10 +6351,10 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/remote-wake-up</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/remotehamradio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/remoteviewer</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/remotix-agent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/removebg</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/renameclick</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/renamer</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/rencal</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/renpy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/reolink</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/repetier-host</loc></url>
@@ -6450,6 +6464,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/runway</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/rustcast</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/rustdesk</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/rustgis</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/rustrover</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ruswitcher</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/rwts-pdfwriter</loc></url>
@@ -6470,6 +6485,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/samsung-magician</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/sanctum</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/sandisk</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/sanductor</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/sanesidebuttons</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/santa</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/saoimageds9</loc></url>
@@ -6481,7 +6497,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/sauerbraten</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/save-hollywood</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/sc-menu</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/scala-ide</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/scansnap-home</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/scapple</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/scatter</loc></url>
@@ -6500,6 +6515,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/screaming-frog-log-file-analyser</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/screaming-frog-seo-spider</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/screen-studio</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/screendrop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/screenflick</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/screenflow</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/screenfocus</loc></url>
@@ -6722,6 +6738,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/sokim</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/sol</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/solar2d</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/solidcraft</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/solidtime</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/solvespace</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/sonarqube-cli</loc></url>
@@ -6781,8 +6798,8 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/spectra-app</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spectrolite</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/speechify-voice-ai</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/speedcrunch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/speedify</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/spencer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spike</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spires</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spitfire-audio</loc></url>
@@ -6795,6 +6812,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/splitshow</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spokenly</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spotify</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/spotify-soloist</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spotify4bigsur</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/spotmenu</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/springtoolsforeclipse</loc></url>
@@ -6862,7 +6880,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/stoplight-studio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/storyboarder</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/stratoshark</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/stravu-crystal</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/strawberry</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/strawberry-wallpaper</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/streamlabs</loc></url>
@@ -7008,6 +7025,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/taphouse</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tapmap</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tartelet</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/task-manager-tmog</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/taskade</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/taskbar</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/taskexplorer</loc></url>
@@ -7032,6 +7050,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/teamviewer-quickjoin</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/teamviewer-quicksupport</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/teamviewermeeting</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/teamwork-graph-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/techsmith-capture</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/teensy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/teeworlds</loc></url>
@@ -7060,6 +7079,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/tencent-meeting</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tencent-ugit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tencent-yingyongbao</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/tendedero</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tentacle-sync-studio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/terax</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/terminal-browser</loc></url>
@@ -7074,6 +7094,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/texifier</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/texmacs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/texmaker</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/texpile</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/texshop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/texstudio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/textadept</loc></url>
@@ -7083,7 +7104,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/textgrabber2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/textmate</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/textream</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/texts</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/textsniper</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/textual</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/texturepacker</loc></url>
@@ -7105,12 +7125,12 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/thedesk</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/theiaide</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/thelowtechguys-cling</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/themeengine</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/there</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/therm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/thetimemachinemechanic</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/thingsmacsandboxhelper</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/thinkorswim</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/thinkrail</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/thinlinc-client</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/thonny</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/thor</loc></url>
@@ -7149,6 +7169,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/tiled</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tiles</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/timche-gmail-desktop</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/time-messenger</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/time-out</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/time-sink</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/time-to-leave</loc></url>
@@ -7158,7 +7179,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/timemachineeditor</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/timemachinestatus</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/timemator</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/timer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/timescribe</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/timeular</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/timing</loc></url>
@@ -7168,12 +7188,15 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/tint</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tiny-player</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tiny-shield</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/tinycast</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/tinycast@beta</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tinymediamanager</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tinypng4mac</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tip</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tiptoi-manager</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tla+-toolbox</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tldraw</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/tldv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tlv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tm-error-logger</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tmpdisk</loc></url>
@@ -7217,7 +7240,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/touchswitcher</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tourbox-console</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tower</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/townwifi</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tpvirtual</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tqsl</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tracexy</loc></url>
@@ -7238,6 +7260,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/transmit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/transnomino</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/transocks</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/tree-outliner</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/treesheets</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/treeviewer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tresorit</loc></url>
@@ -7254,7 +7277,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/tripmode</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tritium</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/trivial</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/trolcommander</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tropy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/truetree</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/truhu</loc></url>
@@ -7290,7 +7312,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/twist</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/twobird</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/twonkyserver</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/tyke</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/tyme</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/typeface</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/typefully</loc></url>
@@ -7306,7 +7327,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/ubersicht</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ubiquiti-unifi-controller</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ubports-installer</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/udig</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/uefitool</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ueli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ugg</loc></url>
@@ -7320,7 +7340,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/ultdata</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ultimaker-cura</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ultimate</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/ultimate-control</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ultimate-vocal-remover</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/ultrastardeluxe</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/unblocked</loc></url>
@@ -7381,7 +7400,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/vagrant</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vagrant-manager</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vagrant-vmware-utility</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/valentina-studio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/valhalla-freq-echo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/valhalla-space-modulator</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/valhalla-supermassive</loc></url>
@@ -7483,8 +7501,9 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/vnc-server</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vnote</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vocaster-hub</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/vocevista-basic</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/vocevista-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vocevista-video</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/vocevista-video-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/voiceink</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/voicemod</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/voicenotes</loc></url>
@@ -7513,7 +7532,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/vsd-viewer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vsdx-annotator</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vsee</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/vu</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vuescan</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vuze</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/vv</loc></url>
@@ -7527,6 +7545,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/wakatime</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/waku</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wallpaper-wizard</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/wallpapermachine</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wallspace</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/waltr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/waltr-heic-converter</loc></url>
@@ -7542,12 +7561,12 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/wasabi-wallet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/watchfacestudio</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/waterfox</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/waterfox-classic</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wave</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wavebox</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/waveforms</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/waves-central</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wavesurfer</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/wblock</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wch-ch34x-usb-serial-driver</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wd-security</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/weakauras-companion</loc></url>
@@ -7628,6 +7647,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/wiso-steuer-2024</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wiso-steuer-2025</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wiso-steuer-2026</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/wiso-steuer-2027</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wispr-flow</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/witch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/witsy</loc></url>
@@ -7664,6 +7684,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/wrike</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/write</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/writemapper</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/writer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/writerside</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wrkspace</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/wsl-manager</loc></url>
@@ -7681,6 +7702,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/xattred</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/xbar</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/xca</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/xcasca</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/xcodeclangformat</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/xcodepilot</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/xcodes-app</loc></url>
@@ -7768,7 +7790,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/zed@preview</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/zeitgeist</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/zen</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/zen-privacy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/zenbeats</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/zenmap</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/zentty</loc></url>
@@ -7828,6 +7849,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/abpoa</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/abricate</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/abseil</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/abtop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/abyss</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ace</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/aces_container</loc></url>
@@ -7886,6 +7908,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/age-plugin-yubikey</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/agedu</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/agent-browser</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/agent-desktop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/agent-manager</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/agg</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/aha</loc></url>
@@ -7960,6 +7983,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/angle-grinder</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/angular-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/animdl</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/annotsv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ansible</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ansible-builder</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ansible-cmdb</loc></url>
@@ -8073,6 +8097,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/arm-none-eabi-binutils</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/arm-none-eabi-gcc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/arm-none-eabi-gdb</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/arm-optimized-routines</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/armadillo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/arp-scan</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/arp-scan-rs</loc></url>
@@ -8091,6 +8116,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/asar</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/asc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/asccli</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/ascelerate</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ascii</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ascii2binary</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/asciidoc</loc></url>
@@ -8378,6 +8404,8 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/berglas</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/berkeley-db</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/berkeley-db@5</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/beszel</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/beszel-agent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/bettercap</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/betterglobekey</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/betterleaks</loc></url>
@@ -8444,6 +8472,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/blazeblogger</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/blink</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/blink1</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/blint</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/blis</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/blisp</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/blitz</loc></url>
@@ -8625,6 +8654,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/calabash</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/calc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/calceph</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/calcure</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/calcurse</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/calicoctl</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/calm-cli</loc></url>
@@ -8754,6 +8784,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/cek</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cekit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/celero</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/cellpose</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/censys</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/center-im</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cereal</loc></url>
@@ -9046,7 +9077,6 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/conda-lock</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/conda-zsh-completion</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/conduit</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/formula/condure</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/confd</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/config-file-validator</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/configen</loc></url>
@@ -9187,6 +9217,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/csfml</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/csmith</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/csound</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/csound-plugins</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cspell</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cspice</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/csprecon</loc></url>
@@ -9239,6 +9270,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/cwalk</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cwb3</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cweb</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/cx</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cxgo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cxxopts</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/cxxtest</loc></url>
@@ -9354,6 +9386,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/demumble</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/deno</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/denominator</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/dep-scan</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dep-tree</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dependabot</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dependency-check</loc></url>
@@ -9365,6 +9398,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/derby</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/descope</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/desed</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/designcraft-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/desk</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/desktop-file-utils</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/detach</loc></url>
@@ -9538,6 +9572,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/dotdrop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dotenv-linter</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dotnet</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/dotnet@10</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dotnet@6</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dotnet@8</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dotnet@9</loc></url>
@@ -9576,6 +9611,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/dropbox-uploader</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/druid</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dry</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/drydock</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dscanner</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dsda-doom</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/dsh</loc></url>
@@ -9725,6 +9761,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/emacs-dracula</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/embree</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/embulk</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/emeraldian</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/emmylua_ls</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/emojify</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/emp</loc></url>
@@ -9740,6 +9777,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/energy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/enet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/enex2notion</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/engram</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/enigma</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/enkits</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/enpass-cli</loc></url>
@@ -9748,6 +9786,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/ent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ente-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/enter-tex</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/entire-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/entityx</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/entr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/entt</loc></url>
@@ -9782,6 +9821,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/erlang_ls</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/erlfmt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/erofs-utils</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/erpc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/errcheck</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/esbmc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/esbonio</loc></url>
@@ -9975,6 +10015,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/fileicon</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/filen-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/fileql</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/filmcraft-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/filtlong</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/findent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/findomain</loc></url>
@@ -10184,6 +10225,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/gaffitter</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/galen</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gallery-dl</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/gam</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gama</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gambit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gambit-scheme</loc></url>
@@ -10428,6 +10470,8 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/gitbatch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gitbucket</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gitea</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/gitea-cli</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/gitea-importer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gitea-mcp-server</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gitea-runner</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gitg</loc></url>
@@ -10587,8 +10631,10 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/gocr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gocryptfs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/goctl</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/goda</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/godap</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/godns</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/godu</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/goenv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/goenv@2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/gof5</loc></url>
@@ -10724,6 +10770,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/grepcidr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/grepip</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/grex</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/gridcraft-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/grin</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/grin-wallet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/grip</loc></url>
@@ -10846,7 +10893,6 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/haskell-language-server</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/haskell-stack</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/haste-client</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/formula/hasura-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/hatari</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/hatch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/havener</loc></url>
@@ -10948,6 +10994,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/honker</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/hookdeck</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/hopenpgp-tools</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/hoppr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/hopscotch-map</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/hostdb</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/hostess</loc></url>
@@ -11053,10 +11100,10 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/iconsur</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/icoutils</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/icp-cli</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/formula/icu4c@75</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/icu4c@76</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/icu4c@77</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/icu4c@78</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/icu4c@79</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/id3lib</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/id3v2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/identme</loc></url>
@@ -11462,6 +11509,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/klog</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kmod</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kn</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/knife</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/knock</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/knot</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/knot-resolver</loc></url>
@@ -11474,6 +11522,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/kompose</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kona</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kondo</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/kontext</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kool</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kopia</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kops</loc></url>
@@ -11493,6 +11542,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/krb5</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/krep</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/krew</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/krunkit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ksh93</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ksops</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kstart</loc></url>
@@ -11532,7 +11582,6 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/kubeone</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kubergrunt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kubernetes-cli</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/formula/kubernetes-cli@1.31</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kubernetes-cli@1.32</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kubernetes-cli@1.33</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/kubernetes-cli@1.34</loc></url>
@@ -11843,6 +11892,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/libgnt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libgoa</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libgosu</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/libgovirt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libgpg-error</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libgphoto2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libgr</loc></url>
@@ -11895,6 +11945,8 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/libkiwix</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libklvanc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libkml</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/libkrun</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/libkrunfw</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libks</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libksba</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/liblbfgs</loc></url>
@@ -12019,7 +12071,6 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/libpq@16</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libpq@17</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libpqxx</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/formula/libprelude</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libprotoident</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libproxy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/libpsl</loc></url>
@@ -12245,6 +12296,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/lief</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lief-patchelf</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lifelines</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/lightcraft-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lightgbm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lighthouse</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lightning</loc></url>
@@ -12289,6 +12341,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/lizard-analyzer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lla</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/llama.cpp</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/llamastash</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lld</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lld@19</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lld@20</loc></url>
@@ -12348,6 +12401,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/lorem</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/loudmouth</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lout</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/lovable-oj</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lowdown</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lp_solve</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lpc21isp</loc></url>
@@ -12362,6 +12416,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/lsdvd</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lsix</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lsof</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/lsoff</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lspmux</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lsr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/lstr</loc></url>
@@ -12990,6 +13045,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/nef</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/neko</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/nelm</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/nelm@1</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/nemu</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/neo4j</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/neo4j-mcp</loc></url>
@@ -13014,6 +13070,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/net-tools</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/netaddr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/netatalk</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/netbird</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/netcat</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/netcdf</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/netcdf-cxx</loc></url>
@@ -13056,6 +13113,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/nfdump</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/nfpm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/nftables</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/ng-log</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/nghttp2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/nginx</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ngircd</loc></url>
@@ -13096,7 +13154,6 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/node-build</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/node-red</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/node-sass</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/formula/node@18</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/node@20</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/node@22</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/node@24</loc></url>
@@ -13446,6 +13503,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/osx-trash</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/osxutils</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/otel-cli</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/otel-tui</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/oterm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/otf2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/otf2bdf</loc></url>
@@ -13611,6 +13669,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/percona-toolkit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/percona-xtrabackup</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/percona-xtrabackup@8.0</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/percona-xtrabackup@8.4</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/periphery</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/periscope</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/perl</loc></url>
@@ -14421,6 +14480,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/robin-map</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/roblox-ts</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/robodoc</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/roborev</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/robot-framework</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/robot-framework-robocop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/robotcode</loc></url>
@@ -14541,6 +14601,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/ry</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/rye</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/ryelang</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/ryl</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/rzip</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/s-lang</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/s-nail</loc></url>
@@ -14561,6 +14622,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/sacad</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sad</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/saf-cli</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/safe-chain</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/safe-rm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/safeint</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/safestringlib</loc></url>
@@ -14594,7 +14656,10 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/sbjson</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sblim-sfcc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sbom-tool</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/sbom-tools</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sbom-utility</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/sbomasm</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/sbomqs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sbt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sbtenv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sbuild</loc></url>
@@ -14864,6 +14929,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/slint-cpp</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/slirp4netns</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/slither-analyzer</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/slivar</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sloc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sloccount</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sloth-cli</loc></url>
@@ -15006,10 +15072,12 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/spicedb</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spicetify-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spidermonkey</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/spidermonkey@140</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spiffe-helper</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spigot</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spim</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spin</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/sping</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spiped</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spirv-cross</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/spirv-headers</loc></url>
@@ -15054,6 +15122,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/sqlitecpp</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sqliteodbc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sqlmap</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/sqlmux</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sqlpage</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sqlparse</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/sqlsmith</loc></url>
@@ -15157,6 +15226,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/strip-nondeterminism</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/stripe-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/stripe-mock</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/strobealign</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/strongswan</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/structurizr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/structurizr-cli</loc></url>
@@ -15204,6 +15274,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/svlint</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/svls</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/svt-av1</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/svt-jpegxs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/svt-vp9</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/svtplay-dl</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/svu</loc></url>
@@ -15355,6 +15426,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/tendermint</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tenere</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tengo</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/tennis</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tenv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tenyr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tere</loc></url>
@@ -15462,6 +15534,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/thrift</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/thriftgo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/thrulay</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/tidemail</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tidy-html5</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tidy-viewer</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tiff2png</loc></url>
@@ -15503,7 +15576,6 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/tkey-ssh-agent</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tkrzw</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tl-expected</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/formula/tldr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tldx</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tllist</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tlrc</loc></url>
@@ -15540,6 +15612,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/tofuenv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/toilet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/toipe</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/toit</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tokei</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/toktop</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/tokyo-cabinet</loc></url>
@@ -15782,6 +15855,8 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/unyaffs</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/unzip</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/up</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/upki</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/upmd</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/upterm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/uptimed</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/uptoc</loc></url>
@@ -15815,6 +15890,8 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/uutils-coreutils</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/uutils-diffutils</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/uutils-findutils</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/uutils-grep</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/uutils-sed</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/uuu</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/uv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/uvg266</loc></url>
@@ -15868,6 +15945,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/vdt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/veccore</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/veclibfort</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/vectorcraft-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/vectorscan</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/vedic</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/vegeta</loc></url>
@@ -16126,12 +16204,14 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/woodpecker-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/woof</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/woof-doom</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/wordcraft-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/wordgrinder</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/wordle</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/wordnet</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/wordplay</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/workmux</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/worktrunk</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/worldmonitor</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/worm-scraper</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/wormhole-william</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/woxi</loc></url>
@@ -16225,6 +16305,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/xeve</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/xeyes</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/xfig</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/xfr</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/xgboost</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/xgo</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/xgrammar</loc></url>
@@ -16418,6 +16499,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/zls</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/z.lua</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zmap</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/zmij</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zmqpp</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/znapzend</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/znc</loc></url>
@@ -16464,6 +16546,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/zug</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zurl</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zvbi</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/zvec-grep</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zx</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zxc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zxcc</loc></url>
