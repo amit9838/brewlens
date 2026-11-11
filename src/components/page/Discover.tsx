@@ -45,6 +45,9 @@ const tint = (ink: string) =>
     ({ '--c': ink } as React.CSSProperties);
 const tintClass = 'bg-[color-mix(in_srgb,var(--c)_14%,transparent)] text-[var(--c)] dark:text-[color-mix(in_srgb,var(--c)_55%,white)]';
 
+/** Still installable: not deprecated or disabled by Homebrew. */
+const isAvailable = (item: BrewItem) => !item.deprecated && !item.disabled;
+
 // ── Hero ─────────────────────────────────────────────────────────────────────
 
 function Hero({ items }: { items: BrewItem[] }) {
@@ -180,9 +183,11 @@ export default function Discover() {
 
     // Featured and picks are fetched on their own, so they render without waiting for the full lists.
     // Each section appears once all of its items have settled, so rows don't reorder as they arrive.
+    // Deprecated and disabled casks are left out; the curated draws include spares for that.
     const featured = useBrewItems('cask', FEATURED_CASKS);
     const pickItems = useBrewItems('cask', EDITORS_PICKS_TOKENS);
-    const picks = useMemo(() => (pickItems.isLoading ? [] : pickItems.items.slice(0, 5)), [pickItems]);
+    const slides = useMemo(() => (featured.isLoading ? [] : featured.items.filter(isAvailable).slice(0, 5)), [featured]);
+    const picks = useMemo(() => (pickItems.isLoading ? [] : pickItems.items.filter(isAvailable).slice(0, 5)), [pickItems]);
 
     const { data: caskStats } = useAnalytics('cask', '30d');
     const { data: formulaStats } = useAnalytics('formula', '30d');
@@ -202,7 +207,7 @@ export default function Discover() {
         <>
             {/* FEATURE + EDITOR'S PICKS */}
             <section id="top" className="flex flex-wrap items-stretch gap-8">
-                <Hero items={featured.isLoading ? [] : featured.items} />
+                <Hero items={slides} />
                 <aside id="picks" aria-labelledby="picks-title" className="flex min-w-0 flex-[2_1_420px] flex-col">
                     <div className="text-[15px] font-medium text-muted">Hand-picked by our editors</div>
                     <h2 id="picks-title" className="mb-1 mt-0.5 text-[30px] font-bold tracking-[-0.025em]">Editor’s Picks</h2>

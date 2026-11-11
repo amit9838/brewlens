@@ -132,8 +132,9 @@ const EDITORS_PICKS_POOL = [
 ];
 
 // Dynamically generate on load — shuffled at import time so each page visit
-// shows a fresh, randomized set drawn from every category.
-export const FEATURED_CASKS = shuffle(FEATURED_POOL).slice(0, 5);
+// shows a fresh, randomized set drawn from every category. Both draw more than
+// Discover shows (5 each), so deprecated or disabled casks can be dropped.
+export const FEATURED_CASKS = shuffle(FEATURED_POOL).slice(0, 8);
 export const EDITORS_PICKS_TOKENS = shuffle(EDITORS_PICKS_POOL).slice(0, 10);
 
 // ─── Open-source casks ───────────────────────────────────────────────────────
