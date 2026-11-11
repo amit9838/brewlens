@@ -16,7 +16,16 @@ import About from './components/page/About';
 import Analytics from './components/page/Analytics';
 import Discover from './components/page/Discover';
 
-const queryClient = new QueryClient();
+// Shared defaults for every query: the Homebrew API itself caches for 10 minutes
+// (`cache-control: max-age=600`), so refetching sooner gains nothing.
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: 1000 * 60 * 10,
+            refetchOnWindowFocus: false,
+        },
+    },
+});
 
 function Shell() {
     const [isOpen, setIsOpen] = useState(false);

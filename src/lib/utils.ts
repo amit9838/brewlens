@@ -37,9 +37,11 @@ const API_CONFIG = {
  *
  * @param rawData - Raw JSON object from the Homebrew API
  * @param type - Whether this is a 'cask' or 'formula'
+ * @param keepRaw - Keep the full API object on `raw` (detail pages). List fetches pass
+ *   `false` so the parsed catalogue (tens of MB) can be garbage-collected.
  * @returns A normalized `BrewItem` ready for use in the UI
  */
-export const normalizeItem = (rawData: RawBrewData, type: BrewType): BrewItem => {
+export const normalizeItem = (rawData: RawBrewData, type: BrewType, keepRaw = true): BrewItem => {
     const isCask = type === 'cask';
     const rawName = Array.isArray(rawData.name) ? rawData.name[0] : rawData.name;
     const id = (isCask ? rawData.full_token : rawName) ?? '';
@@ -57,7 +59,7 @@ export const normalizeItem = (rawData: RawBrewData, type: BrewType): BrewItem =>
         disabled: rawData.disabled,
         installCmd: `${API_CONFIG[type].installPrefix} ${id}`,
         package: getSourceCodeStatus(rawData, type),
-        raw: rawData,
+        ...(keepRaw && { raw: rawData }),
         _searchString: `${id} ${name} ${rawData.desc || ''}`.toLowerCase()
     };
 };
@@ -78,9 +80,9 @@ export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewI
     const res = await fetch(full_url);
     if (!res.ok) throw new Error(`Failed to fetch ${type} data from ${full_url}`);
     const json: RawBrewData | RawBrewData[] = await res.json();
-    // Handle both single objects (individual formula) and arrays (list)
-    const data = Array.isArray(json) ? json : [json];
-    return data.map((item) => normalizeItem(item, type));
+    // Lists come back as arrays and drop `raw`; a single package keeps it for the detail page.
+    if (Array.isArray(json)) return json.map((item) => normalizeItem(item, type, false));
+    return [normalizeItem(json, type)];
 };
 
 

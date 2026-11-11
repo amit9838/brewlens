@@ -86,8 +86,11 @@ export interface BrewItem {
     installCmd: string;
     /** Open-source status computed at normalization time */
     package: BrewPackage;
-    /** Full unmodified API response for fields not in the normalized shape */
-    raw: RawBrewData;
+    /**
+     * Full unmodified API response for fields not in the normalized shape.
+     * Only set on single-package (detail page) fetches; list items leave it out to save memory.
+     */
+    raw?: RawBrewData;
     /** Pre-computed lowercase search index for fast filtering */
     _searchString: string;
 }

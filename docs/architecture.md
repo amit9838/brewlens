@@ -65,7 +65,7 @@ Icons for packages come from Google's favicon service; their colour is sampled t
 | Recently viewed | `RecentlyViewedContext` | localStorage (with TTL) |
 | Theme | `useTheme` | localStorage (`theme`), falls back to the OS preference |
 | Modal state | `ModalContext` | None |
-| API data cache | React Query | In-memory (10 min stale) |
+| API data cache | React Query | In-memory (10 min stale, analytics 1 h); list items drop `raw` |
 
 ## Routing
 

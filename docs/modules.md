@@ -36,7 +36,7 @@ The normalized representation of any Homebrew package. All page components and c
 | `disabled` | boolean? | Whether the package is disabled |
 | `installCmd` | string | Ready-to-run install command |
 | `package` | BrewPackage | Open source status info |
-| `raw` | RawBrewData | Full unmodified API response (fields BrewLens reads are typed, the rest `unknown`) |
+| `raw` | RawBrewData? | Full unmodified API response (fields BrewLens reads are typed, the rest `unknown`). Only on single-package fetches; list items leave it out to save memory |
 | `_searchString` | string | Pre-computed lowercase search index |
 
 ---
@@ -48,8 +48,8 @@ Core utility functions for API interaction and data transformation.
 ### `cn(...inputs)`
 Merges Tailwind CSS class names using `clsx` + `tailwind-merge`. Handles conditional classes and deduplication.
 
-### `normalizeItem(rawData, type)`
-Transforms a raw Homebrew API object into a typed `BrewItem`. Called for every item in the list and detail fetches.
+### `normalizeItem(rawData, type, keepRaw = true)`
+Transforms a raw Homebrew API object into a typed `BrewItem`. Called for every item in the list and detail fetches. `fetchBrewData` passes `keepRaw = false` for the full lists, so the parsed catalogue isn't kept in memory.
 
 - Extracts the correct `id` and `name` based on type (casks use `full_token`, formulae use `name`)
 - Builds `installCmd` from the type-specific prefix
@@ -76,8 +76,8 @@ useBrewData(type: BrewType, url?: string)
 ```
 
 - Cache key includes both `type` and `url` so list and detail fetches are cached independently
-- `staleTime: 10 minutes` — data won't refetch unless older than 10 minutes
-- `refetchOnWindowFocus: false` — prevents unnecessary refetches when switching tabs
+- Uses the QueryClient defaults set in `App.tsx`: `staleTime: 10 minutes` (matches the API's own `max-age=600`) and `refetchOnWindowFocus: false`
+- `useAnalytics` overrides `staleTime` to 1 hour, since Homebrew regenerates analytics daily
 
 ---
 

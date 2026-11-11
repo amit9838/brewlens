@@ -58,8 +58,8 @@ export function useAnalytics(type: BrewType, period: Period = '30d', enabled = t
     return useQuery({
         queryKey: ['analytics', type, period],
         queryFn: () => fetchAnalytics(type, period),
-        staleTime: 1000 * 60 * 10,
-        refetchOnWindowFocus: false,
+        // Homebrew regenerates analytics once a day.
+        staleTime: 1000 * 60 * 60,
         enabled,
     });
 }
@@ -75,7 +75,6 @@ export function useGitHubStars() {
             return Number(json.stargazers_count) || 0;
         },
         staleTime: 1000 * 60 * 60,
-        refetchOnWindowFocus: false,
         retry: false,
     });
 }

@@ -132,7 +132,7 @@ page/* → ui/*, layout/* → contexts/*, hooks/* → lib/*, data/* → types.ts
 ```
 
 - Components never call `fetch` directly. Use `useBrewData` (packages) or `useAnalytics` (analytics), or add a hook in `src/hooks/` that wraps `useQuery`.
-- Raw API objects become `BrewItem` only through `normalizeItem()` in `lib/utils.ts`. Read normalized fields; reach into `item.raw` (`RawBrewData`) only for detail-page fields that aren't normalized.
+- Raw API objects become `BrewItem` only through `normalizeItem()` in `lib/utils.ts`. Read normalized fields; reach into `item.raw` (`RawBrewData`) only for detail-page fields that aren't normalized. `raw` is only set on single-package fetches; list items don't carry it.
 - `lib/` and `data/` are plain TypeScript: no React, no JSX.
 - API URLs are built in one place per area (`lib/utils.ts`, `hooks/useAnalytics.ts`, `DetailParts.tsx`). Don't scatter new inline URLs.
 
@@ -279,7 +279,7 @@ The app should feel:
 
 | State | Where |
 | --- | --- |
-| Server data | React Query (`useBrewData`, `useAnalytics`); 10-minute `staleTime`, no refetch on focus |
+| Server data | React Query (`useBrewData`, `useAnalytics`); defaults in `App.tsx`: 10-minute `staleTime`, no refetch on focus (analytics: 1 h) |
 | Shareable view state (type, search, category) | URL search params (`useSearchParams`) |
 | Explore filters, view mode, fonts toggle | `useStorage` (sessionStorage) |
 | Bookmarks, recently viewed, theme, current page | localStorage through their context / hook |
