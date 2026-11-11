@@ -55,9 +55,10 @@ export function DetailFallback({ isLoading, error, token }: { isLoading: boolean
 }
 
 /** Install analytics for the 30/90/365-day windows, tolerant of missing data. */
-export function installStats(item: BrewItem) {
+function installStats(item: BrewItem) {
     const install = item.raw?.analytics?.install ?? {};
-    const pick = (p: string) => install[p]?.[item.token] ?? install[p]?.[item.raw?.name];
+    const rawName = typeof item.raw?.name === 'string' ? item.raw.name : undefined;
+    const pick = (p: string) => install[p]?.[item.token] ?? (rawName ? install[p]?.[rawName] : undefined);
     return [
         { label: '1 month', value: pick('30d') },
         { label: '3 months', value: pick('90d') },

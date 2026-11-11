@@ -6,7 +6,7 @@
 
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { type BrewItem, type BrewType, type BrewPackage } from "../types";
+import type { BrewItem, BrewType, BrewPackage, RawBrewData } from "../types";
 
 /**
  * Merges Tailwind CSS class names, resolving conflicts via tailwind-merge.
@@ -39,18 +39,19 @@ const API_CONFIG = {
  * @param type - Whether this is a 'cask' or 'formula'
  * @returns A normalized `BrewItem` ready for use in the UI
  */
-export const normalizeItem = (rawData: any, type: BrewType): BrewItem => {
+export const normalizeItem = (rawData: RawBrewData, type: BrewType): BrewItem => {
     const isCask = type === 'cask';
-    const id = isCask ? rawData.full_token : rawData.name;
-    const name = isCask && Array.isArray(rawData.name) ? rawData.name[0] : rawData.name;
+    const rawName = Array.isArray(rawData.name) ? rawData.name[0] : rawData.name;
+    const id = (isCask ? rawData.full_token : rawName) ?? '';
+    const name = rawName || id;
 
     return {
         id,
         type: type,
-        name: name || id,
-        token: isCask ? rawData.full_token : rawData.full_name,
+        name,
+        token: (isCask ? rawData.full_token : rawData.full_name) ?? id,
         desc: rawData.desc || "No description available.",
-        version: isCask ? rawData.version : rawData.versions?.stable || 'N/A',
+        version: isCask ? rawData.version ?? '' : rawData.versions?.stable || 'N/A',
         homepage: rawData.homepage,
         deprecated: rawData.deprecated,
         disabled: rawData.disabled,
@@ -76,10 +77,10 @@ export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewI
     const full_url = url || API_CONFIG[type].url;
     const res = await fetch(full_url);
     if (!res.ok) throw new Error(`Failed to fetch ${type} data from ${full_url}`);
-    const json = await res.json();
+    const json: RawBrewData | RawBrewData[] = await res.json();
     // Handle both single objects (individual formula) and arrays (list)
     const data = Array.isArray(json) ? json : [json];
-    return data.map((item: any) => normalizeItem(item, type));
+    return data.map((item) => normalizeItem(item, type));
 };
 
 
@@ -96,9 +97,9 @@ export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewI
  * @param type - 'cask' or 'formula'
  * @returns A `BrewPackage` with `isFoss`, `verified`, and `fossUrl`
  */
-export const getSourceCodeStatus = (rawData: any, type: BrewType): BrewPackage => {
+export const getSourceCodeStatus = (rawData: RawBrewData, type: BrewType): BrewPackage => {
     const isCask = type === 'cask';
-    const urlSpecsValues = Object.values(rawData.url_specs ?? {}) as string[];
+    const urlSpecsValues = Object.values(rawData.url_specs ?? {});
     const websiteUrl = rawData.homepage || "";
 
     let allTextToSearch = [...urlSpecsValues, websiteUrl].join(" ").toLowerCase();

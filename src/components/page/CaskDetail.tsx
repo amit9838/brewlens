@@ -41,7 +41,7 @@ export function CaskDetail() {
     if (!item) return <DetailFallback isLoading={isLoading} error={error} token={token} />;
 
     const raw = item.raw ?? {};
-    const artifacts: Record<string, unknown>[] = (raw.artifacts ?? []).filter((a: unknown) => a && typeof a === 'object');
+    const artifacts = (raw.artifacts ?? []).filter((a): a is Record<string, unknown> => !!a && typeof a === 'object');
     const { verified, isFoss, fossUrl } = getSourceCodeStatus(raw, 'cask');
     const categoryId = getCategoryForToken(item, CASK_CATEGORIES);
     const rows = artifacts.flatMap((a) => Object.entries(a)).map(([type, value]) => ({ type, text: flatten(value).join(', ') })).filter((r) => r.text);

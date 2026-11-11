@@ -21,6 +21,45 @@ export interface BrewPackage {
 }
 
 /**
+ * Raw cask or formula object from the Homebrew API (formulae.brew.sh).
+ * Only the fields BrewLens reads are typed; everything else is `unknown`.
+ */
+export interface RawBrewData {
+    [key: string]: unknown;
+    /** Cask token, e.g. `firefox` (casks only) */
+    full_token?: string;
+    /** Formula full name, e.g. `git` or `user/tap/name` (formulae only) */
+    full_name?: string;
+    /** Display names (casks) or the formula name */
+    name?: string | string[];
+    desc?: string | null;
+    homepage?: string;
+    deprecated?: boolean;
+    disabled?: boolean;
+    /** Cask version */
+    version?: string;
+    /** Formula versions */
+    versions?: { stable?: string | null };
+    /** Cask download URL and checksum */
+    url?: string;
+    sha256?: string;
+    url_specs?: Record<string, string>;
+    artifacts?: unknown[];
+    depends_on?: { macos?: unknown };
+    /** Formula source URLs */
+    urls?: { stable?: { url?: string }; head?: { url?: string } };
+    tap?: string;
+    dependencies?: string[];
+    build_dependencies?: string[];
+    revision?: number;
+    keg_only?: boolean;
+    bottle?: unknown;
+    license?: string | null;
+    /** Install counts per period ("30d", "90d", "365d") keyed by token */
+    analytics?: { install?: Record<string, Record<string, number>> };
+}
+
+/**
  * Normalized representation of a Homebrew cask or formula.
  * Consumed by all page components, cards, and filter logic.
  */
@@ -48,7 +87,7 @@ export interface BrewItem {
     /** Open-source status computed at normalization time */
     package: BrewPackage;
     /** Full unmodified API response for fields not in the normalized shape */
-    raw: any;
+    raw: RawBrewData;
     /** Pre-computed lowercase search index for fast filtering */
     _searchString: string;
 }
