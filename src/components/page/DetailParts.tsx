@@ -184,6 +184,11 @@ export function ScreenshotsCard({ item }: { item: BrewItem }) {
                     </a>
                 ))}
             </div>
+            {info.source !== 'Mac App Store' && (
+                <p className="m-0 text-[13px] text-muted">
+                    These screenshots are from {info.source} (Linux). The macOS app may look different.
+                </p>
+            )}
         </Card>
     );
 }
