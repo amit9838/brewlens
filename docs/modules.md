@@ -135,27 +135,33 @@ openModal(<MyModal prop={value} />, options)
 
 ---
 
-## `src/components/ui/Button.tsx`
+## `src/components/ui/kit.tsx`
 
-Polymorphic button component built with `@radix-ui/react-slot`.
+Small design-system primitives used on every page: `Chip`, `Segmented` (pill tabs), `SectionHead`, `PillButton` / `PillLink` (variants: `outline`, `dark`, `accent`, `soft`, `ghost`, `danger`), `IconButton`, `EmptyState`, `Card`, `CardTitle`, `Eyebrow`. Colours come from the CSS-variable tokens in `src/index.css` (light + `.dark`).
 
-### Variants
-| Variant | Use case |
-|---|---|
-| `primary` | Main actions (green) |
-| `secondary` | Secondary actions (zinc) |
-| `destructive` | Dangerous actions (red) |
-| `outline` | Bordered, transparent background |
-| `ghost` | No border, subtle hover |
-| `blue` | OSS filter tag |
-| `glass` | Frosted glass, used on dark hero sections |
-| `link` | Inline text link style |
-| `black` / `white` | High contrast variants |
+---
 
-### Props
-- `isPill` — applies `rounded-full` instead of `rounded-md`
-- `isLoading` — shows spinner, disables interaction
-- `asChild` — renders as child element via Radix Slot (useful for wrapping `<a>` tags)
+## `src/components/ui/AppCards.tsx`
+
+Package presentations: `AppCard` (grid), `AppRow` (list), `CompactRow` (Editor's Picks / Top Charts) and `CompactRowSkeleton`. The whole card is a link via `StretchLink`. `FaviconGlow` renders the soft favicon colour wash behind cards. Cards show a category tag coloured by the category's colour.
+
+---
+
+## `src/components/ui/AppIcon.tsx`
+
+Rounded app tile: favicon (Google s2) or a coloured letter tile. In dark mode dark, near-monochrome logos are inverted (see `src/lib/iconTone.ts`, which samples the icon through the wsrv.nl image proxy because Google's favicon service sends no CORS headers).
+
+---
+
+## `src/components/ui/SearchPalette.tsx`
+
+Global ⌘K / Ctrl+K search over all casks and formulae (arrow-key navigation). On `/all` the shortcut focuses the page's own search box instead.
+
+---
+
+## `src/components/ui/FiltersModal.tsx`
+
+Explore's "Filters & view" dialog: grid/list view, source and status filters, fonts. Changes apply immediately.
 
 ---
 
@@ -216,12 +222,6 @@ Pagination controls with page jump and items-per-page selector.
 - Shows a sliding window of ±2 pages around the current page
 - "Go to" form for jumping to arbitrary pages
 - Items per page: 12 / 24 / 48
-
----
-
-## `src/components/ui/QuickSearchModal.tsx`
-
-Pre-defined search term shortcuts. Clicking a term calls `onSelect(term)` and closes the modal. Terms cover common app categories: browsers, dev tools, productivity, media, communication, system utilities.
 
 ---
 

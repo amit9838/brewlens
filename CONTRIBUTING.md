@@ -67,14 +67,14 @@ Filters in `BrewList` are driven by a `Set<string>`. To add a new filter:
 
 ## Adding a New Button Variant
 
-In `src/components/ui/Button.tsx`, add to the `variants` object and the `ButtonProps` variant union type:
+In `src/components/ui/kit.tsx`, add the variant name to `PillVariant` and its classes to the `PILL` map (colours should use the theme tokens such as `bg-invert` / `text-ink` so dark mode works):
 
 ```ts
-variant?: '...' | 'yourVariant';
+type PillVariant = '...' | 'yourVariant';
 
-const variants = {
+const PILL: Record<PillVariant, string> = {
   // ...
-  yourVariant: "bg-purple-600 text-white hover:bg-purple-700 ...",
+  yourVariant: 'bg-accent-soft text-accent-ink hover:bg-accent-tint',
 };
 ```
 

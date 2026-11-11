@@ -53,7 +53,7 @@ BrewLens is a fully client-side React SPA. There is no backend — all data is f
 3. `BrewList` mounts → `useBrewData('cask')` fires a fetch via React Query
 4. Raw API response is normalized by `normalizeItem()` into `BrewItem[]`
 5. `BrewList` applies filters/search via `useMemo`, paginates via `usePagination`
-6. `ItemCard` renders each item; clicking navigates to `/cask/:token` or `/formula/:token`
+6. `AppCard` / `AppRow` render each item; the whole card is a link to `/cask/:token` or `/formula/:token`
 7. Detail pages fetch individual item data via `useBrewData(type, specificUrl)`
 
 ## State Management
