@@ -4,7 +4,7 @@
  * with automatic JSON serialization and default-value cleanup.
  */
 
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 type StorageType = "local" | "session";
 
@@ -50,13 +50,18 @@ export function useStorage<T>(
         }
     });
 
-    const setValue = (value: T | ((prev: T) => T)) => {
+    // Callers often pass a fresh literal (`[]`) as the default; keep the first
+    // one so `setValue` stays stable across renders.
+    const defaultRef = useRef(defaultValue);
+
+    const setValue = useCallback((value: T | ((prev: T) => T)) => {
+        const storage = getStorage(type);
         setState(prev => {
             const next = typeof value === "function" ? (value as (prev: T) => T)(prev) : value;
             try {
                 if (next === null || next === undefined ||
                     (Array.isArray(next) && (next as unknown[]).length === 0) ||
-                    next === defaultValue) {
+                    next === defaultRef.current) {
                     storage.removeItem(key);
                 } else {
                     storage.setItem(key, JSON.stringify(next));
@@ -64,7 +69,7 @@ export function useStorage<T>(
             } catch { /* ignore */ }
             return next;
         });
-    };
+    }, [key, type]);
 
     return [state, setValue];
 }
