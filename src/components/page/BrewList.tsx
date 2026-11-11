@@ -80,14 +80,16 @@ export const BrewList: React.FC = () => {
     const pagination = usePagination(filtered, itemsPerPage, `cp_${type}`);
     const { currentData, currentPage, setCurrentPage, totalPages } = pagination;
 
-    // Any change to what's being listed goes back to page 1 (but not on first mount,
-    // so a restored page survives navigating away and back).
-    const firstRun = useRef(true);
+    // Any change to what's being listed goes back to page 1, but mounting doesn't, so
+    // a restored page survives a trip to a detail page and back. Comparing against the
+    // previous value (not a "first run" flag) also holds when StrictMode runs effects twice.
+    const listKey = JSON.stringify([deferredSearch, categoryId, filterArr, showFonts, type, itemsPerPage]);
+    const prevListKey = useRef(listKey);
     useEffect(() => {
-        if (firstRun.current) { firstRun.current = false; return; }
+        if (prevListKey.current === listKey) return;
+        prevListKey.current = listKey;
         setCurrentPage(1);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [deferredSearch, categoryId, filterArr, showFonts, type, itemsPerPage]);
+    }, [listKey, setCurrentPage]);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
