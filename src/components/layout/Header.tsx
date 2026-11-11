@@ -6,8 +6,8 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { BarChart3, Bookmark, Compass, Home, Menu, Search, Star, Github } from 'lucide-react';
 import logo from '../../assets/brewlens_logo.png';
-import { useBookmarks } from '../contexts/BookmarksContext';
 import { useModal } from '../contexts/ModalContexts';
+import { useBookmarks } from '../contexts/BookmarksContext';
 import BookmarksModal from '../ui/BookmarksModal';
 import { useSearchPalette } from '../ui/SearchPalette';
 import { shortcutLabel } from '../../lib/platform';
@@ -29,8 +29,8 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ setIsOpen, isOpen }) => {
     const navigate = useNavigate();
-    const { bookmarks } = useBookmarks();
     const { openModal } = useModal();
+    const hasBookmarks = useBookmarks().bookmarks.length > 0;
     const palette = useSearchPalette();
     const { data: stars } = useGitHubStars();
 
@@ -91,17 +91,12 @@ export const Header: React.FC<HeaderProps> = ({ setIsOpen, isOpen }) => {
                 </button>
                 <button
                     type="button"
-                    aria-label={`Bookmarks, ${bookmarks.length} saved`}
+                    aria-label="Bookmarks"
                     aria-haspopup="dialog"
                     onClick={() => openModal(() => <BookmarksModal />, { size: 'lg' })}
                     className={iconBtn}
                 >
-                    <Bookmark size={20} />
-                    {bookmarks.length > 0 && (
-                        <span className="absolute right-0.5 top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-accent px-1 text-[11px] font-extrabold text-[#111114]">
-                            {bookmarks.length}
-                        </span>
-                    )}
+                    <Bookmark size={20} fill={hasBookmarks ? 'currentColor' : 'none'} />
                 </button>
                 <a
                     href="https://github.com/amit9838/brewlens"
