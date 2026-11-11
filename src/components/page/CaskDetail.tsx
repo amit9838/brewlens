@@ -110,7 +110,7 @@ export function CaskDetail() {
                             <code className="mt-1.5 block break-all rounded-xl bg-raised p-3 font-mono text-[12.5px] text-muted">{raw.sha256 || 'Not available'}</code>
                         </div>
                         {raw.url && (
-                            <PillLink href={raw.url} variant="dark" className="justify-center"><Download size={16} strokeWidth={2.2} />Download installer</PillLink>
+                            <PillLink href={raw.url} variant="soft" className="justify-center"><Download size={16} strokeWidth={2.2} />Download installer</PillLink>
                         )}
                     </Card>
                     <MoreInCategory item={item} categoryId={categoryId} />
