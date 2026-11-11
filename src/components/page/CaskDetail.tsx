@@ -43,6 +43,8 @@ export function CaskDetail() {
 
     const raw = item.raw ?? {};
     const artifacts = (raw.artifacts ?? []).filter((a): a is Record<string, unknown> => !!a && typeof a === 'object');
+    // Casks that install an `.app` bundle (not fonts, drivers or command-line tools).
+    const isGuiApp = artifacts.some((a) => 'app' in a);
     const { verified, isFoss, fossUrl } = getSourceCodeStatus(raw, 'cask');
     const categoryId = getCategoryForToken(item, CASK_CATEGORIES);
     const rows = artifacts.flatMap((a) => Object.entries(a)).map(([type, value]) => ({ type, text: flatten(value).join(', ') })).filter((r) => r.text);
@@ -68,6 +70,7 @@ export function CaskDetail() {
                         <div className="flex flex-wrap gap-2">
                             <Chip tone="raised">Version {item.version}</Chip>
                             <Chip tone="raised">macOS · Cask</Chip>
+                            {isGuiApp && <Chip tone="raised">GUI</Chip>}
                             {isFoss && <Chip tone="oss">Open Source</Chip>}
                         </div>
                     </Card>
