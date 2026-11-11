@@ -117,8 +117,8 @@ src/
     layout/                Header, Drawer (nav, theme toggle)
     page/                  one component per route + DetailParts, skeletons, Error
     ui/                    kit.tsx primitives, AppCards, AppIcon, Modal, SearchPalette, FiltersModal, Pagination, …
-  hooks/                   useBrewData, useBrewItems, useAnalytics, useDetailItem, useStorage, usePagination, useDocumentMeta, useTheme, useCopy, …
-  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), queryPersister, format, brewfile, iconTone, platform
+  hooks/                   useBrewData, useBrewItems, useAnalytics, useDetailItem, useScreenshots, useStorage, usePagination, useDocumentMeta, useTheme, useCopy, …
+  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), queryPersister, screenshots (+ appStore, flathub), format, brewfile, iconTone, platform
   data/                    categories.ts (taxonomy + styles), curated.ts (featured / Editor's Picks pools)
 scripts/prerender.mjs      post-build: static HTML per route + sitemap.xml
 public/                    404.html (SPA redirect), manifest, robots.txt, llms.txt, og-image, logos
@@ -204,7 +204,8 @@ When unsure, ask:
 | A few packages by token, without waiting for the full list | `useBrewItems(type, tokens)` |
 | Single-package API URL | `itemUrl(type, token)` (`lib/utils.ts`) |
 | Detail page data | `useDetailItem(type)` (`hooks/useDetailItem.ts`) |
-| Detail page pieces | `DetailFallback`, `TopBar`, `Hero`, `InstallsCard`, `MoreInCategory`, `ExternalLinkPill` in `DetailParts.tsx` |
+| Detail page pieces | `DetailFallback`, `TopBar`, `Hero`, `InstallsCard`, `ScreenshotsCard`, `MoreInCategory`, `ExternalLinkPill` in `DetailParts.tsx` |
+| Screenshots for a cask (optional, detail page only) | `useScreenshots(item)` / `ScreenshotsCard` |
 | Class names | `cn(...)` |
 
 ### Modals
@@ -319,6 +320,7 @@ The app should feel:
 ## Data Rules
 
 - `formulae.brew.sh` is the only package data source: `/api/cask.json`, `/api/formula.json`, `/api/{cask|formula}/:token.json`, `/api/analytics/...`. It needs no API key; never add one.
+- Screenshots are optional extras (`lib/screenshots.ts`): the iTunes Lookup API first (Mac App Store apps, matched by the bundle IDs in a cask's uninstall / zap stanzas, `kind === 'mac-software'` only), then Flathub (Linux builds; case-insensitive bundle ID, name or reversed-domain match, the last two verified against the cask homepage). Fetch them lazily per item through `useScreenshots`, never for lists, and render nothing when there are none. Both APIs are keyless and CORS-enabled; iTunes is rate-limited (~20 requests/minute).
 - Casks are identified by `token`, formulae by `name`; `normalizeItem` handles this. Install commands are `brew install --cask <token>` / `brew install <name>` through `installCommand`.
 - Open-source detection is `getSourceCodeStatus` (formulae: `license`; casks: a repository homepage on GitHub, GitLab, Bitbucket or Codeberg, or the hand-picked `OPEN_SOURCE_CASKS` in `data/curated.ts`). Extend it there, not in components. To mark a cask whose homepage is its own website, add its token to `OPEN_SOURCE_CASKS`.
 - Category assignment lives in `data/categories.ts` (exact `tokens` first, then `keywords`). Curated lists (featured, Editor's Picks, open-source casks) live in `data/curated.ts`; only use tokens that exist in the API.

@@ -5,7 +5,7 @@ import { getCategoryForToken, CASK_CATEGORIES } from '../../data/categories';
 import { getSourceCodeStatus } from '../../lib/utils';
 import { Card, CardTitle, Chip, Eyebrow, PillLink } from '../ui/kit';
 import {
-    DetailFallback, ExternalLinkPill, Hero, InstallsCard, MoreInCategory, TopBar,
+    DetailFallback, ExternalLinkPill, Hero, InstallsCard, MoreInCategory, ScreenshotsCard, TopBar,
 } from './DetailParts';
 
 /** Flattens Homebrew's nested artifact values into readable strings. */
@@ -71,6 +71,8 @@ export function CaskDetail() {
                             {isFoss && <Chip tone="oss">Open Source</Chip>}
                         </div>
                     </Card>
+
+                    <ScreenshotsCard item={item} />
 
                     {rows.length > 0 && (
                         <Card>

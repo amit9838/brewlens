@@ -18,13 +18,13 @@ export const CACHE_MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 7 days
  */
 const CACHE_VERSION = 'v2'; // v2: new open-source detection (getSourceCodeStatus)
 
-/** Only the full lists (`['brew', type]`, no URL) and analytics are worth saving. */
+/** Only the full lists (`['brew', type]`, no URL), analytics and screenshot lookups are worth saving. */
 function shouldPersist(query: Query): boolean {
     if (!defaultShouldDehydrateQuery(query)) return false; // successful queries only
     const [scope, , url] = query.queryKey;
     // `url == null`, not `=== undefined`: a restored key went through JSON, which turns
     // `['brew', 'cask', undefined]` into `['brew', 'cask', null]`.
-    return (scope === 'brew' && url == null) || scope === 'analytics';
+    return (scope === 'brew' && url == null) || scope === 'analytics' || scope === 'screenshots';
 }
 
 const persister = createAsyncStoragePersister({

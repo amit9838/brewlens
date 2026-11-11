@@ -206,6 +206,18 @@ Explore's "Filters & view" dialog: grid/list view, source and status filters, fo
 
 ---
 
+## `src/lib/screenshots.ts`, `appStore.ts`, `flathub.ts`
+
+Optional screenshots for a cask, shown only in `ScreenshotsCard` on the cask detail page.
+
+- `caskBundleIds(raw)` pulls bundle ID candidates from the cask's `uninstall` / `zap` artifacts (`com.apple.*` excluded). `hasSingleApp(raw)` skips suites that install several apps.
+- `fetchScreenshots(item)` tries `fetchAppStoreMedia` (iTunes Lookup, Mac listings only), then `fetchFlathubMedia`. Flathub search is POST-only and blocked by CORS, so its ID list (~90 KB) is fetched once per session and matched locally: bundle ID ignoring case, then name, then the only ID under the homepage's reversed domain; the last two must have the same homepage domain on Flathub.
+- Returns `{ source, url, screenshots }` or `null`. Throws only when nothing was found and a source failed, so a network error isn't cached as "no screenshots".
+
+`useScreenshots(item)` wraps it in React Query (key `['screenshots', token]`, 1-day stale time, no retry, persisted in IndexedDB).
+
+---
+
 ## `src/components/page/BrewList.tsx`
 
 Main browse/search page. The most complex component in the app.

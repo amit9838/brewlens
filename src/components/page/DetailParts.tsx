@@ -12,6 +12,7 @@ import { BookmarkButton } from '../ui/BookmarkButton';
 import { Chip, EmptyState, IconButton, PillLink, Card, CardTitle, Eyebrow } from '../ui/kit';
 import { useBrewData } from '../../hooks/useBrewData';
 import { useCopy } from '../../hooks/useCopy';
+import { useScreenshots } from '../../hooks/useScreenshots';
 import { formatCount } from '../../lib/format';
 import { getCategoryForToken, getCategoryStyle, CASK_CATEGORIES, FORMULA_CATEGORIES } from '../../data/categories';
 import { cn } from '../../lib/utils';
@@ -138,6 +139,54 @@ export function Hero({
 export const ExternalLinkPill = ({ href, children }: { href: string; children: ReactNode }) => (
     <PillLink href={href} variant="outline">{children}<ArrowUpRight size={15} strokeWidth={2.2} /></PillLink>
 );
+
+/**
+ * Screenshots for a cask (Mac App Store, else Flathub), in a horizontal strip.
+ * Renders nothing when no source has the app or every image fails to load.
+ */
+export function ScreenshotsCard({ item }: { item: BrewItem }) {
+    const info = useScreenshots(item);
+    const [failed, setFailed] = useState<string[]>([]);
+    const shots = info?.screenshots.filter((s) => !failed.includes(s)) ?? [];
+    if (!info || shots.length === 0) return null;
+
+    return (
+        <Card>
+            <div className="flex items-baseline justify-between gap-3">
+                <CardTitle>Screenshots</CardTitle>
+                {/* Flathub pages are for the Linux build, so only the Mac App Store is linked. */}
+                {info.source === 'Flathub' ? (
+                    <span className="text-[13px] font-semibold text-muted">Source · {info.source}</span>
+                ) : (
+                    <a
+                        href={info.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-[13px] font-semibold text-muted hover:text-ink"
+                    >
+                        Source · {info.source}
+                        <ArrowUpRight size={14} strokeWidth={2.2} />
+                    </a>
+                )}
+            </div>
+            <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2">
+                {shots.map((src, i) => (
+                    <a key={src} href={src} target="_blank" rel="noopener noreferrer" className="shrink-0 snap-start">
+                        <img
+                            src={src}
+                            alt={`${item.name} screenshot ${i + 1}`}
+                            loading="lazy"
+                            decoding="async"
+                            referrerPolicy="no-referrer"
+                            onError={() => setFailed((f) => [...f, src])}
+                            className="aspect-[16/10] h-[clamp(170px,22vw,280px)] w-auto rounded-2xl border border-line bg-raised object-contain"
+                        />
+                    </a>
+                ))}
+            </div>
+        </Card>
+    );
+}
 
 export function InstallsCard({ item }: { item: BrewItem }) {
     return (
