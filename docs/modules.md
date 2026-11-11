@@ -36,7 +36,7 @@ The normalized representation of any Homebrew package. All page components and c
 | `disabled` | boolean? | Whether the package is disabled |
 | `installCmd` | string | Ready-to-run install command |
 | `package` | BrewPackage | Open source status info |
-| `raw` | any | Full unmodified API response |
+| `raw` | RawBrewData | Full unmodified API response (fields BrewLens reads are typed, the rest `unknown`) |
 | `_searchString` | string | Pre-computed lowercase search index |
 
 ---
@@ -81,6 +81,18 @@ useBrewData(type: BrewType, url?: string)
 
 ---
 
+## `src/hooks/useDetailItem.ts`
+
+Shared logic for `CaskDetail` and `FormulaeDetail`.
+
+```ts
+useDetailItem(type: BrewType)
+```
+
+Reads the token from the route, fetches `/api/{type}/:token.json` through `useBrewData` and records the item in recently viewed. Returns `{ token, apiUrl, item, isLoading, error }`.
+
+---
+
 ## `src/hooks/usePagination.ts`
 
 Generic pagination hook with localStorage persistence.
@@ -92,8 +104,8 @@ usePagination<T>(data: T[], itemsPerPage: number, storageKey?: string)
 Returns `{ currentPage, setCurrentPage, totalPages, currentData }`.
 
 - Reads saved page from `localStorage` on mount (keyed by `storageKey`)
-- Clamps page to valid range when `data.length` changes (skips clamp when data is empty to avoid overwriting saved page before data loads)
-- Writes current page to `localStorage` on every change
+- Clamps the page to the valid range during render (skipped while `data` is empty, so a saved page isn't reset before data loads)
+- Writes the visible page to `localStorage` once data has loaded
 
 ---
 
@@ -155,7 +167,7 @@ Rounded app tile: favicon (Google s2) or a coloured letter tile. In dark mode da
 
 ## `src/components/ui/SearchPalette.tsx`
 
-Global ⌘K / Ctrl+K search over all casks and formulae (arrow-key navigation). On `/all` the shortcut focuses the page's own search box instead.
+Global ⌘K / Ctrl+K search over all casks and formulae (arrow-key navigation). On `/all` the shortcut focuses the page's own search box instead. The shortcut label and platform check (`shortcutLabel`, `isMac`) live in `src/lib/platform.ts`.
 
 ---
 
@@ -230,4 +242,4 @@ Pagination controls with page jump and items-per-page selector.
 A-Z character grid for jumping to alphabetical sections of the list. Generates A–Z plus `#` for non-alphabetic entries.
 
 ---
-*Updated: Mar 23, 2026*
+*Updated: Nov 11, 2026*

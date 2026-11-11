@@ -111,14 +111,14 @@ src/
   main.tsx                 BrowserRouter (basename from import.meta.env.BASE_URL), mounts App
   App.tsx                  providers (QueryClient, Modal, Bookmarks, RecentlyViewed, SearchPalette), shell, routes
   index.css                Tailwind import, design tokens (:root / .dark), @theme inline mapping
-  types.ts                 BrewType, BrewItem, BrewPackage and other shared types
+  types.ts                 BrewType, BrewItem, BrewPackage, RawBrewData and other shared types
   components/
     contexts/              ModalContexts, BookmarksContext, RecentlyViewedContext
     layout/                Header, Drawer (nav, theme toggle)
     page/                  one component per route + DetailParts, skeletons, Error
     ui/                    kit.tsx primitives, AppCards, AppIcon, Modal, SearchPalette, FiltersModal, Pagination, …
-  hooks/                   useBrewData, useAnalytics, useStorage, usePagination, useDocumentMeta, useTheme, useCopy, …
-  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), format, brewfile, iconTone
+  hooks/                   useBrewData, useAnalytics, useDetailItem, useStorage, usePagination, useDocumentMeta, useTheme, useCopy, …
+  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), format, brewfile, iconTone, platform
   data/                    categories.ts (taxonomy + styles), curated.ts (featured / Editor's Picks pools)
 scripts/prerender.mjs      post-build: static HTML per route + sitemap.xml
 public/                    404.html (SPA redirect), manifest, robots.txt, llms.txt, og-image, logos
@@ -132,7 +132,7 @@ page/* → ui/*, layout/* → contexts/*, hooks/* → lib/*, data/* → types.ts
 ```
 
 - Components never call `fetch` directly. Use `useBrewData` (packages) or `useAnalytics` (analytics), or add a hook in `src/hooks/` that wraps `useQuery`.
-- Raw API objects become `BrewItem` only through `normalizeItem()` in `lib/utils.ts`. Read normalized fields; reach into `item.raw` only for detail-page fields that aren't normalized.
+- Raw API objects become `BrewItem` only through `normalizeItem()` in `lib/utils.ts`. Read normalized fields; reach into `item.raw` (`RawBrewData`) only for detail-page fields that aren't normalized.
 - `lib/` and `data/` are plain TypeScript: no React, no JSX.
 - API URLs are built in one place per area (`lib/utils.ts`, `hooks/useAnalytics.ts`, `DetailParts.tsx`). Don't scatter new inline URLs.
 
@@ -179,7 +179,7 @@ When unsure, ask:
 | Tag / badge | `Chip` (`tone`: neutral, raised, accent, oss, warn, dark) |
 | Tabs / toggle between a few values | `Segmented` |
 | Section title with "See all" | `SectionHead` |
-| Button / link styled as a pill | `PillButton` / `PillLink` / `pillClass(variant)` |
+| Button / link styled as a pill | `PillButton` / `PillLink` |
 | Icon-only button | `IconButton` |
 | Empty result | `EmptyState` |
 | Boxed content | `Card`, `CardTitle`, `Eyebrow` |
@@ -191,7 +191,7 @@ When unsure, ask:
 | Bookmark toggle | `BookmarkButton` + `useBookmarks()` |
 | Recently viewed | `useRecentlyViewed()` |
 | A dialog | `useModal().openModal(() => <X />, options)` rendered in `ModalShell` |
-| Global search | `useSearchPalette()`, `shortcutLabel` |
+| Global search | `useSearchPalette()`, `shortcutLabel` (`lib/platform.ts`) |
 | Pagination | `usePagination` + `Pagination` |
 | Persisted UI state | `useStorage(key, default, 'session' \| 'local')` |
 | Page title / meta / canonical | `useDocumentMeta` |
@@ -201,7 +201,8 @@ When unsure, ask:
 | Number formatting | `formatCount`, `toNumber` |
 | Category of a package, its colour and icon | `getCategoryForToken`, `getCategoryStyle`, `CATEGORY_ICON_MAP` |
 | Brewfile | `buildBrewfile` |
-| Detail page pieces | `useDetailItem`, `DetailFallback`, `TopBar`, `Hero`, `InstallsCard`, `MoreInCategory` in `DetailParts.tsx` |
+| Detail page data | `useDetailItem(type)` (`hooks/useDetailItem.ts`) |
+| Detail page pieces | `DetailFallback`, `TopBar`, `Hero`, `InstallsCard`, `MoreInCategory`, `ExternalLinkPill` in `DetailParts.tsx` |
 | Class names | `cn(...)` |
 
 ### Modals
@@ -304,7 +305,7 @@ The app should feel:
 
 ## TypeScript & React Rules
 
-- Strict mode. No `any` in new code, except at the raw-API boundary (`raw`, `normalizeItem` input). Prefer `unknown` + narrowing or a small interface.
+- Strict mode. No `any`. Raw API objects are `RawBrewData` (`types.ts`): add a typed field there when you read a new one, otherwise use `unknown` + narrowing.
 - Function components and hooks only. Named exports for shared pieces; follow the export style of the file you are in.
 - `import type` for type-only imports (`verbatimModuleSyntax` is on).
 - Follow the hook rules; fix `react-hooks/exhaustive-deps` warnings properly rather than disabling them.
@@ -357,7 +358,9 @@ npx tsc -b
 npm run lint
 ```
 
-The codebase already has some ESLint findings (`no-explicit-any` at the API boundary, `react-refresh/only-export-components`, a few `exhaustive-deps`). Don't add new ones in the code you change, and don't mass-fix unrelated ones in the same change.
+Both must pass with no errors or warnings. Don't silence a rule with `eslint-disable` without a comment saying why.
+
+- Component files (`.tsx`) export only components, so Fast Refresh works. Put hooks in `src/hooks/` and plain helpers or constants in `src/lib/`. The one exception is a context file exporting its provider together with its `use…` hook; add the hook's name to `allowExportNames` in [eslint.config.js](eslint.config.js).
 
 Run `npm run build` when you touched routing, `vite.config.ts`, `index.html`, `public/` or `scripts/prerender.mjs` (it needs network access to the Homebrew API), then check the result with `npm run preview`.
 
@@ -385,5 +388,6 @@ Before every feature implementation:
 - Do not co-author Claude
 - Commit messages follow Conventional Commits: `type(scope): subject` (`feat`, `fix`, `refactor`, `chore`, `style`, `docs`; e.g. `feat(seo): …`, `fix(ui): …`)
 - Work on `dev`; `main` is the release branch. Never run `npm run deploy` unless asked
-- Always name plan documents with the `-plan.md` suffix (e.g. `docs/abc-plan.md`). Never commit plan documents; keep them local (add `*-plan.md` to `.gitignore` if it isn't there yet)
+- Always name plan documents with the `-plan.md` suffix (e.g. `docs/abc-plan.md`), so `.gitignore` catches them
+- Never commit plan documents. They stay local and are gitignored (`*-plan.md`)
 - `.gitignore` also ignores `test*`, so a new test file won't be tracked unless you `git add -f` it or change that rule
