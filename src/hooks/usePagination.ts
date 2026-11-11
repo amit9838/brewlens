@@ -37,28 +37,25 @@ export function usePagination<T>(
     });
 
     const totalPages = Math.ceil(data.length / itemsPerPage);
+    const clamp = (page: number) => Math.max(1, Math.min(page, totalPages));
 
-    // Clamp page when data changes
-    useEffect(() => {
-        setCurrentPage(prev => Math.max(1, Math.min(prev, totalPages)));
-    }, [data.length, itemsPerPage]);
+    // Clamp during render rather than in an effect, and only once data has
+    // loaded, so a saved page isn't reset to 1 while the list is still empty.
+    const page = data.length > 0 ? clamp(currentPage) : currentPage;
 
-    // Save to storage whenever page changes
+    // Save to storage whenever the visible page changes
     useEffect(() => {
-        if (storageKey) {
-            localStorage.setItem(storageKey, String(currentPage));
+        if (storageKey && data.length > 0) {
+            localStorage.setItem(storageKey, String(page));
         }
-    }, [currentPage, storageKey]);
+    }, [page, storageKey, data.length]);
 
-    const safeSetPage = (page: number) => {
-        const p = Math.max(1, Math.min(page, totalPages));
-        setCurrentPage(p);
-    };
+    const safeSetPage = (next: number) => setCurrentPage(clamp(next));
 
     const currentData = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
+        const start = (page - 1) * itemsPerPage;
         return data.slice(start, start + itemsPerPage);
-    }, [data, currentPage, itemsPerPage]);
+    }, [data, page, itemsPerPage]);
 
-    return { currentPage, setCurrentPage: safeSetPage, totalPages, currentData };
+    return { currentPage: page, setCurrentPage: safeSetPage, totalPages, currentData };
 }
