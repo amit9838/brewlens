@@ -82,7 +82,7 @@ function Hero({ items }: { items: BrewItem[] }) {
         return () => clearInterval(t);
     }, [paused, total]);
 
-    const wrap = 'min-h-[300px] flex-[1_1_100%] lg:flex-[0_0_65%]';
+    const wrap = 'min-h-[380px] lg:min-h-[300px] flex-[1_1_100%] lg:flex-[0_0_65%]';
     const item = slides[active];
     if (!item) {
         return (
