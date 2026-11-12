@@ -1082,6 +1082,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/devonsphere-express</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/devonthink</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/devpod</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/devtools</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/devtoys</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/devtunnel</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/devutils</loc></url>
@@ -4849,6 +4850,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/kitty</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kitty@nightly</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kiwi-for-gmail</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/kiwidesk</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kiwix</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kkbox</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/kkterm</loc></url>
@@ -5886,6 +5888,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/parallels@18</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/parallels@19</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/parallels@20</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/parallels@26</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/paranoia-file-text-encryption</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/paraview</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pareto-security</loc></url>
@@ -6016,6 +6019,7 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/plex-htpc</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/plex-media-server</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/plexamp</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/cask/plezy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/pliim</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/plistedit-pro</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/plotdigitizer</loc></url>
@@ -6509,7 +6513,6 @@
   <url><loc>https://amit9838.github.io/brewlens/cask/scihubeva</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/scilab</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/scoot</loc></url>
-  <url><loc>https://amit9838.github.io/brewlens/cask/scout</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/scrapp</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/scratch</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/cask/screaming-frog-log-file-analyser</loc></url>
@@ -12637,6 +12640,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/mdq</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mdserve</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mdsh</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/mdspan</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mdt</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mdv</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mdxmini</loc></url>
@@ -12958,6 +12962,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/musikcube</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mussh</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mutt</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/muvm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mvfst</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mvnvm</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/mx</loc></url>
@@ -14338,6 +14343,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/re-flex</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/re2</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/re2c</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/rea</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/react-native-cli</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/readerwriterqueue</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/readline</loc></url>
@@ -16476,6 +16482,7 @@
   <url><loc>https://amit9838.github.io/brewlens/formula/zig@0.14</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zig@0.15</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zig@0.16</loc></url>
+  <url><loc>https://amit9838.github.io/brewlens/formula/ziggy</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zigmod</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zigup</loc></url>
   <url><loc>https://amit9838.github.io/brewlens/formula/zile</loc></url>
