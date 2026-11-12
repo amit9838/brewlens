@@ -16,6 +16,8 @@ import { useScreenshots } from '../../hooks/useScreenshots';
 import { formatCount } from '../../lib/format';
 import { getCategoryForToken, getCategoryStyle, CASK_CATEGORIES, FORMULA_CATEGORIES } from '../../data/categories';
 import { cn } from '../../lib/utils';
+import { useModal } from '../contexts/ModalContexts';
+import ScreenshotsModal from '../ui/ScreenshotsModal';
 import SkeletonDetails from './SkeletonDetails';
 
 function hashString(str: string): number {
@@ -151,6 +153,7 @@ export const ExternalLinkPill = ({ href, children }: { href: string; children: R
  */
 export function ScreenshotsCard({ item }: { item: BrewItem }) {
     const info = useScreenshots(item);
+    const { openModal } = useModal();
     const [failed, setFailed] = useState<string[]>([]);
     const shots = info?.screenshots.filter((s) => !failed.includes(s)) ?? [];
     if (!info || shots.length === 0) return null;
@@ -176,7 +179,13 @@ export function ScreenshotsCard({ item }: { item: BrewItem }) {
             </div>
             <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2">
                 {shots.map((src, i) => (
-                    <a key={src} href={src} target="_blank" rel="noopener noreferrer" className="shrink-0 snap-start">
+                    <button
+                        key={src}
+                        type="button"
+                        onClick={() => openModal(() => <ScreenshotsModal name={item.name} shots={shots} start={i} />, { size: 'xl' })}
+                        aria-label={`View ${item.name} screenshot ${i + 1} larger`}
+                        className="shrink-0 cursor-zoom-in snap-start rounded-2xl border-0 bg-transparent p-0"
+                    >
                         <img
                             src={src}
                             alt={`${item.name} screenshot ${i + 1}`}
@@ -186,7 +195,7 @@ export function ScreenshotsCard({ item }: { item: BrewItem }) {
                             onError={() => setFailed((f) => [...f, src])}
                             className="aspect-[16/10] h-[clamp(170px,22vw,280px)] w-auto rounded-2xl border border-line bg-raised object-contain"
                         />
-                    </a>
+                    </button>
                 ))}
             </div>
             {info.source !== 'Mac App Store' && (
