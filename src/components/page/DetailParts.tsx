@@ -103,15 +103,20 @@ export function Hero({
             cat ? TINT[cat.color] ?? 'from-zinc-500/8' : 'from-accent-soft',
         )}>
             <FaviconGlow homepage={item.homepage} large />
+            {cat && (
+                <Link
+                    to={`/all?category=${cat.id}&type=${item.type}`}
+                    title={`Browse ${item.type}s in ${cat.label}`}
+                    className="absolute right-6 top-6 no-underline"
+                >
+                    <Chip className={cn(getCategoryStyle(cat.color).badgeBg, getCategoryStyle(cat.color).badgeColor)}>{cat.label}</Chip>
+                </Link>
+            )}
             <AppIcon name={item.name} homepage={item.homepage} size={128} blend />
             <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-3">
-                <div className="flex flex-wrap items-center gap-2">
+                {/* Right padding keeps a long kicker clear of the category tag in the corner. */}
+                <div className={cn('flex flex-wrap items-center gap-2', cat && 'sm:pr-36')}>
                     <span className="font-mono text-[13px] font-medium uppercase tracking-[0.02em] text-muted">{kicker}</span>
-                    {cat && (
-                        <Link to={`/all?category=${cat.id}&type=${item.type}`} title={`Browse ${item.type}s in ${cat.label}`} className="no-underline">
-                            <Chip className={cn(getCategoryStyle(cat.color).badgeBg, getCategoryStyle(cat.color).badgeColor)}>{cat.label}</Chip>
-                        </Link>
-                    )}
                     {status && <Chip tone="warn">{status}</Chip>}
                 </div>
                 <h1 className="m-0 text-5xl font-extrabold leading-none tracking-[-0.04em] max-sm:text-4xl">{item.name}</h1>
