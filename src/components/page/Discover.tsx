@@ -60,6 +60,13 @@ const FEATURED_TINT: Record<string, string> = {
 /** Apps shown per My Shelf tab (bookmarks, recently viewed). All bookmarks stay in the Bookmarks dialog. */
 const SHELF_LIMIT = 10;
 
+/** Editor's Picks: rows per page and number of pages behind the arrows. */
+const PICKS_PER_PAGE = 4;
+const PICKS_PAGES = 3;
+
+/** Round arrow button shared by the featured carousel and Editor's Picks. */
+const arrowBtn = 'relative z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-line bg-raised/70 text-ink backdrop-blur-md hover:bg-raised';
+
 /** Still installable: not deprecated or disabled by Homebrew. */
 const isAvailable = (item: BrewItem) => !item.deprecated && !item.disabled;
 
@@ -105,7 +112,6 @@ function Hero({ items }: { items: BrewItem[] }) {
     const cat = catId === 'all' ? undefined : CASK_CATEGORIES.find((c) => c.id === catId);
     const catStyle = getCategoryStyle(cat?.color ?? 'zinc');
     const step = (d: number) => setActive((a) => (a + d + total) % total);
-    const ctl = 'relative z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-line bg-raised/70 text-ink backdrop-blur-md hover:bg-raised';
 
     return (
         <article
@@ -128,8 +134,8 @@ function Hero({ items }: { items: BrewItem[] }) {
                 <Sparkles size={14} fill="#FFB547" stroke="#FFB547" />Featured app
             </div>
             <div className="absolute right-4 top-4 flex gap-2">
-                <button type="button" onClick={() => step(-1)} aria-label="Previous featured app" className={ctl}><ChevronLeft size={18} /></button>
-                <button type="button" onClick={() => step(1)} aria-label="Next featured app" className={ctl}><ChevronRight size={18} /></button>
+                <button type="button" onClick={() => step(-1)} aria-label="Previous featured app" className={arrowBtn}><ChevronLeft size={18} /></button>
+                <button type="button" onClick={() => step(1)} aria-label="Next featured app" className={arrowBtn}><ChevronRight size={18} /></button>
             </div>
 
             <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 px-4 pb-4">
@@ -189,6 +195,7 @@ export default function Discover() {
     // Until the visitor picks a tab, show whichever shelf has something in it.
     const shelf: 'bm' | 'rv' = shelfPick ?? (!bookmarks.length && recentItems.length ? 'rv' : 'bm');
     const setShelf = setShelfPick;
+    const [pickPage, setPickPage] = useState(0);
     const [chartTab, setChartTab] = useState<'all' | 'cask' | 'formula'>('all');
 
     const caskByToken = useMemo(() => new Map(casks.map((c) => [c.token, c])), [casks]);
@@ -200,7 +207,14 @@ export default function Discover() {
     const featured = useBrewItems('cask', FEATURED_CASKS);
     const pickItems = useBrewItems('cask', EDITORS_PICKS_TOKENS);
     const slides = useMemo(() => (featured.isLoading ? [] : featured.items.filter(isAvailable).slice(0, 5)), [featured]);
-    const picks = useMemo(() => (pickItems.isLoading ? [] : pickItems.items.filter(isAvailable).slice(0, 4)), [pickItems]);
+    const allPicks = useMemo(
+        () => (pickItems.isLoading ? [] : pickItems.items.filter(isAvailable).slice(0, PICKS_PER_PAGE * PICKS_PAGES)),
+        [pickItems],
+    );
+    // Only full pages, so the list keeps its height when paging.
+    const pickPages = Math.max(1, Math.min(PICKS_PAGES, Math.floor(allPicks.length / PICKS_PER_PAGE)));
+    const picks = allPicks.slice(pickPage * PICKS_PER_PAGE, (pickPage + 1) * PICKS_PER_PAGE);
+    const stepPicks = (d: number) => setPickPage((p) => (p + d + pickPages) % pickPages);
 
     const { data: caskStats } = useAnalytics('cask', '30d');
     const { data: formulaStats } = useAnalytics('formula', '30d');
@@ -222,8 +236,16 @@ export default function Discover() {
             <section id="top" className="flex flex-wrap items-stretch gap-8">
                 <Hero items={slides} />
                 <aside id="picks" aria-labelledby="picks-title" className="flex min-w-0 flex-[2_1_420px] flex-col">
-                    <div className="text-[15px] font-medium text-muted">Hand-picked by our editors</div>
-                    <h2 id="picks-title" className="mb-1 mt-0.5 text-[30px] font-bold tracking-[-0.025em]">Editor’s Picks</h2>
+                    <div className="mb-1 flex items-center justify-between gap-3">
+                        <h2 id="picks-title" className="text-[30px] font-bold tracking-[-0.025em]">Editor’s Picks</h2>
+                        {pickPages > 1 && (
+                            <div className="mr-4 flex items-center gap-2">
+                                <span className="text-[13px] font-medium text-muted" aria-live="polite">{pickPage + 1} / {pickPages}</span>
+                                <button type="button" onClick={() => stepPicks(-1)} aria-label="Previous editor's picks" className={arrowBtn}><ChevronLeft size={18} /></button>
+                                <button type="button" onClick={() => stepPicks(1)} aria-label="Next editor's picks" className={arrowBtn}><ChevronRight size={18} /></button>
+                            </div>
+                        )}
+                    </div>
                     <div className="flex flex-1 flex-col">
                     {picks.length === 0 && Array.from({ length: 4 }).map((_, i) => <CompactRowSkeleton key={i} iconSize={56} className="flex-1" />)}
                     {picks.map((p) => (

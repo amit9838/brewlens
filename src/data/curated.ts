@@ -148,8 +148,8 @@ const NOT_FEATURED: ReadonlySet<string> = new Set([
 
 /** Apps shown on recent visits (newest first), so the next visits show different apps first. */
 const RECENT_DRAWS_KEY = 'brewlens_curated_last';
-/** About three visits' worth of draws (8 featured + 10 picks each). */
-const RECENT_DRAWS_LIMIT = 54;
+/** About three visits' worth of draws (8 featured + 15 picks each). */
+const RECENT_DRAWS_LIMIT = 69;
 
 function readRecentDraws(): string[] {
     try {
@@ -163,11 +163,11 @@ function readRecentDraws(): string[] {
 const recentDraws = readRecentDraws();
 const avoid = new Set(recentDraws);
 
-// Drawn once per page load. Both draw more than Discover shows (5 featured, 4 picks),
+// Drawn once per page load. Both draw more than Discover shows (5 featured, 3 pages of 4 picks),
 // so deprecated or disabled casks can be dropped, and Editor's Picks never repeats a
 // featured app.
 export const FEATURED_CASKS = drawBalanced(CURATED_POOL, 8, { avoid, exclude: NOT_FEATURED });
-export const EDITORS_PICKS_TOKENS = drawBalanced(CURATED_POOL, 10, {
+export const EDITORS_PICKS_TOKENS = drawBalanced(CURATED_POOL, 15, {
     avoid,
     exclude: new Set(FEATURED_CASKS),
 });
