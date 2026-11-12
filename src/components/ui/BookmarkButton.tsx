@@ -1,33 +1,36 @@
 /**
  * @file BookmarkButton.tsx
- * A toggle button that bookmarks/unbookmarks a BrewItem into the 'favourites' collection.
+ * Round toggle that saves/removes a BrewItem from bookmarks.
  */
-
 import { Bookmark } from 'lucide-react';
-import { Button } from './Button';
 import { useBookmarks } from '../contexts/BookmarksContext';
 import type { BrewItem } from '../../types';
+import { cn } from '../../lib/utils';
 
-interface BookmarkButtonProps {
+interface Props {
     item: BrewItem;
-    size?: 'sm' | 'md';
+    /** `solid` = filled chip (detail page); `plain` = white on grey cards */
+    tone?: 'solid' | 'plain';
+    className?: string;
 }
 
-export function BookmarkButton({ item, size = 'md' }: BookmarkButtonProps) {
+export function BookmarkButton({ item, tone = 'solid', className }: Props) {
     const { isBookmarked, toggleBookmark } = useBookmarks();
-    const bookmarked = isBookmarked(item.id);
-
+    const on = isBookmarked(item.id);
     return (
-        <Button
-            variant="ghost"
-            size={size}
-            onClick={() => toggleBookmark(item)}
-            aria-label={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
+        <button
+            type="button"
+            aria-pressed={on}
+            aria-label={on ? `Remove ${item.name} from bookmarks` : `Bookmark ${item.name}`}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleBookmark(item); }}
+            className={cn(
+                'flex shrink-0 cursor-pointer items-center justify-center rounded-full border-0 transition-colors',
+                tone === 'solid' ? 'h-11 w-11' : 'h-10 w-10',
+                on ? 'bg-accent-soft text-accent-ink' : tone === 'solid' ? 'bg-chip text-ink hover:bg-line-strong' : 'bg-raised text-ink hover:bg-chip',
+                className,
+            )}
         >
-            <Bookmark
-                className={bookmarked ? 'fill-current text-yellow-500' : undefined}
-                size={size === 'sm' ? 18 : 20}
-            />
-        </Button>
+            <Bookmark size={tone === 'solid' ? 18 : 20} fill={on ? 'currentColor' : 'none'} strokeWidth={2} />
+        </button>
     );
 }

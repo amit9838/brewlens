@@ -1,107 +1,76 @@
 /**
  * @file Pagination.tsx
- * Pagination controls with sliding page window, page jump input,
- * and items-per-page selector.
- *
- * Shows a window of ±2 pages around the current page.
- * Supports jumping to an arbitrary page via a number input.
- * Items per page options: 12, 24, 48.
+ * Round-button pagination with first/last pages, a ±1 window, a "go to page"
+ * field and an items-per-page selector.
  */
 import React, { useState } from 'react';
-import { Button } from './Button';
-
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { cn } from '../../lib/utils';
 
 interface PaginationProps {
-    pagination: any;
+    pagination: { currentPage: number; setCurrentPage: (p: number) => void; totalPages: number };
     itemsPerPage: number;
-    setItemsPerPage: (itemsPerPage: number) => void;
+    setItemsPerPage: (n: number) => void;
 }
 
-export const Pagination: React.FC<PaginationProps> = ({ pagination, itemsPerPage, setItemsPerPage }) => {
-    const [jumpPage, setJumpPage] = useState("");
+function pageList(current: number, total: number): (number | '…')[] {
+    const set = new Set([1, total, current - 1, current, current + 1]);
+    const nums = [...set].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
+    const out: (number | '…')[] = [];
+    nums.forEach((n, i) => {
+        if (i > 0 && n - nums[i - 1] > 1) out.push('…');
+        out.push(n);
+    });
+    return out;
+}
 
-    const { currentPage, setCurrentPage, totalPages } = pagination
+const circle = 'flex h-11 min-w-11 cursor-pointer items-center justify-center rounded-full text-sm font-bold';
+
+export const Pagination: React.FC<PaginationProps> = ({ pagination, itemsPerPage, setItemsPerPage }) => {
+    const { currentPage, setCurrentPage, totalPages } = pagination;
+    const [jump, setJump] = useState('');
     if (totalPages <= 1) return null;
 
-    // Logic to show current, -2, and +2 pages
-    const pageNumbers = [];
-    for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
-        pageNumbers.push(i);
-    }
-
-    const handleJump = (e: React.FormEvent) => {
+    const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        const page = parseInt(jumpPage);
-        if (!isNaN(page) && page > 0) {
-            setCurrentPage(Math.min(page, totalPages));
-            setJumpPage("");
-        }
+        const p = parseInt(jump, 10);
+        if (!Number.isNaN(p) && p > 0) { setCurrentPage(Math.min(p, totalPages)); setJump(''); }
     };
 
     return (
-        <div className="flex flex-col items-center gap-6 pt-8">
-            <div className="flex items-center gap-2">
-                {/* Previous Button */}
-                <Button
-                    variant="secondary"
-                    size='sm'
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage(currentPage - 1)}
-                >
-                    Prev
-                </Button>
-
-                {/* Dynamic Page Numbers */}
-                <div className="flex gap-1">
-                    {pageNumbers.map((page) => (
-                        <Button
-                            key={page}
-                            onClick={() => setCurrentPage(page)}
-                            variant={currentPage === page ? "white" : "ghost"}
-                            size="sm"
-                        >
-                            {page}
-                        </Button>
-                    ))}
-                </div>
-
-                {/* Next Button */}
-                <Button
-                    variant="secondary"
-                    size='sm'
-                    disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage(currentPage + 1)}
-                >
-                    Next
-                </Button>
+        <nav aria-label="Pagination" className="flex flex-wrap items-center justify-between gap-4 pt-2">
+            <div className="flex items-center gap-1.5">
+                <button type="button" aria-label="Previous page" disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1)}
+                    className={cn(circle, 'w-11 border border-line-strong bg-raised text-ink disabled:cursor-not-allowed disabled:opacity-40')}>
+                    <ChevronLeft size={20} strokeWidth={2.2} />
+                </button>
+                {pageList(currentPage, totalPages).map((p, i) => p === '…' ? (
+                    <span key={`e${i}`} className="px-1 text-muted" aria-hidden="true">…</span>
+                ) : (
+                    <button key={p} type="button" aria-current={p === currentPage ? 'page' : undefined} onClick={() => setCurrentPage(p)}
+                        className={cn(circle, 'border-0', p === currentPage ? 'bg-invert text-on-invert' : 'bg-transparent text-ink hover:bg-chip')}>
+                        {p}
+                    </button>
+                ))}
+                <button type="button" aria-label="Next page" disabled={currentPage === totalPages} onClick={() => setCurrentPage(currentPage + 1)}
+                    className={cn(circle, 'w-11 border border-line-strong bg-raised text-ink disabled:cursor-not-allowed disabled:opacity-40')}>
+                    <ChevronRight size={20} strokeWidth={2.2} />
+                </button>
             </div>
 
-            {/* Custom Page Jump & Info */}
-            <div className="flex items-center gap-4 text-sm font-mono text-zinc-500 dark:text-zinc-400">
-                <span>Page {currentPage} of {totalPages}</span>
-
-                <form onSubmit={handleJump} className="flex items-center gap-2 border-l border-r px-4 border-zinc-200 dark:border-zinc-700">
-                    <label htmlFor="jump" className="text-xs uppercase tracking-wider">Go to:</label>
-                    <input
-                        id="jump"
-                        type="number"
-                        placeholder='#'
-                        value={jumpPage}
-                        onChange={(e) => setJumpPage(e.target.value)}
-                        className="w-16 rounded border border-zinc-200 bg-transparent px-1 py-0.5 text-center focus:outline-none focus:ring-1 focus:ring-zinc-400 dark:border-zinc-700"
-                    />
+            <div className="flex flex-wrap items-center gap-5 text-sm text-muted">
+                <form onSubmit={submit} className="flex items-center gap-2.5">
+                    <label htmlFor="jump-page">Go to</label>
+                    <input id="jump-page" type="number" min={1} max={totalPages} placeholder="#" value={jump} onChange={(e) => setJump(e.target.value)}
+                        className="h-11 w-20 rounded-xl border border-line-strong bg-raised px-2 text-center text-ink outline-none focus:border-accent" />
                 </form>
-                <div className="flex items-center gap-3 text-sm min-w-40">
-                    <span className="text-zinc-500 dark:text-zinc-400">Items per page:</span>
-                    <select
-                        className="bg-transparent text-zinc-700 dark:text-zinc-200 font-medium cursor-pointer outline-none "
-                        value={itemsPerPage}
-                        onChange={e => setItemsPerPage(Number(e.target.value))}
-                    >
-                        {[12, 24, 48].map(n => <option key={n} value={n}>{n}</option>)}
+                <label className="flex items-center gap-2.5">Per page
+                    <select value={itemsPerPage} onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        className="h-11 cursor-pointer rounded-xl border border-line-strong bg-raised px-3 text-sm text-ink">
+                        {[24, 48, 96, 192].map((n) => <option key={n} value={n}>{n}</option>)}
                     </select>
-                </div>
+                </label>
             </div>
-        </div>
+        </nav>
     );
 };

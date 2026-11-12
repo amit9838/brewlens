@@ -6,7 +6,8 @@
 
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { type BrewItem, type BrewType, type BrewPackage } from "../types";
+import type { BrewItem, BrewType, BrewPackage, RawBrewData } from "../types";
+import { OPEN_SOURCE_CASKS } from "../data/curated";
 
 /**
  * Merges Tailwind CSS class names, resolving conflicts via tailwind-merge.
@@ -27,6 +28,10 @@ const API_CONFIG = {
     formula: { url: "https://formulae.brew.sh/api/formula.json", installPrefix: "brew install" }
 };
 
+/** API URL of a single cask or formula, e.g. `https://formulae.brew.sh/api/cask/firefox.json`. */
+export const itemUrl = (type: BrewType, token: string) =>
+    `https://formulae.brew.sh/api/${type}/${token}.json`;
+
 /**
  * Normalizes a raw Homebrew API object into a typed `BrewItem`.
  *
@@ -37,26 +42,29 @@ const API_CONFIG = {
  *
  * @param rawData - Raw JSON object from the Homebrew API
  * @param type - Whether this is a 'cask' or 'formula'
+ * @param keepRaw - Keep the full API object on `raw` (detail pages). List fetches pass
+ *   `false` so the parsed catalogue (tens of MB) can be garbage-collected.
  * @returns A normalized `BrewItem` ready for use in the UI
  */
-export const normalizeItem = (rawData: any, type: BrewType): BrewItem => {
+export const normalizeItem = (rawData: RawBrewData, type: BrewType, keepRaw = true): BrewItem => {
     const isCask = type === 'cask';
-    const id = isCask ? rawData.full_token : rawData.name;
-    const name = isCask && Array.isArray(rawData.name) ? rawData.name[0] : rawData.name;
+    const rawName = Array.isArray(rawData.name) ? rawData.name[0] : rawData.name;
+    const id = (isCask ? rawData.full_token : rawName) ?? '';
+    const name = rawName || id;
 
     return {
         id,
         type: type,
-        name: name || id,
-        token: isCask ? rawData.full_token : rawData.full_name,
+        name,
+        token: (isCask ? rawData.full_token : rawData.full_name) ?? id,
         desc: rawData.desc || "No description available.",
-        version: isCask ? rawData.version : rawData.versions?.stable || 'N/A',
+        version: isCask ? rawData.version ?? '' : rawData.versions?.stable || 'N/A',
         homepage: rawData.homepage,
         deprecated: rawData.deprecated,
         disabled: rawData.disabled,
         installCmd: `${API_CONFIG[type].installPrefix} ${id}`,
         package: getSourceCodeStatus(rawData, type),
-        raw: rawData,
+        ...(keepRaw && { raw: rawData }),
         _searchString: `${id} ${name} ${rawData.desc || ''}`.toLowerCase()
     };
 };
@@ -74,57 +82,70 @@ export const normalizeItem = (rawData: any, type: BrewType): BrewItem => {
  */
 export const fetchBrewData = async (type: BrewType, url?: string): Promise<BrewItem[]> => {
     const full_url = url || API_CONFIG[type].url;
-    const res = await fetch(full_url);
+    // A single package is a few KB and is what the page is waiting for; the full lists are
+    // several MB. The hint lets the browser give the small requests the bandwidth first.
+    const res = await fetch(full_url, { priority: url ? 'high' : 'low' });
     if (!res.ok) throw new Error(`Failed to fetch ${type} data from ${full_url}`);
-    const json = await res.json();
-    // Handle both single objects (individual formula) and arrays (list)
-    const data = Array.isArray(json) ? json : [json];
-    return data.map((item: any) => normalizeItem(item, type));
+    const json: RawBrewData | RawBrewData[] = await res.json();
+    // Lists come back as arrays and drop `raw`; a single package keeps it for the detail page.
+    if (Array.isArray(json)) return json.map((item) => normalizeItem(item, type, false));
+    return [normalizeItem(json, type)];
 };
 
 
+const SOURCE_HOSTS = ['github.com', 'gitlab.com', 'bitbucket.org', 'codeberg.org'];
+
 /**
- * Determines the open-source status of a Homebrew package by scanning
- * its URL fields for known OSS hosting domains.
+ * The repository page a URL points into, on a known source host, or `null`.
+ * `https://github.com/rxhanson/Rectangle/releases/download/v2/x.dmg` → `https://github.com/rxhanson/Rectangle`.
+ * A bare owner page (`github.com/mozilla`) is not a repository.
+ */
+export function repoUrl(url: string | null | undefined): string | null {
+    if (!url) return null;
+    let parsed: URL;
+    try {
+        parsed = new URL(url);
+    } catch {
+        return null;
+    }
+    const host = parsed.hostname.replace(/^www\./, '').toLowerCase();
+    if (!SOURCE_HOSTS.includes(host)) return null;
+    // GitLab allows nested groups and puts its own pages after `/-/`; the other hosts are owner/repo.
+    const path = parsed.pathname.split('/-/')[0].split('/').filter(Boolean);
+    const parts = host === 'gitlab.com' ? path : path.slice(0, 2);
+    if (parts.length < 2) return null;
+    parts[parts.length - 1] = parts[parts.length - 1].replace(/\.git$/, '');
+    return `https://${host}/${parts.join('/')}`;
+}
+
+/**
+ * Decides whether a package is open source and where its source lives.
  *
- * Checks: github.com, gitlab.com, bitbucket.org, codeberg.org
- *
- * For casks: inspects `url_specs` values and `homepage`
- * For formulae: additionally inspects `urls.head.url`
+ * - Formulae: open source when the API gives a `license` (homebrew/core only accepts
+ *   open-source software, so in practice every formula). The source link is the first
+ *   repository found in the `head` URL, the homepage or the `stable` download URL.
+ * - Casks: the API has no license, so a cask counts only when its homepage is a
+ *   repository page, or when it is in the hand-picked `OPEN_SOURCE_CASKS`. For listed
+ *   casks the download URL may also give the source link (GitHub releases). A GitHub
+ *   download alone proves nothing: many closed-source apps ship from release-only repos.
  *
  * @param rawData - Raw API response object (not a normalized BrewItem)
  * @param type - 'cask' or 'formula'
- * @returns A `BrewPackage` with `isFoss`, `verified`, and `fossUrl`
+ * @returns A `BrewPackage`: `isFoss`, `fossUrl` (repository page or ''), and
+ *   `verified` (true when `fossUrl` is set)
  */
-export const getSourceCodeStatus = (rawData: any, type: BrewType): BrewPackage => {
-    const isCask = type === 'cask';
-    const urlSpecsValues = Object.values(rawData.url_specs ?? {}) as string[];
-    const websiteUrl = rawData.homepage || "";
+export const getSourceCodeStatus = (rawData: RawBrewData, type: BrewType): BrewPackage => {
+    let isFoss: boolean;
+    let source: string | null;
 
-    let allTextToSearch = [...urlSpecsValues, websiteUrl].join(" ").toLowerCase();
-
-    if (!isCask) {
-        allTextToSearch += " " + (rawData.urls?.head?.url || "");
+    if (type === 'formula') {
+        isFoss = !!rawData.license;
+        source = repoUrl(rawData.urls?.head?.url) ?? repoUrl(rawData.homepage) ?? repoUrl(rawData.urls?.stable?.url);
+    } else {
+        const listed = OPEN_SOURCE_CASKS.has(rawData.full_token ?? '');
+        source = repoUrl(rawData.homepage) ?? (listed ? repoUrl(rawData.url) : null);
+        isFoss = listed || !!source;
     }
 
-    const osDomains = ["github.com", "gitlab.com", "bitbucket.org", "codeberg.org"];
-    const isFoss = osDomains.some(domain => allTextToSearch.includes(domain));
-
-    if (!isCask) {
-        return {
-            verified: !!rawData.urls?.head?.url,
-            isFoss,
-            fossUrl: rawData.urls?.head?.url || "",
-        };
-    }
-
-    if (urlSpecsValues.length === 0) {
-        return { verified: false, isFoss, fossUrl: "" };
-    }
-
-    return {
-        verified: true,
-        isFoss,
-        fossUrl: `http://${urlSpecsValues[0]}`,
-    };
+    return { verified: !!source, isFoss, fossUrl: source ?? '' };
 };

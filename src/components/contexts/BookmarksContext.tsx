@@ -4,7 +4,7 @@
  * Stores a single flat list of BrewItem objects.
  */
 
-import { createContext, useContext, type ReactNode, useMemo } from 'react';
+import { createContext, useCallback, useContext, type ReactNode, useMemo } from 'react';
 import { useStorage } from '../../hooks/useStorage';
 import type { BrewItem } from '../../types';
 
@@ -21,7 +21,7 @@ export function BookmarksProvider({ children }: { children: ReactNode }) {
     // Using a new key for the simplified schema
     const [bookmarks, setBookmarks] = useStorage<BrewItem[]>('brewlens_bookmarks_v3', [], 'local');
 
-    const toggleBookmark = (item: BrewItem) => {
+    const toggleBookmark = useCallback((item: BrewItem) => {
         setBookmarks(prev => {
             const isBookmarked = prev.some(b => b.id === item.id);
             if (isBookmarked) {
@@ -30,19 +30,19 @@ export function BookmarksProvider({ children }: { children: ReactNode }) {
                 return [item, ...prev];
             }
         });
-    };
+    }, [setBookmarks]);
 
-    const isBookmarked = (itemId: string): boolean =>
-        bookmarks.some(b => b.id === itemId);
+    const isBookmarked = useCallback((itemId: string): boolean =>
+        bookmarks.some(b => b.id === itemId), [bookmarks]);
 
-    const clearBookmarks = () => setBookmarks([]);
+    const clearBookmarks = useCallback(() => setBookmarks([]), [setBookmarks]);
 
     const value = useMemo(() => ({
         bookmarks,
         toggleBookmark,
         isBookmarked,
         clearBookmarks,
-    }), [bookmarks]);
+    }), [bookmarks, toggleBookmark, isBookmarked, clearBookmarks]);
 
     return (
         <BookmarksContext.Provider value={value}>

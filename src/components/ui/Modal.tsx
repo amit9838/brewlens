@@ -1,120 +1,91 @@
 /**
  * @file Modal.tsx
- * Standardized Global Modal System.
- * Provides the Modal renderer and structural sub-components (Header, Body, Footer).
+ * Global modal renderer driven by ModalContext. Content components render
+ * their own header/body/footer; `ModalShell` provides the common layout.
  */
-
 import React, { useEffect, useRef, type ReactNode } from 'react';
-import { useModal } from '../contexts/ModalContexts';
-import { Button } from './Button';
 import { X } from 'lucide-react';
+import { useModal } from '../contexts/ModalContexts';
 import { cn } from '../../lib/utils';
-
-// --- Sub-components for standardization ---
-
-interface ModalHeaderProps {
-    title: ReactNode;
-    subtitle?: ReactNode;
-    icon?: ReactNode;
-    children?: ReactNode;
-}
-
-export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, subtitle, icon, children }) => {
-    const { closeModal } = useModal();
-    return (
-        <div className="px-6 py-5 border-b border-gray-100 dark:border-zinc-800 flex items-center justify-between sticky top-0 bg-inherit z-20">
-            <div className="flex items-center gap-3">
-                {icon && <div className="p-2 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400">{icon}</div>}
-                <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white leading-tight">{title}</h2>
-                    {subtitle && <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5">{subtitle}</p>}
-                </div>
-            </div>
-            <div className="flex items-center gap-2">
-                {children}
-                <Button
-                    onClick={closeModal}
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800"
-                >
-                    <X size={20} />
-                </Button>
-            </div>
-        </div>
-    );
-};
-
-export const ModalBody: React.FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
-    <div className={cn("p-6", className)}>
-        {children}
-    </div>
-);
-
-export const ModalFooter: React.FC<{ children: ReactNode; className?: string }> = ({ children, className }) => (
-    <div className={cn("px-6 py-4 border-t border-gray-100 dark:border-zinc-800 bg-gray-50/50 dark:bg-zinc-900/50 flex items-center justify-end gap-3", className)}>
-        {children}
-    </div>
-);
-
-// --- Main Modal Renderer ---
+import { IconButton } from './kit';
 
 const sizeClasses = {
     sm: 'max-w-sm',
     md: 'max-w-md',
-    lg: 'max-w-2xl',
+    lg: 'max-w-[600px]',
     xl: 'max-w-4xl',
     full: 'max-w-[95vw] h-[90vh]',
 };
 
+export const ModalShell: React.FC<{
+    title: ReactNode;
+    subtitle?: ReactNode;
+    icon?: ReactNode;
+    children: ReactNode;
+    footer?: ReactNode;
+    id?: string;
+}> = ({ title, subtitle, icon, children, footer, id = 'modal-title' }) => {
+    const { closeModal } = useModal();
+    return (
+        <div role="dialog" aria-modal="true" aria-labelledby={id} className="flex max-h-[calc(100vh-48px)] flex-col">
+            <div className="flex items-center gap-3 px-6 pb-4 pt-5">
+                {icon && (
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent-tint text-accent-tint-ink">{icon}</span>
+                )}
+                <div className="flex-1">
+                    <h2 id={id} className="m-0 text-[22px] font-extrabold tracking-[-0.02em]">{title}</h2>
+                    {subtitle && <div className="text-sm text-muted">{subtitle}</div>}
+                </div>
+                <IconButton aria-label="Close" onClick={closeModal}><X size={18} strokeWidth={2.4} /></IconButton>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto px-6 pb-3">{children}</div>
+            {footer && (
+                <div className="flex flex-wrap items-center gap-2.5 border-t border-line px-6 pb-5 pt-4">{footer}</div>
+            )}
+        </div>
+    );
+};
+
 export const Modal: React.FC = () => {
     const { isOpen, modalContent, modalOptions, closeModal } = useModal();
-    const modalRef = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
+    const { size = 'md', closeOnBackdropClick = true } = modalOptions;
 
-    const {
-        size = 'md',
-        closeOnBackdropClick = true,
-    } = modalOptions;
-
-    // ESC key listener
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && isOpen) closeModal();
+        if (!isOpen) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') closeModal();
         };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
     }, [isOpen, closeModal]);
 
-    // Focus first element
     useEffect(() => {
-        if (isOpen && modalRef.current) {
-            const firstInput = modalRef.current.querySelector('input, button:not([aria-label="Close modal"])') as HTMLElement;
-            firstInput?.focus();
-        }
+        if (!isOpen) return;
+        const prev = document.activeElement as HTMLElement | null;
+        const t = setTimeout(() => {
+            ref.current?.querySelector<HTMLElement>('textarea, input, button')?.focus();
+        }, 0);
+        return () => {
+            clearTimeout(t);
+            prev?.focus?.();
+        };
     }, [isOpen]);
 
     if (!isOpen) return null;
 
     return (
         <div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-hidden"
-            role="dialog"
-            aria-modal="true"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(17,17,20,0.45)] p-6"
+            onClick={closeOnBackdropClick ? closeModal : undefined}
         >
-            {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-zinc-950/40 backdrop-blur-md transition-opacity duration-300 animate-in fade-in"
-                onClick={closeOnBackdropClick ? closeModal : undefined}
-            />
-
-            {/* Modal Container */}
-            <div
-                ref={modalRef}
-                className={cn(
-                    "relative w-full bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl border border-white/20 dark:border-zinc-800/50 overflow-hidden flex flex-col transition-all duration-300 animate-in zoom-in-95 slide-in-from-bottom-4",
-                    sizeClasses[size]
-                )}
+                ref={ref}
                 onClick={(e) => e.stopPropagation()}
+                className={cn(
+                    'flex w-full flex-col overflow-hidden rounded-[28px] bg-canvas text-ink shadow-[0_24px_64px_rgba(17,17,20,0.28)]',
+                    sizeClasses[size],
+                )}
             >
                 {modalContent?.()}
             </div>

@@ -15,7 +15,7 @@ Discriminates between Homebrew GUI apps (casks) and CLI tools (formulae).
 ```ts
 interface BrewPackage {
   verified: boolean   // Whether a source URL was found
-  isFoss: boolean     // Whether the source is on a known OSS host
+  isFoss: boolean     // Whether the package is open source (see getSourceCodeStatus)
   fossUrl: string | null  // Direct link to source repository
 }
 ```
@@ -36,7 +36,7 @@ The normalized representation of any Homebrew package. All page components and c
 | `disabled` | boolean? | Whether the package is disabled |
 | `installCmd` | string | Ready-to-run install command |
 | `package` | BrewPackage | Open source status info |
-| `raw` | any | Full unmodified API response |
+| `raw` | RawBrewData? | Full unmodified API response (fields BrewLens reads are typed, the rest `unknown`). Only on single-package fetches; list items leave it out to save memory |
 | `_searchString` | string | Pre-computed lowercase search index |
 
 ---
@@ -48,8 +48,8 @@ Core utility functions for API interaction and data transformation.
 ### `cn(...inputs)`
 Merges Tailwind CSS class names using `clsx` + `tailwind-merge`. Handles conditional classes and deduplication.
 
-### `normalizeItem(rawData, type)`
-Transforms a raw Homebrew API object into a typed `BrewItem`. Called for every item in the list and detail fetches.
+### `normalizeItem(rawData, type, keepRaw = true)`
+Transforms a raw Homebrew API object into a typed `BrewItem`. Called for every item in the list and detail fetches. `fetchBrewData` passes `keepRaw = false` for the full lists, so the parsed catalogue isn't kept in memory.
 
 - Extracts the correct `id` and `name` based on type (casks use `full_token`, formulae use `name`)
 - Builds `installCmd` from the type-specific prefix
@@ -60,10 +60,12 @@ Transforms a raw Homebrew API object into a typed `BrewItem`. Called for every i
 Fetches and normalizes Homebrew data. Handles both list endpoints (returns array) and individual item endpoints (returns single object wrapped in array).
 
 ### `getSourceCodeStatus(rawData, type)`
-Determines open-source status by scanning URL fields for known OSS hosting domains (`github.com`, `gitlab.com`, `bitbucket.org`, `codeberg.org`).
+Decides whether a package is open source and finds its source repository on a known host (`github.com`, `gitlab.com`, `bitbucket.org`, `codeberg.org`). URLs are parsed with `repoUrl()`, which returns the repository page (`https://github.com/owner/repo`) or `null`; a bare owner page doesn't count.
 
-- For casks: checks `url_specs` values and `homepage`
-- For formulae: additionally checks `urls.head.url`
+- **Formulae:** open source when the API gives a `license` (homebrew/core only accepts open-source software). Source link: the first repository in `urls.head.url`, `homepage` or `urls.stable.url`
+- **Casks:** the API has no license, so a cask is open source when its `homepage` is a repository page, or when its token is in `OPEN_SOURCE_CASKS` (`data/curated.ts`). For listed casks the download `url` can also give the source link. A GitHub release download alone is not enough: many closed-source apps ship from release-only repositories
+- `verified` is true when a source link was found (`fossUrl`)
+- Changing the result changes the cached lists: bump `CACHE_VERSION` in `lib/queryPersister.ts`
 
 ---
 
@@ -76,8 +78,47 @@ useBrewData(type: BrewType, url?: string)
 ```
 
 - Cache key includes both `type` and `url` so list and detail fetches are cached independently
-- `staleTime: 10 minutes` — data won't refetch unless older than 10 minutes
-- `refetchOnWindowFocus: false` — prevents unnecessary refetches when switching tabs
+- Uses the QueryClient defaults set in `App.tsx`: `staleTime: 10 minutes` (matches the API's own `max-age=600`) and `refetchOnWindowFocus: false`
+- `useAnalytics` overrides `staleTime` to 1 hour, since Homebrew regenerates analytics daily
+
+---
+
+## `src/hooks/useBrewItems.ts`
+
+```ts
+useBrewItems(type: BrewType, tokens: string[]) // → { items: BrewItem[], isLoading: boolean }
+```
+
+A few packages by token, for Discover's featured carousel and Editor's Picks.
+
+- If the full list is cached (repeat visit), items come from it, with no extra requests
+- Otherwise each package is fetched from `/api/{type}/{token}.json`, all in parallel (a few KB each), so Discover renders long before the multi-MB lists arrive
+- Uses the same query key as the detail page (`['brew', type, itemUrl(type, token)]`), so opening one of these packages is instant
+- Unknown tokens (404) are dropped; `isLoading` stays true until every request has settled, so rows don't reorder
+- `fetchBrewData` sends single-package requests with `priority: 'high'` and the full lists with `priority: 'low'`
+
+---
+
+## `src/lib/queryPersister.ts`
+
+Persists part of the React Query cache to IndexedDB (`idb-keyval`, key `brewlens_query_cache`) through `PersistQueryClientProvider` in `App.tsx`.
+
+- Saves only successful full lists (`['brew', type]`) and analytics; detail fetches and GitHub stars stay in memory
+- `CACHE_MAX_AGE` (7 days): older data is discarded. The QueryClient's `gcTime` uses the same value, so a list isn't dropped from memory, and then from IndexedDB, while the tab is open
+- `CACHE_VERSION`: bump it when `BrewItem`, `normalizeItem` or `AnalyticsData` change shape, so old saved data is thrown away
+- If IndexedDB is unavailable, saves fail silently and the app works as before
+
+---
+
+## `src/hooks/useDetailItem.ts`
+
+Shared logic for `CaskDetail` and `FormulaeDetail`.
+
+```ts
+useDetailItem(type: BrewType)
+```
+
+Reads the token from the route, fetches `/api/{type}/:token.json` through `useBrewData` and records the item in recently viewed. Returns `{ token, apiUrl, item, isLoading, error }`.
 
 ---
 
@@ -92,8 +133,8 @@ usePagination<T>(data: T[], itemsPerPage: number, storageKey?: string)
 Returns `{ currentPage, setCurrentPage, totalPages, currentData }`.
 
 - Reads saved page from `localStorage` on mount (keyed by `storageKey`)
-- Clamps page to valid range when `data.length` changes (skips clamp when data is empty to avoid overwriting saved page before data loads)
-- Writes current page to `localStorage` on every change
+- Clamps the page to the valid range during render (skipped while `data` is empty, so a saved page isn't reset before data loads)
+- Writes the visible page to `localStorage` once data has loaded
 
 ---
 
@@ -135,27 +176,45 @@ openModal(<MyModal prop={value} />, options)
 
 ---
 
-## `src/components/ui/Button.tsx`
+## `src/components/ui/kit.tsx`
 
-Polymorphic button component built with `@radix-ui/react-slot`.
+Small design-system primitives used on every page: `Chip`, `Segmented` (pill tabs), `SectionHead`, `PillButton` / `PillLink` (variants: `outline`, `dark`, `accent`, `soft`, `ghost`, `danger`), `IconButton`, `EmptyState`, `Card`, `CardTitle`, `Eyebrow`. Colours come from the CSS-variable tokens in `src/index.css` (light + `.dark`).
 
-### Variants
-| Variant | Use case |
-|---|---|
-| `primary` | Main actions (green) |
-| `secondary` | Secondary actions (zinc) |
-| `destructive` | Dangerous actions (red) |
-| `outline` | Bordered, transparent background |
-| `ghost` | No border, subtle hover |
-| `blue` | OSS filter tag |
-| `glass` | Frosted glass, used on dark hero sections |
-| `link` | Inline text link style |
-| `black` / `white` | High contrast variants |
+---
 
-### Props
-- `isPill` — applies `rounded-full` instead of `rounded-md`
-- `isLoading` — shows spinner, disables interaction
-- `asChild` — renders as child element via Radix Slot (useful for wrapping `<a>` tags)
+## `src/components/ui/AppCards.tsx`
+
+Package presentations: `AppCard` (grid), `AppRow` (list), `CompactRow` (Editor's Picks / Top Charts) and `CompactRowSkeleton`. The whole card is a link via `StretchLink`. `FaviconGlow` renders the soft favicon colour wash behind cards. Cards show a category tag coloured by the category's colour.
+
+---
+
+## `src/components/ui/AppIcon.tsx`
+
+Rounded app tile: favicon (Google s2) or a coloured letter tile. In dark mode dark, near-monochrome logos are inverted (see `src/lib/iconTone.ts`, which samples the icon through the wsrv.nl image proxy because Google's favicon service sends no CORS headers).
+
+---
+
+## `src/components/ui/SearchPalette.tsx`
+
+Global ⌘K / Ctrl+K search over all casks and formulae (arrow-key navigation). On `/all` the shortcut focuses the page's own search box instead. The shortcut label and platform check (`shortcutLabel`, `isMac`) live in `src/lib/platform.ts`.
+
+---
+
+## `src/components/ui/FiltersModal.tsx`
+
+Explore's "Filters & view" dialog: grid/list view, source and status filters, fonts. Changes apply immediately.
+
+---
+
+## `src/lib/screenshots.ts`, `appStore.ts`, `flathub.ts`
+
+Optional screenshots for a cask, shown only in `ScreenshotsCard` on the cask detail page.
+
+- `caskBundleIds(raw)` pulls bundle ID candidates from the cask's `uninstall` / `zap` artifacts (`com.apple.*` excluded). `hasSingleApp(raw)` skips suites that install several apps.
+- `fetchScreenshots(item)` tries `fetchAppStoreMedia` (iTunes Lookup, Mac listings only), then `fetchFlathubMedia`. Flathub search is POST-only and blocked by CORS, so its ID list (~90 KB) is fetched once per session and matched locally: bundle ID ignoring case, then name, then the only ID under the homepage's reversed domain; the last two must have the same homepage domain on Flathub.
+- Returns `{ source, url, screenshots }` or `null`. Throws only when nothing was found and a source failed, so a network error isn't cached as "no screenshots".
+
+`useScreenshots(item)` wraps it in React Query (key `['screenshots', token]`, 1-day stale time, no retry, persisted in IndexedDB).
 
 ---
 
@@ -219,15 +278,9 @@ Pagination controls with page jump and items-per-page selector.
 
 ---
 
-## `src/components/ui/QuickSearchModal.tsx`
-
-Pre-defined search term shortcuts. Clicking a term calls `onSelect(term)` and closes the modal. Terms cover common app categories: browsers, dev tools, productivity, media, communication, system utilities.
-
----
-
 ## `src/components/ui/SearchIndexModal.tsx`
 
 A-Z character grid for jumping to alphabetical sections of the list. Generates A–Z plus `#` for non-alphabetic entries.
 
 ---
-*Updated: Mar 23, 2026*
+*Updated: Nov 11, 2026*

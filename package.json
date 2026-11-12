@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node scripts/prerender.mjs",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
@@ -15,8 +15,11 @@
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
     "@tailwindcss/vite": "^4.1.17",
+    "@tanstack/query-async-storage-persister": "^5.107.1",
     "@tanstack/react-query": "^5.90.10",
+    "@tanstack/react-query-persist-client": "^5.107.1",
     "clsx": "^2.1.1",
+    "idb-keyval": "^6.3.0",
     "lucide-react": "^0.554.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

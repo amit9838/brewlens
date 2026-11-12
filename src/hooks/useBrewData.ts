@@ -1,7 +1,7 @@
 /**
  * @file useBrewData.ts
  * React Query hook for fetching and caching Homebrew package data.
- * Wraps `fetchBrewData` with a 10-minute stale time and no window-focus refetch.
+ * Wraps `fetchBrewData`; stale time and focus behaviour come from the QueryClient defaults in `App.tsx`.
  */
 
 import { useQuery } from "@tanstack/react-query";
@@ -30,7 +30,5 @@ export function useBrewData(type: BrewType, url?: string) {
         // Include 'url' in the key so the cache is unique per URL
         queryKey: ['brew', type, url],
         queryFn: () => fetchBrewData(type, url),
-        staleTime: 1000 * 60 * 10,
-        refetchOnWindowFocus: false,
     });
 }

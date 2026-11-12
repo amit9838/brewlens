@@ -19,5 +19,12 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // Context files export their provider together with its hook.
+      'react-refresh/only-export-components': [
+        'error',
+        { allowConstantExport: true, allowExportNames: ['useModal', 'useBookmarks', 'useRecentlyViewed', 'useSearchPalette'] },
+      ],
+    },
   },
 ])
