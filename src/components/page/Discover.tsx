@@ -13,6 +13,7 @@ import { useBrewData } from '../../hooks/useBrewData';
 import { useBrewItems } from '../../hooks/useBrewItems';
 import { useAnalytics } from '../../hooks/useAnalytics';
 import { useDocumentMeta } from '../../hooks/useDocumentMeta';
+import { useStorage } from '../../hooks/useStorage';
 import { useBookmarks } from '../contexts/BookmarksContext';
 import { useRecentlyViewed } from '../contexts/RecentlyViewedContext';
 import { useModal } from '../contexts/ModalContexts';
@@ -191,12 +192,13 @@ export default function Discover() {
     const { recentItems, clearRecent } = useRecentlyViewed();
     const { openModal } = useModal();
 
-    const [shelfPick, setShelfPick] = useState<'bm' | 'rv' | null>(null);
+    // Tabs and the picks page live in sessionStorage, so they survive leaving Discover and coming back.
+    const [shelfPick, setShelfPick] = useStorage<'bm' | 'rv' | null>('discover_shelf', null);
     // Until the visitor picks a tab, show whichever shelf has something in it.
     const shelf: 'bm' | 'rv' = shelfPick ?? (!bookmarks.length && recentItems.length ? 'rv' : 'bm');
     const setShelf = setShelfPick;
-    const [pickPage, setPickPage] = useState(0);
-    const [chartTab, setChartTab] = useState<'all' | 'cask' | 'formula'>('all');
+    const [pickPageSaved, setPickPage] = useStorage('discover_picks_page', 0);
+    const [chartTab, setChartTab] = useStorage<'all' | 'cask' | 'formula'>('discover_chart', 'all');
 
     const caskByToken = useMemo(() => new Map(casks.map((c) => [c.token, c])), [casks]);
     const formulaByToken = useMemo(() => new Map(formulae.map((f) => [f.token, f])), [formulae]);
@@ -213,8 +215,10 @@ export default function Discover() {
     );
     // Only full pages, so the list keeps its height when paging.
     const pickPages = Math.max(1, Math.min(PICKS_PAGES, Math.floor(allPicks.length / PICKS_PER_PAGE)));
+    // A reload draws new picks, possibly fewer pages, so keep the saved page in range.
+    const pickPage = Math.min(pickPageSaved, pickPages - 1);
     const picks = allPicks.slice(pickPage * PICKS_PER_PAGE, (pickPage + 1) * PICKS_PER_PAGE);
-    const stepPicks = (d: number) => setPickPage((p) => (p + d + pickPages) % pickPages);
+    const stepPicks = (d: number) => setPickPage((pickPage + d + pickPages) % pickPages);
 
     const { data: caskStats } = useAnalytics('cask', '30d');
     const { data: formulaStats } = useAnalytics('formula', '30d');

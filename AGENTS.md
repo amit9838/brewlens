@@ -284,7 +284,7 @@ The app should feel:
 | --- | --- |
 | Server data | React Query (`useBrewData`, `useAnalytics`); defaults in `App.tsx`: 10-minute `staleTime`, no refetch on focus (analytics: 1 h). Lists and analytics persist to IndexedDB (`lib/queryPersister.ts`); bump `CACHE_VERSION` when their shape changes |
 | Shareable view state (type, search, category) | URL search params (`useSearchParams`) |
-| Explore filters, view mode, fonts toggle | `useStorage` (sessionStorage) |
+| Explore filters, view mode, fonts toggle, Discover tabs and Editor's Picks page | `useStorage` (sessionStorage) |
 | Bookmarks, recently viewed, theme, current page, recent curated draws | localStorage through their context / hook (`brewlens_curated_last` in `data/curated.ts`) |
 | Modal content | `ModalContext` |
 | Temporary UI state | local `useState` in the component |
