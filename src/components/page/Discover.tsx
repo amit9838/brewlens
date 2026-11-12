@@ -207,9 +207,9 @@ export default function Discover() {
 
     const chart = useMemo(() => {
         const rows = [
-            ...(chartTab !== 'formula' ? caskStats?.items.slice(0, 12) ?? [] : []),
-            ...(chartTab !== 'cask' ? formulaStats?.items.slice(0, 12) ?? [] : []),
-        ].sort((a, b) => toNumber(b.count) - toNumber(a.count)).slice(0, 12);
+            ...(chartTab !== 'formula' ? caskStats?.items.slice(0, 8) ?? [] : []),
+            ...(chartTab !== 'cask' ? formulaStats?.items.slice(0, 8) ?? [] : []),
+        ].sort((a, b) => toNumber(b.count) - toNumber(a.count)).slice(0, 8);
         return rows.map((r) => {
             const meta = (r.type === 'cask' ? caskByToken : formulaByToken).get(r.token);
             return { ...r, name: meta?.name ?? r.token, homepage: meta?.homepage, desc: meta?.desc };
@@ -305,8 +305,8 @@ export default function Discover() {
                         </div>
                     }
                 />
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-3">
-                    {chart.length === 0 && Array.from({ length: 12 }).map((_, i) => <CompactRowSkeleton key={i} iconSize={60} card rank />)}
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                    {chart.length === 0 && Array.from({ length: 8 }).map((_, i) => <CompactRowSkeleton key={i} iconSize={60} card rank />)}
                     {chart.map((r, i) => (
                         <CompactRow
                             key={`${r.type}-${r.token}`}
