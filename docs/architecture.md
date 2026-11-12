@@ -61,6 +61,7 @@ Icons for packages come from Google's favicon service; their colour is sampled t
 |---|---|---|
 | Brew type, search query, category on `/all` | URL search params (`?type=`, `?q=`, `?category=`) | URL (shareable) |
 | Explore filters, view mode, fonts toggle | `BrewList` via `useStorage` | sessionStorage |
+| Discover tabs (My Shelf, Top Charts) and Editor's Picks page | `Discover` via `useStorage` | sessionStorage |
 | Current page | `usePagination` | localStorage (`cp_cask`, `cp_formula`) |
 | Bookmarks | `BookmarksContext` via `useStorage` | localStorage |
 | Recently viewed | `RecentlyViewedContext` | localStorage (with TTL) |

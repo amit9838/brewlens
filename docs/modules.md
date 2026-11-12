@@ -208,7 +208,7 @@ Explore's "Filters & view" dialog: grid/list view, source and status filters, fo
 
 ## `src/lib/screenshots.ts`, `appStore.ts`, `flathub.ts`
 
-Optional screenshots for a cask, shown only in `ScreenshotsCard` on the cask detail page.
+Optional screenshots for a cask, shown only in `ScreenshotsCard` on the cask detail page. Clicking a shot opens `ScreenshotsModal` (`ui/ScreenshotsModal.tsx`), a larger viewer stepped with its arrow buttons or the ← / → keys.
 
 - `caskBundleIds(raw)` pulls bundle ID candidates from the cask's `uninstall` / `zap` artifacts (`com.apple.*` excluded). `hasSingleApp(raw)` skips suites that install several apps.
 - `fetchScreenshots(item)` tries `fetchAppStoreMedia` (iTunes Lookup, Mac listings only), then `fetchFlathubMedia`. Flathub search is POST-only and blocked by CORS, so its ID list (~90 KB) is fetched once per session and matched locally: bundle ID ignoring case, then name, then the only ID under the homepage's reversed domain; the last two must have the same homepage domain on Flathub.

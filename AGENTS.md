@@ -118,8 +118,8 @@ src/
     page/                  one component per route + DetailParts, skeletons, Error
     ui/                    kit.tsx primitives, AppCards, AppIcon, Modal, SearchPalette, FiltersModal, Pagination, …
   hooks/                   useBrewData, useBrewItems, useAnalytics, useDetailItem, useScreenshots, useStorage, usePagination, useDocumentMeta, useTheme, useCopy, …
-  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), queryPersister, screenshots (+ appStore, flathub), format, brewfile, iconTone, platform
-  data/                    categories.ts (taxonomy + styles), curated.ts (featured / Editor's Picks pools)
+  lib/                     utils (cn, normalizeItem, fetchBrewData, getSourceCodeStatus), queryPersister, screenshots (+ appStore, flathub), random, format, brewfile, iconTone, platform
+  data/                    categories.ts (taxonomy + styles), curated.ts (featured / Editor's Picks pool)
 scripts/prerender.mjs      post-build: static HTML per route + sitemap.xml
 public/                    404.html (SPA redirect), manifest, robots.txt, llms.txt, og-image, logos
 docs/                      architecture.md, modules.md, screenshots/
@@ -284,8 +284,8 @@ The app should feel:
 | --- | --- |
 | Server data | React Query (`useBrewData`, `useAnalytics`); defaults in `App.tsx`: 10-minute `staleTime`, no refetch on focus (analytics: 1 h). Lists and analytics persist to IndexedDB (`lib/queryPersister.ts`); bump `CACHE_VERSION` when their shape changes |
 | Shareable view state (type, search, category) | URL search params (`useSearchParams`) |
-| Explore filters, view mode, fonts toggle | `useStorage` (sessionStorage) |
-| Bookmarks, recently viewed, theme, current page | localStorage through their context / hook |
+| Explore filters, view mode, fonts toggle, Discover tabs and Editor's Picks page | `useStorage` (sessionStorage) |
+| Bookmarks, recently viewed, theme, current page, recent curated draws | localStorage through their context / hook (`brewlens_curated_last` in `data/curated.ts`) |
 | Modal content | `ModalContext` |
 | Temporary UI state | local `useState` in the component |
 
@@ -323,7 +323,7 @@ The app should feel:
 - Screenshots are optional extras (`lib/screenshots.ts`): the iTunes Lookup API first (Mac App Store apps, matched by the bundle IDs in a cask's uninstall / zap stanzas, `kind === 'mac-software'` only), then Flathub (Linux builds; case-insensitive bundle ID, name or reversed-domain match, the last two verified against the cask homepage). Fetch them lazily per item through `useScreenshots`, never for lists, and render nothing when there are none. Both APIs are keyless and CORS-enabled; iTunes is rate-limited (~20 requests/minute).
 - Casks are identified by `token`, formulae by `name`; `normalizeItem` handles this. Install commands are `brew install --cask <token>` / `brew install <name>` through `installCommand`.
 - Open-source detection is `getSourceCodeStatus` (formulae: `license`; casks: a repository homepage on GitHub, GitLab, Bitbucket or Codeberg, or the hand-picked `OPEN_SOURCE_CASKS` in `data/curated.ts`). Extend it there, not in components. To mark a cask whose homepage is its own website, add its token to `OPEN_SOURCE_CASKS`.
-- Category assignment lives in `data/categories.ts` (exact `tokens` first, then `keywords`). Curated lists (featured, Editor's Picks, open-source casks) live in `data/curated.ts`; only use tokens that exist in the API.
+- Category assignment lives in `data/categories.ts` (exact `tokens` first, then `keywords`). Curated lists (featured, Editor's Picks, open-source casks) live in `data/curated.ts`; only use tokens that exist in the API and aren't deprecated or disabled. Featured and Editor's Picks share one pool, `CURATED_POOL`, grouped by category; apps that don't suit the large featured slide go in `NOT_FEATURED`. Both lanes are drawn with `drawBalanced` (`lib/random.ts`): one category at a time, categories weighted by size, no app in both lanes, and apps from the last few visits last.
 - Don't send anything about the user to any service. No analytics or tracking scripts without user approval.
 
 ---
